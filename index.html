@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #1a1a2e; }
+    body { background: #0d1b2a; }
   </style>
 </head>
 <body>
@@ -479,7 +479,7 @@ function speak(text) {
 function SpeakBtn({ text, style }) {
   return (
     <button
-      style={{ background: 'none', border: '1px solid rgba(129,140,248,0.3)', borderRadius: '8px', color: '#818cf8', fontSize: '14px', padding: '4px 9px', cursor: 'pointer', lineHeight: 1, flexShrink: 0, ...style }}
+      style={{ background: 'none', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '8px', color: '#60a5fa', fontSize: '14px', padding: '4px 9px', cursor: 'pointer', lineHeight: 1, flexShrink: 0, ...style }}
       onClick={e => { e.stopPropagation(); speak(text); }}
       title="Pronounce"
     >🔊</button>
@@ -493,13 +493,13 @@ function GrammarView({ onBack, showRomaji }) {
   const topics = section === "basics" ? grammar.basics : grammar.adjectives;
 
   const Gs = {
-    wrap: { minHeight:"100vh", background:"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)", fontFamily:"'Noto Sans JP',sans-serif", display:"flex", flexDirection:"column", alignItems:"center", padding:"20px 16px 60px", color:"#e0e7ff" },
+    wrap: { minHeight:"100vh", background:"linear-gradient(135deg,#0d1b2a 0%,#0f2336 50%,#0c2a4a 100%)", fontFamily:"'Noto Sans JP',sans-serif", display:"flex", flexDirection:"column", alignItems:"center", padding:"20px 16px 60px", color:"#e0e7ff" },
     topRow: { display:"flex", alignItems:"center", gap:"10px", width:"100%", maxWidth:"480px", marginBottom:"16px" },
     backBtn: { background:"none", border:"none", color:"#475569", fontSize:"20px", cursor:"pointer", padding:"0 8px 0 0", lineHeight:1 },
-    title: { fontSize:"22px", fontWeight:"900", background:"linear-gradient(90deg,#818cf8,#c084fc)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" },
+    title: { fontSize:"22px", fontWeight:"900", background:"linear-gradient(90deg,#60a5fa,#38bdf8)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent" },
     tabRow: { display:"flex", gap:"8px", width:"100%", maxWidth:"480px", marginBottom:"16px" },
-    tab: a => ({ flex:1, padding:"9px", borderRadius:"12px", border:a?"1px solid #818cf8":"1px solid rgba(255,255,255,0.1)", background:a?"rgba(129,140,248,0.15)":"rgba(255,255,255,0.03)", color:a?"#818cf8":"#475569", fontSize:"13px", cursor:"pointer", fontWeight:a?"700":"400" }),
-    topicCard: open => ({ width:"100%", maxWidth:"480px", background:open?"rgba(129,140,248,0.07)":"rgba(255,255,255,0.03)", border:open?"1px solid rgba(129,140,248,0.25)":"1px solid rgba(255,255,255,0.06)", borderRadius:"16px", marginBottom:"10px", overflow:"hidden", cursor:"pointer" }),
+    tab: a => ({ flex:1, padding:"9px", borderRadius:"12px", border:a?"1px solid #60a5fa":"1px solid rgba(255,255,255,0.1)", background:a?"rgba(59,130,246,0.15)":"rgba(255,255,255,0.03)", color:a?"#60a5fa":"#475569", fontSize:"13px", cursor:"pointer", fontWeight:a?"700":"400" }),
+    topicCard: open => ({ width:"100%", maxWidth:"480px", background:open?"rgba(59,130,246,0.07)":"rgba(255,255,255,0.03)", border:open?"1px solid rgba(59,130,246,0.25)":"1px solid rgba(255,255,255,0.06)", borderRadius:"16px", marginBottom:"10px", overflow:"hidden", cursor:"pointer" }),
     topicHeader: { display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"16px" },
     topicTitle: { fontSize:"17px", fontWeight:"700", color:"#e0e7ff" },
     topicSubtitle: { fontSize:"12px", color:"#475569", marginTop:"2px" },
@@ -508,7 +508,7 @@ function GrammarView({ onBack, showRomaji }) {
     patternCard: c => ({ background:`rgba(${c==='#4ade80'?'74,222,128':c==='#f87171'?'248,113,113':c==='#fb923c'?'251,146,60':c==='#c084fc'?'192,132,252':c==='#38bdf8'?'56,189,248':'130,140,248'},0.08)`, border:`1px solid ${c}30`, borderRadius:"12px", padding:"12px 14px", marginBottom:"10px" }),
     patternLabel: c => ({ fontSize:"10px", letterSpacing:"2px", textTransform:"uppercase", color:c, marginBottom:"4px" }),
     patternFormula: { fontSize:"14px", fontWeight:"700", color:"#e0e7ff", marginBottom:"6px", fontFamily:"monospace" },
-    exampleJp: { fontSize:"14px", color:"#a5b4fc", lineHeight:1.5 },
+    exampleJp: { fontSize:"14px", color:"#93c5fd", lineHeight:1.5 },
     exampleEn: { fontSize:"12px", color:"#475569", marginTop:"2px" },
     romajiSmall: { fontSize:"11px", color:"#334155", fontStyle:"italic", marginBottom:"2px" },
     tipBox: { background:"rgba(251,191,36,0.07)", border:"1px solid rgba(251,191,36,0.2)", borderRadius:"12px", padding:"12px 14px", marginTop:"4px", marginBottom:"12px" },
@@ -570,7 +570,7 @@ function GrammarView({ onBack, showRomaji }) {
                 <td style={{...Gs.tdBase,color:"#64748b"}}>{ex.en}</td>
                 {isNounMod ? (
                   <>
-                    <td style={Gs.tdJp("#a5b4fc")}>
+                    <td style={Gs.tdJp("#93c5fd")}>
                       {ex.combined}
                       <R text={ex.combined}/>
                       <div style={{fontSize:"11px",color:"#475569",marginTop:"2px"}}>{ex.en}</div>
@@ -804,40 +804,40 @@ function App() {
   }, [mode, currentCard, quizSelected, quizOptions, index, direction, deck]);
 
   const S = {
-    app: { minHeight:"100vh", background:"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)", fontFamily:"'Noto Sans JP',sans-serif", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", padding:"20px 16px 60px", color:"#e0e7ff" },
-    title: { fontSize:"clamp(28px,6vw,48px)", fontWeight:"900", letterSpacing:"-1px", background:"linear-gradient(90deg,#818cf8,#c084fc,#f472b6)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", marginBottom:"4px", textAlign:"center" },
+    app: { minHeight:"100vh", background:"linear-gradient(135deg,#0d1b2a 0%,#0f2336 50%,#0c2a4a 100%)", fontFamily:"'Noto Sans JP',sans-serif", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", padding:"20px 16px 60px", color:"#e0e7ff" },
+    title: { fontSize:"clamp(28px,6vw,48px)", fontWeight:"900", letterSpacing:"-1px", background:"linear-gradient(90deg,#60a5fa,#38bdf8,#34d399)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", marginBottom:"4px", textAlign:"center" },
     subtitle: { fontSize:"12px", color:"#475569", marginBottom:"28px", letterSpacing:"3px", textTransform:"uppercase" },
     card: { background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"20px", padding:"24px", width:"100%", maxWidth:"480px", boxSizing:"border-box" },
     sectionLabel: { fontSize:"11px", letterSpacing:"2px", textTransform:"uppercase", color:"#475569", marginBottom:"10px" },
     groupGrid: { display:"flex", flexWrap:"wrap", gap:"6px", marginBottom:"20px" },
-    groupBtn: a => ({ padding:"5px 12px", borderRadius:"20px", border:a?"1px solid #818cf8":"1px solid rgba(255,255,255,0.1)", background:a?"#818cf8":"rgba(255,255,255,0.04)", color:a?"#fff":"#64748b", fontSize:"12px", cursor:"pointer", fontWeight:a?"700":"400" }),
+    groupBtn: a => ({ padding:"5px 12px", borderRadius:"20px", border:a?"1px solid #3b82f6":"1px solid rgba(255,255,255,0.1)", background:a?"#3b82f6":"rgba(255,255,255,0.04)", color:a?"#fff":"#64748b", fontSize:"12px", cursor:"pointer", fontWeight:a?"700":"400" }),
     modeRow: { display:"flex", gap:"10px", marginBottom:"20px" },
-    modeBtn: a => ({ flex:1, padding:"10px 6px", borderRadius:"12px", border:a?"1px solid #c084fc":"1px solid rgba(255,255,255,0.1)", background:a?"rgba(192,132,252,0.15)":"rgba(255,255,255,0.03)", color:a?"#c084fc":"#475569", fontSize:"13px", cursor:"pointer", fontWeight:a?"700":"400" }),
-    dirBtn: a => ({ flex:1, padding:"8px", borderRadius:"10px", border:a?"1px solid #f472b6":"1px solid rgba(255,255,255,0.1)", background:a?"rgba(244,114,182,0.15)":"rgba(255,255,255,0.03)", color:a?"#f472b6":"#475569", fontSize:"12px", cursor:"pointer", fontWeight:a?"700":"400" }),
-    startBtn: { width:"100%", padding:"14px", borderRadius:"14px", border:"none", background:"linear-gradient(135deg,#818cf8,#c084fc)", color:"#fff", fontSize:"15px", fontWeight:"800", cursor:"pointer", marginTop:"4px" },
+    modeBtn: a => ({ flex:1, padding:"10px 6px", borderRadius:"12px", border:a?"1px solid #38bdf8":"1px solid rgba(255,255,255,0.1)", background:a?"rgba(56,189,248,0.15)":"rgba(255,255,255,0.03)", color:a?"#38bdf8":"#475569", fontSize:"13px", cursor:"pointer", fontWeight:a?"700":"400" }),
+    dirBtn: a => ({ flex:1, padding:"8px", borderRadius:"10px", border:a?"1px solid #0ea5e9":"1px solid rgba(255,255,255,0.1)", background:a?"rgba(14,165,233,0.15)":"rgba(255,255,255,0.03)", color:a?"#0ea5e9":"#475569", fontSize:"12px", cursor:"pointer", fontWeight:a?"700":"400" }),
+    startBtn: { width:"100%", padding:"14px", borderRadius:"14px", border:"none", background:"linear-gradient(135deg,#1d4ed8,#0ea5e9)", color:"#fff", fontSize:"15px", fontWeight:"800", cursor:"pointer", marginTop:"4px" },
     progressBar: { width:"100%", height:"4px", background:"rgba(255,255,255,0.08)", borderRadius:"2px", marginBottom:"20px", overflow:"hidden" },
-    progressFill: p => ({ height:"100%", width:`${p}%`, background:"linear-gradient(90deg,#818cf8,#c084fc)", borderRadius:"2px", transition:"width 0.3s ease" }),
+    progressFill: p => ({ height:"100%", width:`${p}%`, background:"linear-gradient(90deg,#3b82f6,#0ea5e9)", borderRadius:"2px", transition:"width 0.3s ease" }),
     flipCard: { width:"100%", maxWidth:"480px", height:"240px", perspective:"1000px", marginBottom:"16px", cursor:"pointer" },
     flipInner: f => ({ width:"100%", height:"100%", position:"relative", transformStyle:"preserve-3d", transition:"transform 0.5s cubic-bezier(0.4,0,0.2,1)", transform:f?"rotateY(180deg)":"rotateY(0deg)" }),
-    flipFace: b => ({ position:"absolute", width:"100%", height:"100%", backfaceVisibility:"hidden", WebkitBackfaceVisibility:"hidden", borderRadius:"20px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", transform:b?"rotateY(180deg)":"rotateY(0deg)", background:b?"rgba(129,140,248,0.10)":"rgba(255,255,255,0.05)", border:`1px solid ${b?"rgba(129,140,248,0.25)":"rgba(255,255,255,0.1)"}`, padding:"20px", boxSizing:"border-box" }),
+    flipFace: b => ({ position:"absolute", width:"100%", height:"100%", backfaceVisibility:"hidden", WebkitBackfaceVisibility:"hidden", borderRadius:"20px", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", transform:b?"rotateY(180deg)":"rotateY(0deg)", background:b?"rgba(59,130,246,0.10)":"rgba(255,255,255,0.05)", border:`1px solid ${b?"rgba(59,130,246,0.25)":"rgba(255,255,255,0.1)"}`, padding:"20px", boxSizing:"border-box" }),
     jpText: { fontSize:"clamp(32px,9vw,58px)", fontWeight:"700", color:"#e0e7ff", textAlign:"center", lineHeight:1.2 },
-    enText: { fontSize:"clamp(18px,4.5vw,26px)", fontWeight:"600", color:"#c084fc", textAlign:"center" },
+    enText: { fontSize:"clamp(18px,4.5vw,26px)", fontWeight:"600", color:"#38bdf8", textAlign:"center" },
     romajiText: { fontSize:"12px", color:"#475569", marginTop:"4px", letterSpacing:"0.5px", textAlign:"center", fontStyle:"italic" },
     tagLabel: { fontSize:"10px", color:"#334155", letterSpacing:"2px", textTransform:"uppercase", marginBottom:"6px" },
     tapHint: { fontSize:"11px", color:"#1e293b", marginTop:"10px" },
     actionRow: { display:"flex", gap:"10px", width:"100%", maxWidth:"480px" },
     actionBtn: c => ({ flex:1, padding:"12px", borderRadius:"14px", border:`1px solid ${c}40`, background:`${c}18`, color:c, fontSize:"14px", fontWeight:"700", cursor:"pointer" }),
-    sentenceBox: { width:"100%", maxWidth:"480px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(129,140,248,0.2)", borderRadius:"14px", padding:"14px 18px", marginBottom:"12px", boxSizing:"border-box" },
-    sentenceJp: { fontSize:"16px", color:"#a5b4fc", fontWeight:"500", marginBottom:"4px", lineHeight:1.5 },
+    sentenceBox: { width:"100%", maxWidth:"480px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(59,130,246,0.2)", borderRadius:"14px", padding:"14px 18px", marginBottom:"12px", boxSizing:"border-box" },
+    sentenceJp: { fontSize:"16px", color:"#93c5fd", fontWeight:"500", marginBottom:"4px", lineHeight:1.5 },
     sentenceEn: { fontSize:"13px", color:"#475569", lineHeight:1.5 },
-    sentenceToggle: { background:"none", border:"1px solid rgba(129,140,248,0.3)", borderRadius:"10px", color:"#818cf8", fontSize:"12px", padding:"5px 14px", cursor:"pointer", width:"100%", maxWidth:"480px" },
+    sentenceToggle: { background:"none", border:"1px solid rgba(59,130,246,0.3)", borderRadius:"10px", color:"#60a5fa", fontSize:"12px", padding:"5px 14px", cursor:"pointer", width:"100%", maxWidth:"480px" },
     quizOption: s => ({ width:"100%", maxWidth:"480px", padding:"13px 18px", borderRadius:"14px", marginBottom:"10px", border:s==="correct"?"1px solid #4ade80":s==="wrong"?"1px solid #f87171":"1px solid rgba(255,255,255,0.1)", background:s==="correct"?"rgba(74,222,128,0.12)":s==="wrong"?"rgba(248,113,113,0.12)":"rgba(255,255,255,0.04)", color:s==="correct"?"#4ade80":s==="wrong"?"#f87171":"#cbd5e1", fontSize:"15px", cursor:quizSelected!==null?"default":"pointer", textAlign:"left", fontWeight:s?"700":"400" }),
     backBtn: { background:"none", border:"none", color:"#475569", fontSize:"20px", cursor:"pointer", padding:"0 8px 0 0", lineHeight:1 },
     topRow: { display:"flex", alignItems:"center", gap:"10px", width:"100%", maxWidth:"480px", marginBottom:"16px" },
     counterChip: { display:"inline-flex", alignItems:"center", gap:"6px", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:"20px", padding:"4px 14px", fontSize:"12px", color:"#64748b" },
     searchBox: { width:"100%", maxWidth:"480px", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:"12px", padding:"10px 16px", color:"#e0e7ff", fontSize:"14px", outline:"none", marginBottom:"12px", boxSizing:"border-box" },
     listGroupHeader: { fontSize:"11px", letterSpacing:"2px", textTransform:"uppercase", color:"#334155", padding:"14px 0 6px", width:"100%", maxWidth:"480px" },
-    listItem: e => ({ width:"100%", maxWidth:"480px", background:e?"rgba(129,140,248,0.08)":"rgba(255,255,255,0.03)", border:e?"1px solid rgba(129,140,248,0.25)":"1px solid rgba(255,255,255,0.06)", borderRadius:"12px", marginBottom:"6px", cursor:"pointer", overflow:"hidden" }),
+    listItem: e => ({ width:"100%", maxWidth:"480px", background:e?"rgba(59,130,246,0.08)":"rgba(255,255,255,0.03)", border:e?"1px solid rgba(59,130,246,0.25)":"1px solid rgba(255,255,255,0.06)", borderRadius:"12px", marginBottom:"6px", cursor:"pointer", overflow:"hidden" }),
     listItemHeader: { display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 16px" },
     listItemJp: { fontSize:"20px", fontWeight:"700", color:"#e0e7ff" },
     listItemEn: { fontSize:"13px", color:"#64748b", marginTop:"1px" },
@@ -895,7 +895,7 @@ function App() {
         <div style={{...S.card,textAlign:"center"}}>
           <div style={{fontSize:"56px",marginBottom:"12px"}}>{emoji}</div>
           {score.total > 0 && <div style={{marginBottom:"20px"}}>
-            <div style={{fontSize:"38px",fontWeight:"900",color:"#c084fc"}}>{pct}%</div>
+            <div style={{fontSize:"38px",fontWeight:"900",color:"#38bdf8"}}>{pct}%</div>
             <div style={{color:"#475569",fontSize:"13px"}}>{score.correct} / {score.total} correct</div>
           </div>}
           {score.total === 0 && <div style={{color:"#475569",marginBottom:"20px"}}>All cards reviewed!</div>}
@@ -919,7 +919,7 @@ function App() {
             </div>
           )}
           <div style={{display:"flex",gap:"10px"}}>
-            <button style={S.actionBtn("#818cf8")} onClick={()=>setMode("menu")}>← Menu</button>
+            <button style={S.actionBtn("#60a5fa")} onClick={()=>setMode("menu")}>← Menu</button>
             <button style={{...S.startBtn,marginTop:0,flex:1}} onClick={score.total>0?startQuiz:startFlashcards}>Try Again</button>
           </div>
         </div>
