@@ -71,7 +71,7 @@ const grammar = {
         { base: "あたらしい",en:"new",        aff: "あたらしいです", neg: "あたらしくないです" },
       ],
       special: {
-        title: "⚠️ Irregular: いい (good)",
+        title: "※ Irregular: いい (good)",
         rows: [
           { label: "Affirmative", jp: "いいです", en: "It is good" },
           { label: "Negative", jp: "よくないです", en: "It is not good — use よ stem, not い!" },
