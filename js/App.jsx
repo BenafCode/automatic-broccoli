@@ -262,8 +262,19 @@ function App() {
               <span>{g}</span>
               <span style={{fontSize:"11px", fontWeight:"400", fontFamily:"'Times New Roman',Times,serif", color:"#6a6050"}}>{gWords.length} words{gMastered>0?` · ${gMastered} mastered`:""}</span>
             </div>
-            <div style={{background:tint, color:"#1a1a18", padding:"7px 12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", lineHeight:"1.4", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
-              <span>{gWords.slice(0,4).map(w=>w.jp).join(" · ")}{gWords.length>4?" · …":""}</span>
+            <div style={{background:tint, color:"#1a1a18", padding:"7px 12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", lineHeight:"1.4", display:"flex", justifyContent:"space-between", alignItems:"flex-start"}}>
+              <div style={{display:"flex", flexWrap:"wrap", gap:"10px"}}>
+                {gWords.slice(0,4).map(w => {
+                  const r = showRomaji ? toRomaji(w.jp) : '';
+                  return (
+                    <span key={w.jp} style={{display:"inline-flex", flexDirection:"column"}}>
+                      <span>{w.jp}</span>
+                      {r && r !== w.jp && <span style={{fontSize:"10px", color:"#6a6050", fontStyle:"italic"}}>{r}</span>}
+                    </span>
+                  );
+                })}
+                {gWords.length>4 && <span>…</span>}
+              </div>
               {gMastered>0&&<span style={{fontSize:"11px", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", color:"#2c4f2c", flexShrink:0, marginLeft:"8px"}}>{gMastered}/{gWords.length}</span>}
             </div>
           </div>
