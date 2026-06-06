@@ -1,4 +1,5 @@
 function App() {
+  const isMobile = useWindowWidth() < 640;
   const [mode, setMode] = useState("menu");
   const [group, setGroup] = useState(() => {
     try { return localStorage.getItem('vocabStudy_group') || "All"; } catch(e) { return "All"; }
@@ -145,8 +146,8 @@ function App() {
   };
 
   const Frame = ({children}) => (
-    <div style={{background:"#888",minHeight:"100vh",padding:"8px 0",boxSizing:"border-box"}}>
-      <div style={{border:"8px solid #000",maxWidth:"760px",margin:"0 auto",background:"#fff",fontFamily:"'Times New Roman',Times,serif",color:"#000",boxSizing:"border-box"}}>
+    <div style={{background: isMobile ? "#fff" : "#888",minHeight:"100vh",padding: isMobile ? "0" : "8px 0",boxSizing:"border-box"}}>
+      <div style={{border: isMobile ? "none" : "8px solid #000",maxWidth:"760px",margin:"0 auto",background:"#fff",fontFamily:"'Times New Roman',Times,serif",color:"#000",boxSizing:"border-box"}}>
         <div style={{background:"#000",color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 16px"}}>
           <div>
             <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"16px",textTransform:"uppercase",color:"#fff"}}>日本語 · Vocabulary Study</div>
@@ -158,7 +159,7 @@ function App() {
           </div>
         </div>
         {children}
-        <div style={{background:"#fff",borderTop:"1px solid #000",padding:"10px 16px"}}>
+        <div style={{background:"#fff",borderTop:"1px solid #000",padding:"10px 16px",...(isMobile?{position:"sticky",bottom:0,zIndex:10}:{})}}>
           <div style={{display:"flex",justifyContent:"space-around",borderBottom:"1px solid #000",paddingBottom:"8px",marginBottom:"6px"}}>
             {[["🏠","HOME",()=>setMode("menu")],["🃏","CARDS",startFlashcards],["📋","LIST",openList],["📖","GRAMMAR",()=>setMode("grammar")]].map(([icon,label,fn])=>(
               <button key={label} onClick={fn} style={{background:"none",border:"none",cursor:"pointer",textAlign:"center",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",textTransform:"uppercase",color:"#0000ee",textDecoration:"underline",display:"flex",flexDirection:"column",alignItems:"center",gap:"3px",padding:"4px 8px"}}>
@@ -194,9 +195,9 @@ function App() {
     sentenceEn: { fontSize:"13px",color:"#333",lineHeight:1.5 },
     sentenceToggle: { border:"1px solid #000",background:"#fff",color:"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",textTransform:"uppercase",padding:"5px 14px",cursor:"pointer",flex:1 },
     actionRow: { display:"flex",gap:"8px",marginBottom:"12px" },
-    actionBtn: c => ({ flex:1,padding:"10px",border:"1px solid #000",background:c==="#f87171"?"#990000":c==="#4ade80"?"#004400":"#fff",color:c==="#f87171"||c==="#4ade80"?"#fff":"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",textTransform:"uppercase",cursor:"pointer" }),
+    actionBtn: c => ({ flex:1,padding:"14px 10px",minHeight:"52px",border:"1px solid #000",background:c==="#f87171"?"#990000":c==="#4ade80"?"#004400":"#fff",color:c==="#f87171"||c==="#4ade80"?"#fff":"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",textTransform:"uppercase",cursor:"pointer" }),
     startBtn: { display:"block",width:"100%",padding:"12px",border:"1px solid #000",background:"#000",color:"#fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",textTransform:"uppercase",cursor:"pointer",marginBottom:"8px",textAlign:"center" },
-    quizOption: s => ({ display:"block",width:"100%",padding:"10px 16px",marginBottom:"8px",border:s==="correct"?"2px solid #004400":s==="wrong"?"2px solid #990000":"1px solid #000",background:s==="correct"?"#c0d4a7":s==="wrong"?"#d77a7a":"#fff",color:"#000",fontFamily:"'Times New Roman',Times,serif",fontSize:"15px",cursor:quizSelected!==null?"default":"pointer",textAlign:"left" }),
+    quizOption: s => ({ display:"block",width:"100%",padding:"14px 16px",marginBottom:"8px",minHeight:"52px",border:s==="correct"?"2px solid #004400":s==="wrong"?"2px solid #990000":"1px solid #000",background:s==="correct"?"#c0d4a7":s==="wrong"?"#d77a7a":"#fff",color:"#000",fontFamily:"'Times New Roman',Times,serif",fontSize:"15px",cursor:quizSelected!==null?"default":"pointer",textAlign:"left" }),
     searchBox: { width:"100%",border:"1px solid #000",borderTop:"none",padding:"8px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"14px",outline:"none",background:"#fff",color:"#000",boxSizing:"border-box" },
     listGroupHeader: { fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif",fontWeight:"900",fontSize:"13px",textTransform:"uppercase",padding:"6px 12px",borderBottom:"1px solid #000",background:"#f0f0f0",borderTop:"1px solid #000" },
     listItem: e => ({ border:"1px solid #000",borderTop:"none",background:e?"#f8f8f0":"#fff",cursor:"pointer" }),
@@ -223,61 +224,88 @@ function App() {
     return <div style={S.romajiText}>{r}</div>;
   }
 
+  const MenuRibbonCards = () => (
+    <>
+      <div style={{background:GROUP_TINTS[group]||"#f0f0e8",color:"#000",fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif",fontWeight:"900",fontSize:"clamp(14px,4vw,26px)",lineHeight:"1.0",padding:"10px 14px",textTransform:"uppercase",borderBottom:"1px solid #000"}}>
+        {group==="All"?"ALL TOPICS":group.toUpperCase()}
+        <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",marginTop:"4px"}}>{filteredVocab.length} words available</div>
+      </div>
+      <div style={{borderBottom:"1px solid #000",padding:"6px 8px",background:"#f8f8f8",display:"flex",flexWrap:"wrap",gap:"4px"}}>
+        {ALL_GROUPS.map(g=>(
+          <button key={g} onClick={()=>setGroup(g)} style={{padding:"6px 8px",border:"1px solid #000",background:group===g?"#000":(GROUP_TINTS[g]||"#fff"),color:group===g?"#fff":"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",cursor:"pointer",textTransform:"uppercase",minHeight:"36px"}}>
+            {g}
+          </button>
+        ))}
+      </div>
+      {(group==="All"?ALL_GROUPS.filter(g=>g!=="All"):[group]).map(g=>{
+        const gWords=vocab.filter(v=>v.group===g);
+        if(!gWords.length)return null;
+        const tint=GROUP_TINTS[g]||"#f0f0e8";
+        const gMastered=gWords.filter(w=>persistentKnown.has(`${w.jp}_${direction}`)).length;
+        return(
+          <div key={g} style={{borderBottom:"1px solid #000"}}>
+            <div style={{background:"#fff",borderBottom:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"4px 12px",textTransform:"uppercase",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <span>{g}</span>
+              <span style={{fontSize:"11px",fontWeight:"400",fontFamily:"'Times New Roman',Times,serif"}}>{gWords.length} words{gMastered>0?` · ✓${gMastered}`:""}</span>
+            </div>
+            <div style={{background:tint,color:"#000",padding:"7px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",lineHeight:"1.4",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <span>{gWords.slice(0,4).map(w=>w.jp).join(" · ")}{gWords.length>4?" · …":""}</span>
+              {gMastered>0&&<span style={{fontSize:"11px",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",color:"#004400",flexShrink:0,marginLeft:"8px"}}>✓{gMastered}/{gWords.length}</span>}
+            </div>
+          </div>
+        );
+      })}
+      <div style={{padding:"6px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#555",fontStyle:"italic"}}>
+        {filteredVocab.length} words selected{masteredCount>0?` · ✓ ${masteredCount} mastered`:""}
+      </div>
+    </>
+  );
+
   if (mode === "menu") return (
     <Frame>
-      <div style={{display:"flex",borderTop:"1px solid #000"}}>
-        <div style={{width:"190px",flexShrink:0,borderRight:"1px solid #000"}}>
-          <div style={{background:"#e91d2a",color:"#fff",borderBottom:"1px solid #000",padding:"14px"}}>
-            <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"13px",textTransform:"uppercase",marginBottom:"6px"}}>Start Studying</div>
-            <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",lineHeight:"1.4",marginBottom:"8px"}}>Select a topic, choose your study mode, and build your Japanese vocabulary.</div>
-            {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#ffcccc"}}>✓ {masteredCount} words mastered</div>}
-            <button style={{display:"block",width:"100%",marginTop:"8px",background:"#000",color:"#fff",border:"1px solid #fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"6px",textTransform:"uppercase",cursor:"pointer"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
-            <button style={{display:"block",width:"100%",marginTop:"5px",background:"#fff",color:"#000",border:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"6px",textTransform:"uppercase",cursor:"pointer"}} onClick={startQuiz}>▶ QUIZ MODE</button>
-          </div>
-          {[["Direction",[["JP → EN","jp2en",()=>setDirection("jp2en")],["EN → JP","en2jp",()=>setDirection("en2jp")]]],["Options",[["ローマ字 "+(showRomaji?"ON":"OFF"),showRomaji?"on":"",()=>setShowRomaji(r=>!r)]]],["Browse",[["📋 Word List","",openList],["📖 Grammar Guide","",()=>setMode("grammar")]]]].map(([sLabel,items])=>(
-            <div key={sLabel}>
-              <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"10px",textTransform:"uppercase",letterSpacing:"1px",padding:"5px 10px",borderBottom:"1px solid #000",borderTop:"1px solid #000",background:"#f0f0f0",color:"#000"}}>{sLabel}</div>
-              {items.map(([label,active,fn])=>(
-                <button key={label} onClick={fn} style={{display:"block",width:"100%",textAlign:"left",padding:"5px 10px",border:"none",borderBottom:"1px solid #ccc",background:active?"#000":"#fff",color:active?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:active?"700":"400",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:active?"none":"underline"}}>{label}</button>
-              ))}
+      {isMobile ? (
+        <div>
+          <div style={{background:"#e91d2a",color:"#fff",borderTop:"1px solid #000",padding:"12px 14px"}}>
+            {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#ffcccc",marginBottom:"6px"}}>✓ {masteredCount} words mastered</div>}
+            <div style={{display:"flex",gap:"8px"}}>
+              <button style={{flex:1,background:"#000",color:"#fff",border:"1px solid #fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"13px",padding:"12px 8px",textTransform:"uppercase",cursor:"pointer",minHeight:"48px"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
+              <button style={{flex:1,background:"#fff",color:"#000",border:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"13px",padding:"12px 8px",textTransform:"uppercase",cursor:"pointer",minHeight:"48px"}} onClick={startQuiz}>▶ QUIZ MODE</button>
             </div>
-          ))}
-        </div>
-        <div style={{flex:1,minWidth:0}}>
-          <div style={{background:GROUP_TINTS[group]||"#f0f0e8",color:"#000",fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif",fontWeight:"900",fontSize:"clamp(14px,2.5vw,26px)",lineHeight:"1.0",padding:"10px 14px",textTransform:"uppercase",borderBottom:"1px solid #000"}}>
-            {group==="All"?"ALL TOPICS":group.toUpperCase()}
-            <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",marginTop:"4px"}}>{filteredVocab.length} words available</div>
           </div>
-          <div style={{borderBottom:"1px solid #000",padding:"5px 8px",background:"#f8f8f8",display:"flex",flexWrap:"wrap",gap:"3px"}}>
-            {ALL_GROUPS.map(g=>(
-              <button key={g} onClick={()=>setGroup(g)} style={{padding:"2px 5px",border:"1px solid #000",background:group===g?"#000":(GROUP_TINTS[g]||"#fff"),color:group===g?"#fff":"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"10px",cursor:"pointer",textTransform:"uppercase"}}>
-                {g}
-              </button>
+          <div style={{display:"flex",flexWrap:"wrap",gap:"4px",padding:"8px",borderBottom:"1px solid #000",background:"#f0f0f0",borderTop:"1px solid #000"}}>
+            {[["JP→EN","jp2en",()=>setDirection("jp2en")],["EN→JP","en2jp",()=>setDirection("en2jp")]].map(([label,val,fn])=>(
+              <button key={val} onClick={fn} style={{padding:"8px 12px",border:"1px solid #000",background:direction===val?"#000":"#fff",color:direction===val?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:direction===val?"none":"underline",minHeight:"44px"}}>{label}</button>
+            ))}
+            <button onClick={()=>setShowRomaji(r=>!r)} style={{padding:"8px 12px",border:"1px solid #000",background:showRomaji?"#000":"#fff",color:showRomaji?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:showRomaji?"none":"underline",minHeight:"44px"}}>ローマ字 {showRomaji?"ON":"OFF"}</button>
+            <button onClick={openList} style={{padding:"8px 12px",border:"1px solid #000",background:"#fff",color:"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:"underline",minHeight:"44px"}}>📋 LIST</button>
+            <button onClick={()=>setMode("grammar")} style={{padding:"8px 12px",border:"1px solid #000",background:"#fff",color:"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:"underline",minHeight:"44px"}}>📖 GRAMMAR</button>
+          </div>
+          <MenuRibbonCards/>
+        </div>
+      ) : (
+        <div style={{display:"flex",borderTop:"1px solid #000"}}>
+          <div style={{width:"190px",flexShrink:0,borderRight:"1px solid #000"}}>
+            <div style={{background:"#e91d2a",color:"#fff",borderBottom:"1px solid #000",padding:"14px"}}>
+              <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"13px",textTransform:"uppercase",marginBottom:"6px"}}>Start Studying</div>
+              <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",lineHeight:"1.4",marginBottom:"8px"}}>Select a topic, choose your study mode, and build your Japanese vocabulary.</div>
+              {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#ffcccc"}}>✓ {masteredCount} words mastered</div>}
+              <button style={{display:"block",width:"100%",marginTop:"8px",background:"#000",color:"#fff",border:"1px solid #fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"6px",textTransform:"uppercase",cursor:"pointer"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
+              <button style={{display:"block",width:"100%",marginTop:"5px",background:"#fff",color:"#000",border:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"6px",textTransform:"uppercase",cursor:"pointer"}} onClick={startQuiz}>▶ QUIZ MODE</button>
+            </div>
+            {[["Direction",[["JP → EN","jp2en",()=>setDirection("jp2en")],["EN → JP","en2jp",()=>setDirection("en2jp")]]],["Options",[["ローマ字 "+(showRomaji?"ON":"OFF"),showRomaji?"on":"",()=>setShowRomaji(r=>!r)]]],["Browse",[["📋 Word List","",openList],["📖 Grammar Guide","",()=>setMode("grammar")]]]].map(([sLabel,items])=>(
+              <div key={sLabel}>
+                <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"10px",textTransform:"uppercase",letterSpacing:"1px",padding:"5px 10px",borderBottom:"1px solid #000",borderTop:"1px solid #000",background:"#f0f0f0",color:"#000"}}>{sLabel}</div>
+                {items.map(([label,active,fn])=>(
+                  <button key={label} onClick={fn} style={{display:"block",width:"100%",textAlign:"left",padding:"5px 10px",border:"none",borderBottom:"1px solid #ccc",background:active?"#000":"#fff",color:active?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:active?"700":"400",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:active?"none":"underline"}}>{label}</button>
+                ))}
+              </div>
             ))}
           </div>
-          {(group==="All"?ALL_GROUPS.filter(g=>g!=="All"):[group]).map(g=>{
-            const gWords=vocab.filter(v=>v.group===g);
-            if(!gWords.length)return null;
-            const tint=GROUP_TINTS[g]||"#f0f0e8";
-            const gMastered=gWords.filter(w=>persistentKnown.has(`${w.jp}_${direction}`)).length;
-            return(
-              <div key={g} style={{borderBottom:"1px solid #000"}}>
-                <div style={{background:"#fff",borderBottom:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"4px 12px",textTransform:"uppercase",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                  <span>{g}</span>
-                  <span style={{fontSize:"11px",fontWeight:"400",fontFamily:"'Times New Roman',Times,serif"}}>{gWords.length} words{gMastered>0?` · ✓${gMastered}`:""}</span>
-                </div>
-                <div style={{background:tint,color:"#000",padding:"7px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",lineHeight:"1.4",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                  <span>{gWords.slice(0,4).map(w=>w.jp).join(" · ")}{gWords.length>4?" · …":""}</span>
-                  {gMastered>0&&<span style={{fontSize:"11px",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",color:"#004400",flexShrink:0,marginLeft:"8px"}}>✓{gMastered}/{gWords.length}</span>}
-                </div>
-              </div>
-            );
-          })}
-          <div style={{padding:"6px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#555",fontStyle:"italic"}}>
-            {filteredVocab.length} words selected{masteredCount>0?` · ✓ ${masteredCount} mastered`:""}
+          <div style={{flex:1,minWidth:0}}>
+            <MenuRibbonCards/>
           </div>
         </div>
-      </div>
+      )}
     </Frame>
   );
 
@@ -381,7 +409,7 @@ function App() {
     const cardTint = GROUP_TINTS[currentCard.group]||"#f0f0e8";
     return (
       <Frame>
-        <div style={{padding:"12px 14px"}}>
+        <div style={{padding:"12px 14px",paddingBottom: isMobile ? "80px" : "12px"}}>
           <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
             <div style={S.progressBar}><div style={S.progressFill(progress)}/></div>
@@ -453,7 +481,7 @@ function App() {
     const cardTint = GROUP_TINTS[currentCard.group]||"#f0f0e8";
     return (
       <Frame>
-        <div style={{padding:"12px 14px"}}>
+        <div style={{padding:"12px 14px",paddingBottom: isMobile ? "80px" : "12px"}}>
           <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
             <div style={S.progressBar}><div style={S.progressFill(progress)}/></div>
