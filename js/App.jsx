@@ -190,11 +190,9 @@ function App() {
   );
 
   const S = {
-    topRow: { display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px" },
     backBtn: { background:"#f5f0e8", border:"1px solid #1a1a18", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"4px 12px" },
     tagLabel: { fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"1px", color:"#6a6050", marginBottom:"4px" },
     kbHint: { fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", fontStyle:"italic", textAlign:"center", marginTop:"8px" },
-    counterChip: { fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", color:"#3a3028" },
     progressBar: { height:"4px", background:"#ddd6cc", border:"1px solid #1a1a18", overflow:"hidden", flex:1 },
     progressFill: p => ({ height:"100%", width:`${p}%`, background:"#1a1a18" }),
     flipCard: { perspective:"1000px", marginBottom:"12px", cursor:"pointer" },
@@ -219,16 +217,6 @@ function App() {
     listItemJp: { fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", fontWeight:"700", color:"#1a1a18" },
     listItemEn: { fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", color:"#4a4038", marginTop:"1px" },
     listItemExpanded: { padding:"0 14px 12px", borderTop:"1px solid #c8c0b4", fontFamily:"'Times New Roman',Times,serif" },
-    card: { border:"1px solid #1a1a18", background:"#fff", padding:"16px" },
-    sectionLabel: { fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"1px", color:"#1a1a18", marginBottom:"6px", borderBottom:"1px solid #c8c0b4", paddingBottom:"3px" },
-    groupGrid: { display:"flex", flexWrap:"wrap", gap:"4px", marginBottom:"12px" },
-    groupBtn: a => ({ padding:"3px 8px", border:"1px solid #1a1a18", background:a?"#1a1a18":"#f5f0e8", color:a?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:a?"700":"400", fontSize:"11px", cursor:"pointer", textTransform:"uppercase" }),
-    modeRow: { display:"flex", gap:"8px", marginBottom:"10px" },
-    modeBtn: a => ({ flex:1, padding:"8px 6px", border:"1px solid #1a1a18", background:a?"#1a1a18":"#f5f0e8", color:a?"#f5f0e8":"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase" }),
-    dirBtn: a => ({ flex:1, padding:"7px", border:"1px solid #1a1a18", background:a?"#1a1a18":"#f5f0e8", color:a?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:a?"700":"400", fontSize:"12px", cursor:"pointer", textTransform:"uppercase" }),
-    title: { fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif", fontWeight:"900", fontSize:"clamp(20px,5vw,36px)", textTransform:"uppercase", color:"#1a1a18", textAlign:"center" },
-    subtitle: { fontFamily:"Helvetica,Arial,sans-serif", fontSize:"12px", color:"#6a6050", textTransform:"uppercase", letterSpacing:"2px", textAlign:"center" },
-    app: { background:"#b8b0a4", minHeight:"100vh", padding:"8px 0" },
   };
 
   function Romaji({ text }) {
@@ -302,8 +290,6 @@ function App() {
               <button key={val} onClick={fn} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:direction===val?"#1a1a18":"#f5f0e8", color:direction===val?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>{label}</button>
             ))}
             <button onClick={()=>setShowRomaji(r=>!r)} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:showRomaji?"#1a1a18":"#f5f0e8", color:showRomaji?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>ローマ字 {showRomaji?"ON":"OFF"}</button>
-            <button onClick={openList} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:"#f5f0e8", color:"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>LIST</button>
-            <button onClick={()=>setMode("grammar")} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:"#f5f0e8", color:"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>文法</button>
           </div>
           <MenuRibbonCards/>
         </div>
@@ -379,7 +365,7 @@ function App() {
     return (
       <Frame>
         <div style={{borderBottom:"1px solid #1a1a18", padding:"8px 14px", display:"flex", alignItems:"center", gap:"10px", background:"#ede8da", borderTop:"1px solid #1a1a18"}}>
-          <button style={S.backBtn} onClick={()=>setMode("menu")}>← BACK</button>
+          <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
           <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif", fontWeight:"900", fontSize:"18px", textTransform:"uppercase", color:"#1a1a18"}}>Vocabulary List</div>
           <div style={{marginLeft:"auto", fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#6a6050"}}>{listVocab.length} words</div>
         </div>
@@ -434,7 +420,7 @@ function App() {
     const cardTint = GROUP_TINTS[currentCard.group]||"#f5f0e8";
     return (
       <Frame>
-        <div style={{padding:"12px 14px", paddingBottom: isMobile ? "80px" : "12px"}}>
+        <div style={{padding:"12px 14px"}}>
           <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
             <div style={S.progressBar}><div style={S.progressFill(progress)}/></div>
@@ -506,7 +492,7 @@ function App() {
     const cardTint = GROUP_TINTS[currentCard.group]||"#f5f0e8";
     return (
       <Frame>
-        <div style={{padding:"12px 14px", paddingBottom: isMobile ? "80px" : "12px"}}>
+        <div style={{padding:"12px 14px"}}>
           <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
             <div style={S.progressBar}><div style={S.progressFill(progress)}/></div>
@@ -558,7 +544,7 @@ function App() {
   }
 
   if (mode === "grammar") {
-    return <GrammarView onBack={()=>setMode("menu")} showRomaji={showRomaji}/>;
+    return <GrammarView onBack={()=>setMode("menu")} onCards={startFlashcards} onList={openList} showRomaji={showRomaji}/>;
   }
 
   return null;
