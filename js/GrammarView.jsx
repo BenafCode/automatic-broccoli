@@ -1,13 +1,14 @@
 function GrammarView({ onBack, showRomaji }) {
+  const isMobile = useWindowWidth() < 640;
   const [section, setSection] = useState("basics"); // "basics" | "adjectives"
   const [expandedId, setExpandedId] = useState(null);
 
   const topics = section === "basics" ? grammar.basics : grammar.adjectives;
 
   const Gs = {
-    wrap: { background:"#888", minHeight:"100vh", padding:"8px 0", boxSizing:"border-box" },
+    wrap: { background: isMobile ? "#fff" : "#888", minHeight:"100vh", padding: isMobile ? "0" : "8px 0", boxSizing:"border-box" },
     backBtn: { background:"#fff", border:"none", color:"#000", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"4px 12px" },
-    tab: a => ({ flex:1, padding:"8px 12px", border:"none", borderRight:"1px solid #000", background:a?"#000":"#f0f0f0", color:a?"#fff":"#0000ee", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", textDecoration:a?"none":"underline" }),
+    tab: a => ({ flex:1, padding: isMobile ? "12px" : "8px 12px", minHeight:"44px", border:"none", borderRight:"1px solid #000", background:a?"#000":"#f0f0f0", color:a?"#fff":"#0000ee", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", textDecoration:a?"none":"underline" }),
     topicCard: open => ({ borderBottom:"1px solid #000", background:open?"#f8f8f0":"#fff", cursor:"pointer" }),
     topicHeader: { display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"10px 14px" },
     topicTitle: { fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"14px", textTransform:"uppercase", color:"#000" },
@@ -110,7 +111,7 @@ function GrammarView({ onBack, showRomaji }) {
 
   return (
     <div style={Gs.wrap}>
-      <div style={{border:"8px solid #000",maxWidth:"760px",margin:"0 auto",background:"#fff",fontFamily:"'Times New Roman',Times,serif",color:"#000",boxSizing:"border-box"}}>
+      <div style={{border: isMobile ? "none" : "8px solid #000",maxWidth:"760px",margin:"0 auto",background:"#fff",fontFamily:"'Times New Roman',Times,serif",color:"#000",boxSizing:"border-box"}}>
         <div style={{background:"#000",color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 16px"}}>
           <div>
             <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"16px",textTransform:"uppercase",color:"#fff"}}>日本語 · Grammar Guide</div>

@@ -1,5 +1,15 @@
 const { useState, useEffect, useCallback } = React;
 
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+}
+
 const ALL_GROUPS = ["All", ...Array.from(new Set(vocab.map(v => v.group)))];
 
 function shuffle(arr) {
@@ -33,7 +43,7 @@ function speak(text) {
 function SpeakBtn({ text, style }) {
   return (
     <button
-      style={{ background: '#fff', border: '1px solid #000', borderRadius: '0', color: '#000', fontSize: '12px', fontFamily: 'Helvetica,Arial,sans-serif', fontWeight: '700', padding: '3px 8px', cursor: 'pointer', lineHeight: 1, flexShrink: 0, ...style }}
+      style={{ background: '#fff', border: '1px solid #000', borderRadius: '0', color: '#000', fontSize: '14px', fontFamily: 'Helvetica,Arial,sans-serif', fontWeight: '700', padding: '8px 12px', cursor: 'pointer', lineHeight: 1, flexShrink: 0, minWidth: '44px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', ...style }}
       onClick={e => { e.stopPropagation(); speak(text); }}
       title="Pronounce"
     >🔊</button>
