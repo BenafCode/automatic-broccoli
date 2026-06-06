@@ -137,37 +137,51 @@ function App() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [mode, currentCard, quizSelected, quizOptions, index, direction, deck]);
 
+  // Muted vintage tones — aged paper, ink, and seasonal dyes
   const GROUP_TINTS = {
-    "All":"#f0f0e8","Basics":"#8e8a25","Countries":"#b3bd95","Occupations":"#d77a7a",
-    "Things & Places":"#e6915d","Directions":"#c0d4a7","Transport":"#9ab6c8",
-    "Verbs":"#a5b8c0","Time":"#8c9ae0","Food & Drink":"#c0d4a7","Adjectives":"#b3bd95",
-    "Colors":"#d77a7a","Na-Adjectives":"#e6915d","Body":"#9ab6c8",
-    "Fruit & Veg":"#a5b8c0","Seafood":"#8c9ae0","Clothes":"#8e8a25","Hobbies":"#c0d4a7"
+    "All":             "#f5f0e8",
+    "Basics":          "#dce6d8",
+    "Countries":       "#e2ddd0",
+    "Occupations":     "#e0d8e8",
+    "Things & Places": "#e2dbd0",
+    "Directions":      "#d8e4de",
+    "Transport":       "#d8dce8",
+    "Verbs":           "#e8e4d8",
+    "Time":            "#d8dce8",
+    "Food & Drink":    "#dce6d8",
+    "Adjectives":      "#e0d8e8",
+    "Colors":          "#e2ddd0",
+    "Na-Adjectives":   "#e0d8e8",
+    "Body":            "#e2dbd0",
+    "Fruit & Veg":     "#dce6d8",
+    "Seafood":         "#d8dce8",
+    "Clothes":         "#e8e4d8",
+    "Hobbies":         "#d8e4de",
   };
 
   const Frame = ({children}) => (
-    <div style={{background: isMobile ? "#fff" : "#888",minHeight:"100vh",padding: isMobile ? "0" : "8px 0",boxSizing:"border-box"}}>
-      <div style={{border: isMobile ? "none" : "8px solid #000",maxWidth:"760px",margin:"0 auto",background:"#fff",fontFamily:"'Times New Roman',Times,serif",color:"#000",boxSizing:"border-box"}}>
-        <div style={{background:"#000",color:"#fff",display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 16px"}}>
+    <div style={{background: isMobile ? "#f5f0e8" : "#b8b0a4", minHeight:"100vh", padding: isMobile ? "0" : "8px 0", boxSizing:"border-box"}}>
+      <div style={{border: isMobile ? "none" : "8px solid #1a1a18", maxWidth:"760px", margin:"0 auto", background:"#fff", fontFamily:"'Times New Roman',Times,serif", color:"#1a1a18", boxSizing:"border-box"}}>
+        <div style={{background:"#1a1a18", color:"#f5f0e8", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 16px"}}>
           <div>
-            <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"16px",textTransform:"uppercase",color:"#fff"}}>日本語 · Vocabulary Study</div>
-            <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontSize:"11px",color:"#aaa",textTransform:"uppercase",letterSpacing:"1px"}}>Build Your Japanese. Online.</div>
+            <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"16px", textTransform:"uppercase", color:"#f5f0e8", letterSpacing:"1px"}}>日本語 · Vocabulary Study</div>
+            <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"11px", color:"#a09888", textTransform:"uppercase", letterSpacing:"2px"}}>Build Your Japanese.</div>
           </div>
-          <div style={{display:"flex",gap:"8px",alignItems:"center"}}>
-            <span style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",color:"#e91d2a"}}>{filteredVocab.length} WORDS</span>
-            <div style={{background:"#fcc20f",color:"#000",border:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",padding:"4px 8px",textTransform:"uppercase",textAlign:"center",lineHeight:"1.3"}}>STUDY<br/>NOW</div>
+          <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"1px"}}>
+            <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"900", fontSize:"20px", color:"#c8a84b", lineHeight:1}}>{filteredVocab.length}</span>
+            <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"9px", color:"#a09888", textTransform:"uppercase", letterSpacing:"2px"}}>words</span>
           </div>
         </div>
         {children}
-        <div style={{background:"#fff",borderTop:"1px solid #000",padding:"10px 16px",...(isMobile?{position:"sticky",bottom:0,zIndex:10}:{})}}>
-          <div style={{display:"flex",justifyContent:"space-around",borderBottom:"1px solid #000",paddingBottom:"8px",marginBottom:"6px"}}>
-            {[["🏠","HOME",()=>setMode("menu")],["🃏","CARDS",startFlashcards],["📋","LIST",openList],["📖","GRAMMAR",()=>setMode("grammar")]].map(([icon,label,fn])=>(
-              <button key={label} onClick={fn} style={{background:"none",border:"none",cursor:"pointer",textAlign:"center",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",textTransform:"uppercase",color:"#0000ee",textDecoration:"underline",display:"flex",flexDirection:"column",alignItems:"center",gap:"3px",padding:"4px 8px"}}>
-                <span style={{fontSize:"18px"}}>{icon}</span>{label}
+        <div style={{background:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"10px 16px", ...(isMobile ? {position:"sticky", bottom:0, zIndex:10} : {})}}>
+          <div style={{display:"flex", justifyContent:"space-around", borderBottom:"1px solid #c8c0b4", paddingBottom:"8px", marginBottom:"6px"}}>
+            {[["HOME",()=>setMode("menu")],["CARDS",startFlashcards],["LIST",openList],["文法",()=>setMode("grammar")]].map(([label,fn])=>(
+              <button key={label} onClick={fn} style={{background:"none", border:"none", cursor:"pointer", textAlign:"center", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", color:"#1e3050", padding:"4px 8px"}}>
+                {label}
               </button>
             ))}
           </div>
-          <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"11px",color:"#555",textAlign:"center",fontStyle:"italic"}}>
+          <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", textAlign:"center", fontStyle:"italic"}}>
             This site is best viewed with browser versions 3.0 and higher.
           </div>
         </div>
@@ -176,45 +190,45 @@ function App() {
   );
 
   const S = {
-    topRow: { display:"flex",alignItems:"center",gap:"10px",marginBottom:"12px" },
-    backBtn: { background:"#fff",border:"1px solid #000",color:"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",textTransform:"uppercase",cursor:"pointer",padding:"4px 12px" },
-    tagLabel: { fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",textTransform:"uppercase",letterSpacing:"1px",color:"#555",marginBottom:"4px" },
-    kbHint: { fontFamily:"'Times New Roman',Times,serif",fontSize:"11px",color:"#555",fontStyle:"italic",textAlign:"center",marginTop:"8px" },
-    counterChip: { fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",color:"#333" },
-    progressBar: { height:"4px",background:"#ddd",border:"1px solid #000",overflow:"hidden",flex:1 },
-    progressFill: p => ({ height:"100%",width:`${p}%`,background:"#000" }),
-    flipCard: { perspective:"1000px",marginBottom:"12px",cursor:"pointer" },
-    flipInner: f => ({ width:"100%",position:"relative",transformStyle:"preserve-3d",transition:"transform 0.5s cubic-bezier(0.4,0,0.2,1)",transform:f?"rotateY(180deg)":"rotateY(0deg)" }),
-    flipFace: b => ({ position:b?"absolute":"relative",top:0,left:0,width:"100%",backfaceVisibility:"hidden",WebkitBackfaceVisibility:"hidden",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",transform:b?"rotateY(180deg)":"rotateY(0deg)",background:b?"#f0f0e8":"#fff",padding:"28px 20px",boxSizing:"border-box",minHeight:"180px" }),
-    jpText: { fontFamily:"'Times New Roman',Times,serif",fontSize:"clamp(32px,9vw,58px)",fontWeight:"700",color:"#000",textAlign:"center",lineHeight:1.2 },
-    enText: { fontFamily:"'Times New Roman',Times,serif",fontSize:"clamp(18px,4.5vw,26px)",fontWeight:"400",color:"#000",textAlign:"center" },
-    romajiText: { fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#555",marginTop:"4px",fontStyle:"italic",textAlign:"center" },
-    tapHint: { fontFamily:"'Times New Roman',Times,serif",fontSize:"11px",color:"#555",marginTop:"8px",fontStyle:"italic" },
-    sentenceBox: { border:"1px solid #000",background:"#f8f8f0",padding:"12px 16px",marginBottom:"12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"14px" },
-    sentenceJp: { fontSize:"16px",color:"#000",fontWeight:"500",marginBottom:"4px",lineHeight:1.5 },
-    sentenceEn: { fontSize:"13px",color:"#333",lineHeight:1.5 },
-    sentenceToggle: { border:"1px solid #000",background:"#fff",color:"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",textTransform:"uppercase",padding:"5px 14px",cursor:"pointer",flex:1 },
-    actionRow: { display:"flex",gap:"8px",marginBottom:"12px" },
-    actionBtn: c => ({ flex:1,padding:"14px 10px",minHeight:"52px",border:"1px solid #000",background:c==="#f87171"?"#990000":c==="#4ade80"?"#004400":"#fff",color:c==="#f87171"||c==="#4ade80"?"#fff":"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",textTransform:"uppercase",cursor:"pointer" }),
-    startBtn: { display:"block",width:"100%",padding:"12px",border:"1px solid #000",background:"#000",color:"#fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",textTransform:"uppercase",cursor:"pointer",marginBottom:"8px",textAlign:"center" },
-    quizOption: s => ({ display:"block",width:"100%",padding:"14px 16px",marginBottom:"8px",minHeight:"52px",border:s==="correct"?"2px solid #004400":s==="wrong"?"2px solid #990000":"1px solid #000",background:s==="correct"?"#c0d4a7":s==="wrong"?"#d77a7a":"#fff",color:"#000",fontFamily:"'Times New Roman',Times,serif",fontSize:"15px",cursor:quizSelected!==null?"default":"pointer",textAlign:"left" }),
-    searchBox: { width:"100%",border:"1px solid #000",borderTop:"none",padding:"8px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"14px",outline:"none",background:"#fff",color:"#000",boxSizing:"border-box" },
-    listGroupHeader: { fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif",fontWeight:"900",fontSize:"13px",textTransform:"uppercase",padding:"6px 12px",borderBottom:"1px solid #000",background:"#f0f0f0",borderTop:"1px solid #000" },
-    listItem: e => ({ border:"1px solid #000",borderTop:"none",background:e?"#f8f8f0":"#fff",cursor:"pointer" }),
-    listItemHeader: { display:"flex",alignItems:"center",justifyContent:"space-between",padding:"10px 14px" },
-    listItemJp: { fontFamily:"'Times New Roman',Times,serif",fontSize:"20px",fontWeight:"700",color:"#000" },
-    listItemEn: { fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",color:"#333",marginTop:"1px" },
-    listItemExpanded: { padding:"0 14px 12px",borderTop:"1px solid #ccc",fontFamily:"'Times New Roman',Times,serif" },
-    card: { border:"1px solid #000",background:"#fff",padding:"16px" },
-    sectionLabel: { fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",textTransform:"uppercase",letterSpacing:"1px",color:"#000",marginBottom:"6px",borderBottom:"1px solid #ccc",paddingBottom:"3px" },
-    groupGrid: { display:"flex",flexWrap:"wrap",gap:"4px",marginBottom:"12px" },
-    groupBtn: a => ({ padding:"3px 8px",border:"1px solid #000",background:a?"#000":"#fff",color:a?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:a?"700":"400",fontSize:"11px",cursor:"pointer",textTransform:"uppercase",textDecoration:a?"none":"underline" }),
-    modeRow: { display:"flex",gap:"8px",marginBottom:"10px" },
-    modeBtn: a => ({ flex:1,padding:"8px 6px",border:"1px solid #000",background:a?"#000":"#fff",color:a?"#fff":"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase" }),
-    dirBtn: a => ({ flex:1,padding:"7px",border:"1px solid #000",background:a?"#000":"#fff",color:a?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:a?"700":"400",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:a?"none":"underline" }),
-    title: { fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif",fontWeight:"900",fontSize:"clamp(20px,5vw,36px)",textTransform:"uppercase",color:"#000",textAlign:"center" },
-    subtitle: { fontFamily:"Helvetica,Arial,sans-serif",fontSize:"12px",color:"#555",textTransform:"uppercase",letterSpacing:"2px",textAlign:"center" },
-    app: { background:"#888",minHeight:"100vh",padding:"8px 0" },
+    topRow: { display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px" },
+    backBtn: { background:"#f5f0e8", border:"1px solid #1a1a18", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"4px 12px" },
+    tagLabel: { fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"1px", color:"#6a6050", marginBottom:"4px" },
+    kbHint: { fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", fontStyle:"italic", textAlign:"center", marginTop:"8px" },
+    counterChip: { fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", color:"#3a3028" },
+    progressBar: { height:"4px", background:"#ddd6cc", border:"1px solid #1a1a18", overflow:"hidden", flex:1 },
+    progressFill: p => ({ height:"100%", width:`${p}%`, background:"#1a1a18" }),
+    flipCard: { perspective:"1000px", marginBottom:"12px", cursor:"pointer" },
+    flipInner: f => ({ width:"100%", position:"relative", transformStyle:"preserve-3d", transition:"transform 0.5s cubic-bezier(0.4,0,0.2,1)", transform:f?"rotateY(180deg)":"rotateY(0deg)" }),
+    flipFace: b => ({ position:b?"absolute":"relative", top:0, left:0, width:"100%", backfaceVisibility:"hidden", WebkitBackfaceVisibility:"hidden", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", transform:b?"rotateY(180deg)":"rotateY(0deg)", background:b?"#f5f0e8":"#fff", padding:"28px 20px", boxSizing:"border-box", minHeight:"180px" }),
+    jpText: { fontFamily:"'Times New Roman',Times,serif", fontSize:"clamp(32px,9vw,58px)", fontWeight:"700", color:"#1a1a18", textAlign:"center", lineHeight:1.2 },
+    enText: { fontFamily:"'Times New Roman',Times,serif", fontSize:"clamp(18px,4.5vw,26px)", fontWeight:"400", color:"#1a1a18", textAlign:"center" },
+    romajiText: { fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#6a6050", marginTop:"4px", fontStyle:"italic", textAlign:"center" },
+    tapHint: { fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", marginTop:"8px", fontStyle:"italic" },
+    sentenceBox: { border:"1px solid #c8c0b4", background:"#f5f0e8", padding:"12px 16px", marginBottom:"12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"14px" },
+    sentenceJp: { fontSize:"16px", color:"#1a1a18", fontWeight:"500", marginBottom:"4px", lineHeight:1.5 },
+    sentenceEn: { fontSize:"13px", color:"#4a4038", lineHeight:1.5 },
+    sentenceToggle: { border:"1px solid #1a1a18", background:"#f5f0e8", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", padding:"5px 14px", cursor:"pointer", flex:1 },
+    actionRow: { display:"flex", gap:"8px", marginBottom:"12px" },
+    actionBtn: c => ({ flex:1, padding:"14px 10px", minHeight:"52px", border:"1px solid #1a1a18", background:c==="#f87171"?"#7a2020":c==="#4ade80"?"#2c4f2c":"#f5f0e8", color:c==="#f87171"||c==="#4ade80"?"#f5f0e8":"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"14px", textTransform:"uppercase", cursor:"pointer" }),
+    startBtn: { display:"block", width:"100%", padding:"12px", border:"1px solid #1a1a18", background:"#1a1a18", color:"#f5f0e8", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"14px", textTransform:"uppercase", cursor:"pointer", marginBottom:"8px", textAlign:"center" },
+    quizOption: s => ({ display:"block", width:"100%", padding:"14px 16px", marginBottom:"8px", minHeight:"52px", border:s==="correct"?"2px solid #3d6b3d":s==="wrong"?"2px solid #7a3030":"1px solid #c8c0b4", background:s==="correct"?"#d8e8d0":s==="wrong"?"#e8d4d4":"#fff", color:"#1a1a18", fontFamily:"'Times New Roman',Times,serif", fontSize:"15px", cursor:quizSelected!==null?"default":"pointer", textAlign:"left" }),
+    searchBox: { width:"100%", border:"1px solid #1a1a18", borderTop:"none", padding:"8px 12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"14px", outline:"none", background:"#fff", color:"#1a1a18", boxSizing:"border-box" },
+    listGroupHeader: { fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif", fontWeight:"900", fontSize:"13px", textTransform:"uppercase", padding:"6px 12px", borderBottom:"1px solid #1a1a18", background:"#ede8da", borderTop:"1px solid #1a1a18", color:"#1a1a18" },
+    listItem: e => ({ border:"1px solid #1a1a18", borderTop:"none", background:e?"#f5f0e8":"#fff", cursor:"pointer" }),
+    listItemHeader: { display:"flex", alignItems:"center", justifyContent:"space-between", padding:"10px 14px" },
+    listItemJp: { fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", fontWeight:"700", color:"#1a1a18" },
+    listItemEn: { fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", color:"#4a4038", marginTop:"1px" },
+    listItemExpanded: { padding:"0 14px 12px", borderTop:"1px solid #c8c0b4", fontFamily:"'Times New Roman',Times,serif" },
+    card: { border:"1px solid #1a1a18", background:"#fff", padding:"16px" },
+    sectionLabel: { fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"1px", color:"#1a1a18", marginBottom:"6px", borderBottom:"1px solid #c8c0b4", paddingBottom:"3px" },
+    groupGrid: { display:"flex", flexWrap:"wrap", gap:"4px", marginBottom:"12px" },
+    groupBtn: a => ({ padding:"3px 8px", border:"1px solid #1a1a18", background:a?"#1a1a18":"#f5f0e8", color:a?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:a?"700":"400", fontSize:"11px", cursor:"pointer", textTransform:"uppercase" }),
+    modeRow: { display:"flex", gap:"8px", marginBottom:"10px" },
+    modeBtn: a => ({ flex:1, padding:"8px 6px", border:"1px solid #1a1a18", background:a?"#1a1a18":"#f5f0e8", color:a?"#f5f0e8":"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase" }),
+    dirBtn: a => ({ flex:1, padding:"7px", border:"1px solid #1a1a18", background:a?"#1a1a18":"#f5f0e8", color:a?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:a?"700":"400", fontSize:"12px", cursor:"pointer", textTransform:"uppercase" }),
+    title: { fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif", fontWeight:"900", fontSize:"clamp(20px,5vw,36px)", textTransform:"uppercase", color:"#1a1a18", textAlign:"center" },
+    subtitle: { fontFamily:"Helvetica,Arial,sans-serif", fontSize:"12px", color:"#6a6050", textTransform:"uppercase", letterSpacing:"2px", textAlign:"center" },
+    app: { background:"#b8b0a4", minHeight:"100vh", padding:"8px 0" },
   };
 
   function Romaji({ text }) {
@@ -226,13 +240,13 @@ function App() {
 
   const MenuRibbonCards = () => (
     <>
-      <div style={{background:GROUP_TINTS[group]||"#f0f0e8",color:"#000",fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif",fontWeight:"900",fontSize:"clamp(14px,4vw,26px)",lineHeight:"1.0",padding:"10px 14px",textTransform:"uppercase",borderBottom:"1px solid #000"}}>
+      <div style={{background:GROUP_TINTS[group]||"#f5f0e8", color:"#1a1a18", fontFamily:"'Arial Black','Arial Bold',Helvetica,sans-serif", fontWeight:"900", fontSize:"clamp(14px,4vw,26px)", lineHeight:"1.0", padding:"10px 14px", textTransform:"uppercase", borderBottom:"1px solid #1a1a18"}}>
         {group==="All"?"ALL TOPICS":group.toUpperCase()}
-        <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",marginTop:"4px"}}>{filteredVocab.length} words available</div>
+        <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", marginTop:"4px", color:"#4a4038"}}>{filteredVocab.length} words available</div>
       </div>
-      <div style={{borderBottom:"1px solid #000",padding:"6px 8px",background:"#f8f8f8",display:"flex",flexWrap:"wrap",gap:"4px"}}>
+      <div style={{borderBottom:"1px solid #1a1a18", padding:"6px 8px", background:"#ede8da", display:"flex", flexWrap:"wrap", gap:"4px"}}>
         {ALL_GROUPS.map(g=>(
-          <button key={g} onClick={()=>setGroup(g)} style={{padding:"6px 8px",border:"1px solid #000",background:group===g?"#000":(GROUP_TINTS[g]||"#fff"),color:group===g?"#fff":"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",cursor:"pointer",textTransform:"uppercase",minHeight:"36px"}}>
+          <button key={g} onClick={()=>setGroup(g)} style={{padding:"6px 8px", border:"1px solid #1a1a18", background:group===g?"#1a1a18":(GROUP_TINTS[g]||"#f5f0e8"), color:group===g?"#f5f0e8":"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", cursor:"pointer", textTransform:"uppercase", minHeight:"36px"}}>
             {g}
           </button>
         ))}
@@ -240,23 +254,23 @@ function App() {
       {(group==="All"?ALL_GROUPS.filter(g=>g!=="All"):[group]).map(g=>{
         const gWords=vocab.filter(v=>v.group===g);
         if(!gWords.length)return null;
-        const tint=GROUP_TINTS[g]||"#f0f0e8";
+        const tint=GROUP_TINTS[g]||"#f5f0e8";
         const gMastered=gWords.filter(w=>persistentKnown.has(`${w.jp}_${direction}`)).length;
         return(
-          <div key={g} style={{borderBottom:"1px solid #000"}}>
-            <div style={{background:"#fff",borderBottom:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"4px 12px",textTransform:"uppercase",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div key={g} style={{borderBottom:"1px solid #c8c0b4"}}>
+            <div style={{background:"#fff", borderBottom:"1px solid #c8c0b4", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"4px 12px", textTransform:"uppercase", display:"flex", justifyContent:"space-between", alignItems:"center", color:"#1a1a18"}}>
               <span>{g}</span>
-              <span style={{fontSize:"11px",fontWeight:"400",fontFamily:"'Times New Roman',Times,serif"}}>{gWords.length} words{gMastered>0?` · ✓${gMastered}`:""}</span>
+              <span style={{fontSize:"11px", fontWeight:"400", fontFamily:"'Times New Roman',Times,serif", color:"#6a6050"}}>{gWords.length} words{gMastered>0?` · ${gMastered} mastered`:""}</span>
             </div>
-            <div style={{background:tint,color:"#000",padding:"7px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",lineHeight:"1.4",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{background:tint, color:"#1a1a18", padding:"7px 12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", lineHeight:"1.4", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
               <span>{gWords.slice(0,4).map(w=>w.jp).join(" · ")}{gWords.length>4?" · …":""}</span>
-              {gMastered>0&&<span style={{fontSize:"11px",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",color:"#004400",flexShrink:0,marginLeft:"8px"}}>✓{gMastered}/{gWords.length}</span>}
+              {gMastered>0&&<span style={{fontSize:"11px", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", color:"#2c4f2c", flexShrink:0, marginLeft:"8px"}}>{gMastered}/{gWords.length}</span>}
             </div>
           </div>
         );
       })}
-      <div style={{padding:"6px 12px",fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#555",fontStyle:"italic"}}>
-        {filteredVocab.length} words selected{masteredCount>0?` · ✓ ${masteredCount} mastered`:""}
+      <div style={{padding:"6px 12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#888078", fontStyle:"italic"}}>
+        {filteredVocab.length} words selected{masteredCount>0?` · ${masteredCount} mastered`:""}
       </div>
     </>
   );
@@ -265,43 +279,43 @@ function App() {
     <Frame>
       {isMobile ? (
         <div>
-          <div style={{background:"#e91d2a",color:"#fff",borderTop:"1px solid #000",padding:"12px 14px"}}>
-            {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#ffcccc",marginBottom:"6px"}}>✓ {masteredCount} words mastered</div>}
-            <div style={{display:"flex",gap:"8px"}}>
-              <button style={{flex:1,background:"#000",color:"#fff",border:"1px solid #fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"13px",padding:"12px 8px",textTransform:"uppercase",cursor:"pointer",minHeight:"48px"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
-              <button style={{flex:1,background:"#fff",color:"#000",border:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"13px",padding:"12px 8px",textTransform:"uppercase",cursor:"pointer",minHeight:"48px"}} onClick={startQuiz}>▶ QUIZ MODE</button>
+          <div style={{background:"#8b1a1a", color:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"12px 14px"}}>
+            {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#d4b0b0", marginBottom:"6px"}}>{masteredCount} words mastered</div>}
+            <div style={{display:"flex", gap:"8px"}}>
+              <button style={{flex:1, background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
+              <button style={{flex:1, background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startQuiz}>▶ QUIZ MODE</button>
             </div>
           </div>
-          <div style={{display:"flex",flexWrap:"wrap",gap:"4px",padding:"8px",borderBottom:"1px solid #000",background:"#f0f0f0",borderTop:"1px solid #000"}}>
+          <div style={{display:"flex", flexWrap:"wrap", gap:"4px", padding:"8px", borderBottom:"1px solid #1a1a18", background:"#ede8da", borderTop:"1px solid #1a1a18"}}>
             {[["JP→EN","jp2en",()=>setDirection("jp2en")],["EN→JP","en2jp",()=>setDirection("en2jp")]].map(([label,val,fn])=>(
-              <button key={val} onClick={fn} style={{padding:"8px 12px",border:"1px solid #000",background:direction===val?"#000":"#fff",color:direction===val?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:direction===val?"none":"underline",minHeight:"44px"}}>{label}</button>
+              <button key={val} onClick={fn} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:direction===val?"#1a1a18":"#f5f0e8", color:direction===val?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>{label}</button>
             ))}
-            <button onClick={()=>setShowRomaji(r=>!r)} style={{padding:"8px 12px",border:"1px solid #000",background:showRomaji?"#000":"#fff",color:showRomaji?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:showRomaji?"none":"underline",minHeight:"44px"}}>ローマ字 {showRomaji?"ON":"OFF"}</button>
-            <button onClick={openList} style={{padding:"8px 12px",border:"1px solid #000",background:"#fff",color:"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:"underline",minHeight:"44px"}}>📋 LIST</button>
-            <button onClick={()=>setMode("grammar")} style={{padding:"8px 12px",border:"1px solid #000",background:"#fff",color:"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:"underline",minHeight:"44px"}}>📖 GRAMMAR</button>
+            <button onClick={()=>setShowRomaji(r=>!r)} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:showRomaji?"#1a1a18":"#f5f0e8", color:showRomaji?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>ローマ字 {showRomaji?"ON":"OFF"}</button>
+            <button onClick={openList} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:"#f5f0e8", color:"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>LIST</button>
+            <button onClick={()=>setMode("grammar")} style={{padding:"8px 12px", border:"1px solid #1a1a18", background:"#f5f0e8", color:"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase", minHeight:"44px"}}>文法</button>
           </div>
           <MenuRibbonCards/>
         </div>
       ) : (
-        <div style={{display:"flex",borderTop:"1px solid #000"}}>
-          <div style={{width:"190px",flexShrink:0,borderRight:"1px solid #000"}}>
-            <div style={{background:"#e91d2a",color:"#fff",borderBottom:"1px solid #000",padding:"14px"}}>
-              <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"13px",textTransform:"uppercase",marginBottom:"6px"}}>Start Studying</div>
-              <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",lineHeight:"1.4",marginBottom:"8px"}}>Select a topic, choose your study mode, and build your Japanese vocabulary.</div>
-              {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#ffcccc"}}>✓ {masteredCount} words mastered</div>}
-              <button style={{display:"block",width:"100%",marginTop:"8px",background:"#000",color:"#fff",border:"1px solid #fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"6px",textTransform:"uppercase",cursor:"pointer"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
-              <button style={{display:"block",width:"100%",marginTop:"5px",background:"#fff",color:"#000",border:"1px solid #000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"12px",padding:"6px",textTransform:"uppercase",cursor:"pointer"}} onClick={startQuiz}>▶ QUIZ MODE</button>
+        <div style={{display:"flex", borderTop:"1px solid #1a1a18"}}>
+          <div style={{width:"190px", flexShrink:0, borderRight:"1px solid #1a1a18"}}>
+            <div style={{background:"#8b1a1a", color:"#f5f0e8", borderBottom:"1px solid #1a1a18", padding:"14px"}}>
+              <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", textTransform:"uppercase", marginBottom:"6px", letterSpacing:"1px"}}>Study</div>
+              <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", lineHeight:"1.4", marginBottom:"8px", color:"#e0d0d0"}}>Select a topic, choose your mode, and build your Japanese vocabulary.</div>
+              {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#d4b0b0"}}>{masteredCount} words mastered</div>}
+              <button style={{display:"block", width:"100%", marginTop:"8px", background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
+              <button style={{display:"block", width:"100%", marginTop:"5px", background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startQuiz}>▶ QUIZ MODE</button>
             </div>
-            {[["Direction",[["JP → EN","jp2en",()=>setDirection("jp2en")],["EN → JP","en2jp",()=>setDirection("en2jp")]]],["Options",[["ローマ字 "+(showRomaji?"ON":"OFF"),showRomaji?"on":"",()=>setShowRomaji(r=>!r)]]],["Browse",[["📋 Word List","",openList],["📖 Grammar Guide","",()=>setMode("grammar")]]]].map(([sLabel,items])=>(
+            {[["Direction",[["JP → EN","jp2en",()=>setDirection("jp2en")],["EN → JP","en2jp",()=>setDirection("en2jp")]]],["Options",[["ローマ字 "+(showRomaji?"ON":"OFF"),showRomaji?"on":"",()=>setShowRomaji(r=>!r)]]],["Browse",[["Word List","",openList],["Grammar Guide","",()=>setMode("grammar")]]]].map(([sLabel,items])=>(
               <div key={sLabel}>
-                <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"10px",textTransform:"uppercase",letterSpacing:"1px",padding:"5px 10px",borderBottom:"1px solid #000",borderTop:"1px solid #000",background:"#f0f0f0",color:"#000"}}>{sLabel}</div>
+                <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"10px", textTransform:"uppercase", letterSpacing:"1px", padding:"5px 10px", borderBottom:"1px solid #1a1a18", borderTop:"1px solid #1a1a18", background:"#ede8da", color:"#1a1a18"}}>{sLabel}</div>
                 {items.map(([label,active,fn])=>(
-                  <button key={label} onClick={fn} style={{display:"block",width:"100%",textAlign:"left",padding:"5px 10px",border:"none",borderBottom:"1px solid #ccc",background:active?"#000":"#fff",color:active?"#fff":"#0000ee",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:active?"700":"400",fontSize:"12px",cursor:"pointer",textTransform:"uppercase",textDecoration:active?"none":"underline"}}>{label}</button>
+                  <button key={label} onClick={fn} style={{display:"block", width:"100%", textAlign:"left", padding:"5px 10px", border:"none", borderBottom:"1px solid #c8c0b4", background:active?"#1a1a18":"#fff", color:active?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:active?"700":"400", fontSize:"12px", cursor:"pointer", textTransform:"uppercase"}}>{label}</button>
                 ))}
               </div>
             ))}
           </div>
-          <div style={{flex:1,minWidth:0}}>
+          <div style={{flex:1, minWidth:0}}>
             <MenuRibbonCards/>
           </div>
         </div>
@@ -314,22 +328,22 @@ function App() {
     return (
       <Frame>
         <div style={{padding:"16px"}}>
-          <div style={{background:"#e91d2a",color:"#fff",border:"1px solid #000",padding:"16px",marginBottom:"12px",textAlign:"center"}}>
-            <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif",fontWeight:"900",fontSize:"48px",color:"#fff",lineHeight:"1.0"}}>{pct}%</div>
-            <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",textTransform:"uppercase",marginTop:"6px"}}>完了！ Session Complete</div>
-            {score.total>0&&<div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",marginTop:"4px"}}>{score.correct} / {score.total} correct</div>}
-            {score.total===0&&<div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",marginTop:"4px"}}>All cards reviewed!</div>}
+          <div style={{background:"#8b1a1a", color:"#f5f0e8", border:"1px solid #1a1a18", padding:"16px", marginBottom:"12px", textAlign:"center"}}>
+            <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif", fontWeight:"900", fontSize:"48px", color:"#f5f0e8", lineHeight:"1.0"}}>{pct}%</div>
+            <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"14px", textTransform:"uppercase", marginTop:"6px", letterSpacing:"1px"}}>完了 · Session Complete</div>
+            {score.total>0&&<div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", marginTop:"4px", color:"#e0d0d0"}}>{score.correct} / {score.total} correct</div>}
+            {score.total===0&&<div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", marginTop:"4px", color:"#e0d0d0"}}>All cards reviewed.</div>}
           </div>
           {missedWords.length>0&&(
             <div style={{marginBottom:"12px"}}>
-              <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif",fontWeight:"900",fontSize:"13px",textTransform:"uppercase",background:"#d77a7a",color:"#000",padding:"5px 12px",border:"1px solid #000"}}>Missed Words ({missedWords.length})</div>
-              <div style={{maxHeight:"200px",overflowY:"auto",border:"1px solid #000",borderTop:"none"}}>
+              <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif", fontWeight:"900", fontSize:"13px", textTransform:"uppercase", background:"#e8d4d4", color:"#1a1a18", padding:"5px 12px", border:"1px solid #1a1a18"}}>Review These ({missedWords.length})</div>
+              <div style={{maxHeight:"200px", overflowY:"auto", border:"1px solid #1a1a18", borderTop:"none"}}>
                 {missedWords.map((w,i)=>(
-                  <div key={i} style={{padding:"8px 12px",borderBottom:"1px solid #ccc",display:"flex",alignItems:"center",justifyContent:"space-between",gap:"8px",background:i%2===0?"#fff":"#f8f8f0"}}>
+                  <div key={i} style={{padding:"8px 12px", borderBottom:"1px solid #c8c0b4", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"8px", background:i%2===0?"#fff":"#f5f0e8"}}>
                     <div>
-                      <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"18px",fontWeight:"700",color:"#000"}}>{w.jp}</div>
-                      {showRomaji&&(()=>{const r=toRomaji(w.jp);return r&&r!==w.jp?<div style={{fontSize:"10px",color:"#555",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif"}}>{r}</div>:null;})()}
-                      <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"13px",color:"#333"}}>{w.en}</div>
+                      <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"18px", fontWeight:"700", color:"#1a1a18"}}>{w.jp}</div>
+                      {showRomaji&&(()=>{const r=toRomaji(w.jp);return r&&r!==w.jp?<div style={{fontSize:"10px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif"}}>{r}</div>:null;})()}
+                      <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", color:"#4a4038"}}>{w.en}</div>
                     </div>
                     <SpeakBtn text={w.jp}/>
                   </div>
@@ -337,9 +351,9 @@ function App() {
               </div>
             </div>
           )}
-          <div style={{display:"flex",gap:"8px"}}>
-            <button style={{flex:1,padding:"10px",border:"1px solid #000",background:"#fff",color:"#000",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"14px",textTransform:"uppercase",cursor:"pointer"}} onClick={()=>setMode("menu")}>← MENU</button>
-            <button style={{...S.startBtn,marginBottom:0,flex:1}} onClick={score.total>0?startQuiz:startFlashcards}>TRY AGAIN</button>
+          <div style={{display:"flex", gap:"8px"}}>
+            <button style={{flex:1, padding:"10px", border:"1px solid #1a1a18", background:"#f5f0e8", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"14px", textTransform:"uppercase", cursor:"pointer"}} onClick={()=>setMode("menu")}>← MENU</button>
+            <button style={{...S.startBtn, marginBottom:0, flex:1}} onClick={score.total>0?startQuiz:startFlashcards}>TRY AGAIN</button>
           </div>
         </div>
       </Frame>
@@ -353,13 +367,13 @@ function App() {
     listVocab.forEach(v => { if (!grouped[v.group]) grouped[v.group]=[]; grouped[v.group].push(v); });
     return (
       <Frame>
-        <div style={{borderBottom:"1px solid #000",padding:"8px 14px",display:"flex",alignItems:"center",gap:"10px",background:"#f0f0f0",borderTop:"1px solid #000"}}>
+        <div style={{borderBottom:"1px solid #1a1a18", padding:"8px 14px", display:"flex", alignItems:"center", gap:"10px", background:"#ede8da", borderTop:"1px solid #1a1a18"}}>
           <button style={S.backBtn} onClick={()=>setMode("menu")}>← BACK</button>
-          <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif",fontWeight:"900",fontSize:"18px",textTransform:"uppercase",color:"#000"}}>Vocabulary List</div>
-          <div style={{marginLeft:"auto",fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#555"}}>{listVocab.length} words</div>
+          <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif", fontWeight:"900", fontSize:"18px", textTransform:"uppercase", color:"#1a1a18"}}>Vocabulary List</div>
+          <div style={{marginLeft:"auto", fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#6a6050"}}>{listVocab.length} words</div>
         </div>
         <input style={S.searchBox} placeholder="Search in Japanese or English…" value={listSearch} onChange={e=>setListSearch(e.target.value)} />
-        <div style={{border:"1px solid #000",borderTop:"none"}}>
+        <div style={{border:"1px solid #1a1a18", borderTop:"none"}}>
           {Object.entries(grouped).map(([grp,words]) => (
             <div key={grp}>
               {!listSearch && <div style={S.listGroupHeader}>{grp} · {words.length}</div>}
@@ -368,28 +382,28 @@ function App() {
                 return (
                   <div key={v.jp} style={S.listItem(expanded)} onClick={()=>setExpandedWord(expanded?null:v.jp)}>
                     <div style={S.listItemHeader}>
-                      <div style={{minWidth:0,flex:1}}>
+                      <div style={{minWidth:0, flex:1}}>
                         <div style={S.listItemJp}>{v.jp}</div>
-                        {showRomaji && (() => { const r = toRomaji(v.jp); return r && r !== v.jp ? <div style={{fontSize:"10px",color:"#555",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"1px"}}>{r}</div> : null; })()}
+                        {showRomaji && (() => { const r = toRomaji(v.jp); return r && r !== v.jp ? <div style={{fontSize:"10px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"1px"}}>{r}</div> : null; })()}
                         <div style={S.listItemEn}>{v.en}</div>
                       </div>
-                      <div style={{display:"flex",alignItems:"center",gap:"8px",flexShrink:0,marginLeft:"12px"}}>
+                      <div style={{display:"flex", alignItems:"center", gap:"8px", flexShrink:0, marginLeft:"12px"}}>
                         <SpeakBtn text={v.jp} />
-                        <div style={{fontSize:"14px",color:"#555",fontFamily:"Helvetica,Arial,sans-serif"}}>{expanded?"▲":"▼"}</div>
+                        <div style={{fontSize:"14px", color:"#6a6050", fontFamily:"Helvetica,Arial,sans-serif"}}>{expanded?"▲":"▼"}</div>
                       </div>
                     </div>
                     {expanded && <div style={S.listItemExpanded}>
-                      <div style={{...S.tagLabel,marginBottom:"8px"}}>Example sentence</div>
-                      <div style={{display:"flex",alignItems:"flex-start",gap:"8px"}}>
+                      <div style={{...S.tagLabel, marginBottom:"8px"}}>Example sentence</div>
+                      <div style={{display:"flex", alignItems:"flex-start", gap:"8px"}}>
                         <div style={{flex:1}}>
                           <div style={S.sentenceJp}>{v.sentence}</div>
-                          {showRomaji && (() => { const r = toRomaji(v.sentence); return r && r !== v.sentence ? <div style={{fontSize:"11px",color:"#555",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"4px"}}>{r}</div> : null; })()}
+                          {showRomaji && (() => { const r = toRomaji(v.sentence); return r && r !== v.sentence ? <div style={{fontSize:"11px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"4px"}}>{r}</div> : null; })()}
                           <div style={S.sentenceEn}>{v.sentenceEn}</div>
                         </div>
                         <SpeakBtn text={v.sentence} style={{marginTop:"2px"}} />
                       </div>
-                      <div style={{...S.tagLabel,marginTop:"10px",marginBottom:"2px"}}>Group</div>
-                      <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#333"}}>{v.group}</div>
+                      <div style={{...S.tagLabel, marginTop:"10px", marginBottom:"2px"}}>Group</div>
+                      <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#4a4038"}}>{v.group}</div>
                     </div>}
                   </div>
                 );
@@ -406,21 +420,21 @@ function App() {
     const back = direction==="jp2en"?currentCard.en:currentCard.jp;
     const frontIsJp = direction==="jp2en";
     const backIsJp = direction==="en2jp";
-    const cardTint = GROUP_TINTS[currentCard.group]||"#f0f0e8";
+    const cardTint = GROUP_TINTS[currentCard.group]||"#f5f0e8";
     return (
       <Frame>
-        <div style={{padding:"12px 14px",paddingBottom: isMobile ? "80px" : "12px"}}>
-          <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"12px"}}>
+        <div style={{padding:"12px 14px", paddingBottom: isMobile ? "80px" : "12px"}}>
+          <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
             <div style={S.progressBar}><div style={S.progressFill(progress)}/></div>
-            <span style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#333",whiteSpace:"nowrap"}}>{index+1}/{deck.length}</span>
+            <span style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#4a4038", whiteSpace:"nowrap"}}>{index+1}/{deck.length}</span>
           </div>
-          <div style={{border:"1px solid #000",marginBottom:"12px"}} onClick={()=>setFlipped(f=>!f)}>
-            <div style={{background:"#000",color:"#fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",textTransform:"uppercase",letterSpacing:"2px",padding:"5px 12px",display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer"}}>
+          <div style={{border:"1px solid #1a1a18", marginBottom:"12px"}} onClick={()=>setFlipped(f=>!f)}>
+            <div style={{background:"#1a1a18", color:"#f5f0e8", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"2px", padding:"5px 12px", display:"flex", justifyContent:"space-between", alignItems:"center", cursor:"pointer"}}>
               <span>{frontIsJp?"Japanese Word":"English Word"}</span>
-              <span style={{fontSize:"10px",color:"#aaa",fontWeight:"400"}}>{currentCard.group}</span>
+              <span style={{fontSize:"10px", color:"#a09888", fontWeight:"400"}}>{currentCard.group}</span>
             </div>
-            <div style={{...S.flipCard,border:"none",marginBottom:0}}>
+            <div style={{...S.flipCard, border:"none", marginBottom:0}}>
               <div style={S.flipInner(flipped)}>
                 <div style={S.flipFace(false)}>
                   <div style={S.tagLabel}>{frontIsJp?"Japanese":"English"}</div>
@@ -428,16 +442,16 @@ function App() {
                   {frontIsJp && <Romaji text={front} />}
                   <div style={S.tapHint}>— click to reveal —</div>
                 </div>
-                <div style={{...S.flipFace(true),background:cardTint}}>
+                <div style={{...S.flipFace(true), background:cardTint}}>
                   <div style={S.tagLabel}>{backIsJp?"Japanese":"English"}</div>
                   <div style={backIsJp?S.jpText:S.enText}>{back}</div>
                   {backIsJp && <Romaji text={back} />}
-                  <div style={{fontFamily:"Helvetica,Arial,sans-serif",fontSize:"11px",color:"#555",marginTop:"8px",textTransform:"uppercase",letterSpacing:"1px"}}>{currentCard.group}</div>
+                  <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"11px", color:"#6a6050", marginTop:"8px", textTransform:"uppercase", letterSpacing:"1px"}}>{currentCard.group}</div>
                 </div>
               </div>
             </div>
           </div>
-          <div style={{display:"flex",gap:"8px",marginBottom:"12px"}}>
+          <div style={{display:"flex", gap:"8px", marginBottom:"12px"}}>
             <button style={S.sentenceToggle} onClick={()=>setShowSentence(s=>!s)}>
               {showSentence?"HIDE EXAMPLE":"SHOW EXAMPLE SENTENCE"}
             </button>
@@ -445,10 +459,10 @@ function App() {
           </div>
           {showSentence && (
             <div style={S.sentenceBox}>
-              <div style={{display:"flex",alignItems:"flex-start",gap:"8px"}}>
+              <div style={{display:"flex", alignItems:"flex-start", gap:"8px"}}>
                 <div style={{flex:1}}>
                   <div style={S.sentenceJp}>{currentCard.sentence}</div>
-                  {showRomaji && (() => { const r = toRomaji(currentCard.sentence); return r && r !== currentCard.sentence ? <div style={{fontSize:"11px",color:"#555",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"4px"}}>{r}</div> : null; })()}
+                  {showRomaji && (() => { const r = toRomaji(currentCard.sentence); return r && r !== currentCard.sentence ? <div style={{fontSize:"11px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"4px"}}>{r}</div> : null; })()}
                   <div style={S.sentenceEn}>{currentCard.sentenceEn}</div>
                 </div>
                 <SpeakBtn text={currentCard.sentence} style={{marginTop:"2px"}} />
@@ -456,16 +470,16 @@ function App() {
             </div>
           )}
           <div style={S.actionRow}>
-            <button style={S.actionBtn("#f87171")} onClick={()=>{setUnknown(s=>new Set(s).add(index));nextCard();}}>✗ AGAIN</button>
+            <button style={S.actionBtn("#f87171")} onClick={()=>{setUnknown(s=>new Set(s).add(index));nextCard();}}>× AGAIN</button>
             <button style={S.actionBtn("#4ade80")} onClick={()=>{
               const key=`${currentCard.jp}_${direction}`;
               setPersistentKnown(s=>new Set(s).add(key));
               setKnown(s=>new Set(s).add(index));
               nextCard();
-            }}>✓ GOT IT</button>
+            }}>○ GOT IT</button>
           </div>
-          <div style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#555",display:"flex",gap:"16px",justifyContent:"center"}}>
-            <span>✓ {known.size} known</span><span>✗ {unknown.size} to review</span>
+          <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#6a6050", display:"flex", gap:"16px", justifyContent:"center"}}>
+            <span>○ {known.size} known</span><span>× {unknown.size} to review</span>
           </div>
           <div style={S.kbHint}>Space: flip · → Got it · ← Again</div>
         </div>
@@ -478,21 +492,21 @@ function App() {
     const correctAns = direction==="jp2en"?currentCard.en:currentCard.jp;
     const questionIsJp = direction==="jp2en";
     const optionsAreJp = direction==="en2jp";
-    const cardTint = GROUP_TINTS[currentCard.group]||"#f0f0e8";
+    const cardTint = GROUP_TINTS[currentCard.group]||"#f5f0e8";
     return (
       <Frame>
-        <div style={{padding:"12px 14px",paddingBottom: isMobile ? "80px" : "12px"}}>
-          <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"12px"}}>
+        <div style={{padding:"12px 14px", paddingBottom: isMobile ? "80px" : "12px"}}>
+          <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
             <div style={S.progressBar}><div style={S.progressFill(progress)}/></div>
-            <span style={{fontFamily:"'Times New Roman',Times,serif",fontSize:"12px",color:"#333",whiteSpace:"nowrap"}}>{score.correct}/{score.total}</span>
+            <span style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#4a4038", whiteSpace:"nowrap"}}>{score.correct}/{score.total}</span>
           </div>
-          <div style={{border:"1px solid #000",marginBottom:"12px"}}>
-            <div style={{background:"#000",color:"#fff",fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",textTransform:"uppercase",letterSpacing:"2px",padding:"5px 12px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div style={{border:"1px solid #1a1a18", marginBottom:"12px"}}>
+            <div style={{background:"#1a1a18", color:"#f5f0e8", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"2px", padding:"5px 12px", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
               <span>{questionIsJp?"What does this mean?":"How do you write this?"}</span>
-              <span style={{fontSize:"10px",color:"#aaa",fontWeight:"400"}}>{currentCard.group}</span>
+              <span style={{fontSize:"10px", color:"#a09888", fontWeight:"400"}}>{currentCard.group}</span>
             </div>
-            <div style={{background:cardTint,padding:"20px",textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",gap:"10px",flexWrap:"wrap"}}>
+            <div style={{background:cardTint, padding:"20px", textAlign:"center", display:"flex", alignItems:"center", justifyContent:"center", gap:"10px", flexWrap:"wrap"}}>
               <div>
                 <div style={questionIsJp?S.jpText:{...S.enText,fontSize:"clamp(18px,4.5vw,26px)"}}>{question}</div>
                 {questionIsJp && <Romaji text={question} />}
@@ -505,19 +519,19 @@ function App() {
             const state=quizSelected===null?null:isCorrect?"correct":isSelected?"wrong":null;
             return (
               <button key={opt} style={S.quizOption(state)} onClick={()=>handleQuizAnswer(opt)}>
-                <span style={{fontFamily:"Helvetica,Arial,sans-serif",fontWeight:"700",fontSize:"11px",color:"#555",marginRight:"8px"}}>{i+1}</span>
+                <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", color:"#888078", marginRight:"8px"}}>{i+1}</span>
                 {opt}
-                {optionsAreJp && showRomaji && (() => { const r = toRomaji(opt); return r && r !== opt ? <div style={{fontSize:"11px",color:"#555",marginTop:"2px",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif"}}>{r}</div> : null; })()}
+                {optionsAreJp && showRomaji && (() => { const r = toRomaji(opt); return r && r !== opt ? <div style={{fontSize:"11px",color:"#6a6050",marginTop:"2px",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif"}}>{r}</div> : null; })()}
               </button>
             );
           })}
           {quizSelected !== null && <>
             <div style={S.sentenceBox}>
-              <div style={{display:"flex",alignItems:"flex-start",gap:"8px"}}>
+              <div style={{display:"flex", alignItems:"flex-start", gap:"8px"}}>
                 <div style={{flex:1}}>
-                  <div style={{...S.tagLabel,marginBottom:"6px"}}>Example sentence</div>
+                  <div style={{...S.tagLabel, marginBottom:"6px"}}>Example sentence</div>
                   <div style={S.sentenceJp}>{currentCard.sentence}</div>
-                  {showRomaji && (() => { const r = toRomaji(currentCard.sentence); return r && r !== currentCard.sentence ? <div style={{fontSize:"11px",color:"#555",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"4px"}}>{r}</div> : null; })()}
+                  {showRomaji && (() => { const r = toRomaji(currentCard.sentence); return r && r !== currentCard.sentence ? <div style={{fontSize:"11px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"4px"}}>{r}</div> : null; })()}
                   <div style={S.sentenceEn}>{currentCard.sentenceEn}</div>
                 </div>
                 <SpeakBtn text={currentCard.sentence} style={{marginTop:"2px"}} />
