@@ -172,8 +172,8 @@ function App() {
             <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"9px", color:"#a09888", textTransform:"uppercase", letterSpacing:"2px"}}>words</span>
           </div>
         </div>
-        {children}
-        <div style={{background:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"10px 16px", ...(isMobile ? {position:"sticky", bottom:0, zIndex:10} : {})}}>
+        <div style={isMobile ? {paddingBottom:"80px"} : {}}>{children}</div>
+        <div style={{background:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"10px 16px", ...(isMobile ? {position:"fixed", bottom:0, left:0, right:0, zIndex:10} : {})}}>
           <div style={{display:"flex", justifyContent:"space-around", borderBottom:"1px solid #c8c0b4", paddingBottom:"8px", marginBottom:"6px"}}>
             {[["HOME",()=>setMode("menu")],["CARDS",startFlashcards],["LIST",openList],["文法",()=>setMode("grammar")]].map(([label,fn])=>(
               <button key={label} onClick={fn} style={{background:"none", border:"none", cursor:"pointer", textAlign:"center", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", color:"#1e3050", padding:"4px 8px"}}>
