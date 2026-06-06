@@ -1,4 +1,4 @@
-function GrammarView({ onBack, showRomaji }) {
+function GrammarView({ onBack, onCards, onList, showRomaji }) {
   const isMobile = useWindowWidth() < 640;
   const [section, setSection] = useState("basics");
   const [expandedId, setExpandedId] = useState(null);
@@ -6,7 +6,7 @@ function GrammarView({ onBack, showRomaji }) {
   const topics = section === "basics" ? grammar.basics : grammar.adjectives;
 
   const Gs = {
-    wrap: { background: isMobile ? "#f5f0e8" : "#b8b0a4", minHeight:"100vh", padding: isMobile ? "0" : "8px 0", boxSizing:"border-box" },
+    wrap: { background: isMobile ? "#f5f0e8" : "#b8b0a4", minHeight:"100vh", padding: isMobile ? "0" : "8px 0", boxSizing:"border-box", paddingBottom: isMobile ? "80px" : "0" },
     backBtn: { background:"#f5f0e8", border:"none", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"4px 12px" },
     tab: a => ({ flex:1, padding: isMobile ? "12px" : "8px 12px", minHeight:"44px", border:"none", borderRight:"1px solid #1a1a18", background:a?"#1a1a18":"#ede8da", color:a?"#f5f0e8":"#1e3050", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", cursor:"pointer", textTransform:"uppercase" }),
     topicCard: open => ({ borderBottom:"1px solid #c8c0b4", background:open?"#f5f0e8":"#fff", cursor:"pointer" }),
@@ -212,10 +212,26 @@ function GrammarView({ onBack, showRomaji }) {
           </div>
         );
       })}
-        <div style={{borderTop:"1px solid #c8c0b4", padding:"10px 16px", textAlign:"center", background:"#f5f0e8"}}>
-          <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", fontStyle:"italic"}}>This site is best viewed with browser versions 3.0 and higher.</div>
-        </div>
+        {!isMobile && (
+          <div style={{borderTop:"1px solid #c8c0b4", padding:"10px 16px", textAlign:"center", background:"#f5f0e8"}}>
+            <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", fontStyle:"italic"}}>This site is best viewed with browser versions 3.0 and higher.</div>
+          </div>
+        )}
       </div>
+      {isMobile && (
+        <div style={{position:"fixed", bottom:0, left:0, right:0, background:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"10px 16px", zIndex:10}}>
+          <div style={{display:"flex", justifyContent:"space-around", borderBottom:"1px solid #c8c0b4", paddingBottom:"8px", marginBottom:"6px"}}>
+            {[["HOME",onBack],["CARDS",onCards],["LIST",onList],["文法",null]].map(([label,fn])=>(
+              <button key={label} onClick={fn||undefined} style={{background:"none", border:"none", cursor:fn?"pointer":"default", textAlign:"center", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", color:fn?"#1e3050":"#1a1a18", padding:"4px 8px", textDecoration:!fn?"underline":"none"}}>
+                {label}
+              </button>
+            ))}
+          </div>
+          <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", textAlign:"center", fontStyle:"italic"}}>
+            This site is best viewed with browser versions 3.0 and higher.
+          </div>
+        </div>
+      )}
     </div>
   );
 }
