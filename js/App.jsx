@@ -28,6 +28,10 @@ function App() {
   const [missedWords, setMissedWords] = useState([]);
   const [listSearch, setListSearch] = useState("");
   const [expandedWord, setExpandedWord] = useState(null);
+  const [writeInput, setWriteInput] = useState("");
+  const [writeSubmitted, setWriteSubmitted] = useState(false);
+  const [writeCorrect, setWriteCorrect] = useState(false);
+  const [lastMode, setLastMode] = useState("flashcard");
 
   useEffect(() => { try { localStorage.setItem('vocabStudy_group', group); } catch(e) {} }, [group]);
   useEffect(() => { try { localStorage.setItem('vocabStudy_direction', direction); } catch(e) {} }, [direction]);
@@ -43,16 +47,31 @@ function App() {
     setDeck(shuffle(filteredVocab));
     setIndex(0); setFlipped(false); setShowSentence(false);
     setKnown(new Set()); setUnknown(new Set());
-    setMode("flashcard");
+    setLastMode("flashcard"); setMode("flashcard");
   }
   function startQuiz() {
     setDeck(shuffle(filteredVocab));
     setIndex(0); setQuizSelected(null);
-    setScore({ correct: 0, total: 0 });
-    setMissedWords([]);
-    setMode("quiz");
+    setScore({ correct: 0, total: 0 }); setMissedWords([]);
+    setLastMode("quiz"); setMode("quiz");
+  }
+  function startWrite() {
+    setDeck(shuffle(filteredVocab));
+    setIndex(0); setWriteInput(""); setWriteSubmitted(false); setWriteCorrect(false);
+    setScore({ correct: 0, total: 0 }); setMissedWords([]);
+    setLastMode("write"); setMode("write");
   }
   function openList() { setListSearch(""); setExpandedWord(null); setMode("list"); }
+
+  function submitWriteAnswer() {
+    if (writeSubmitted || !writeInput.trim()) return;
+    const final = typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput.trim()) : writeInput.trim();
+    const correct = final === currentCard.jp;
+    setWriteCorrect(correct);
+    setWriteSubmitted(true);
+    setScore(s => ({ correct: s.correct + (correct ? 1 : 0), total: s.total + 1 }));
+    if (!correct) setMissedWords(m => [...m, currentCard]);
+  }
 
   const makeQuizOptions = useCallback((current, allCards) => {
     const correct = direction === "jp2en" ? current.en : current.jp;
@@ -82,6 +101,7 @@ function App() {
 
   function nextCard() {
     setFlipped(false); setShowSentence(false); setQuizSelected(null);
+    setWriteInput(""); setWriteSubmitted(false); setWriteCorrect(false);
     if (index + 1 >= deck.length) setMode("done");
     else setIndex(i => i + 1);
   }
@@ -129,13 +149,20 @@ function App() {
         }
       }
 
+      if (mode === 'write' && currentCard) {
+        if (writeSubmitted && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          nextCard();
+        }
+      }
+
       if (mode === 'list' && e.key === 'Escape') {
         setExpandedWord(null);
       }
     }
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [mode, currentCard, quizSelected, quizOptions, index, direction, deck]);
+  }, [mode, currentCard, quizSelected, quizOptions, writeSubmitted, index, direction, deck]);
 
   // Muted vintage tones — aged paper, ink, and seasonal dyes
   const GROUP_TINTS = {
@@ -284,6 +311,7 @@ function App() {
               <button style={{flex:1, background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startFlashcards}>→ FLASH CARDS</button>
               <button style={{flex:1, background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startQuiz}>→ QUIZ MODE</button>
             </div>
+            <button style={{display:"block", width:"100%", marginTop:"6px", background:"#4a5a8a", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"10px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"44px"}} onClick={startWrite}>→ WRITE MODE</button>
           </div>
           <div style={{display:"flex", flexWrap:"wrap", gap:"4px", padding:"8px", borderBottom:"1px solid #1a1a18", background:"#ede8da", borderTop:"1px solid #1a1a18"}}>
             {[["JP→EN","jp2en",()=>setDirection("jp2en")],["EN→JP","en2jp",()=>setDirection("en2jp")]].map(([label,val,fn])=>(
@@ -302,6 +330,7 @@ function App() {
               {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#d4b0b0"}}>{masteredCount} words mastered</div>}
               <button style={{display:"block", width:"100%", marginTop:"8px", background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startFlashcards}>→ FLASH CARDS</button>
               <button style={{display:"block", width:"100%", marginTop:"5px", background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startQuiz}>→ QUIZ MODE</button>
+              <button style={{display:"block", width:"100%", marginTop:"5px", background:"#4a5a8a", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startWrite}>→ WRITE MODE</button>
             </div>
             {[["Direction",[["JP → EN","jp2en",()=>setDirection("jp2en")],["EN → JP","en2jp",()=>setDirection("en2jp")]]],["Options",[["ローマ字 "+(showRomaji?"ON":"OFF"),showRomaji?"on":"",()=>setShowRomaji(r=>!r)]]],["Browse",[["Word List","",openList],["Grammar Guide","",()=>setMode("grammar")]]]].map(([sLabel,items])=>(
               <div key={sLabel}>
@@ -350,7 +379,7 @@ function App() {
           )}
           <div style={{display:"flex", gap:"8px"}}>
             <button style={{flex:1, padding:"10px", border:"1px solid #1a1a18", background:"#f5f0e8", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"14px", textTransform:"uppercase", cursor:"pointer"}} onClick={()=>setMode("menu")}>← MENU</button>
-            <button style={{...S.startBtn, marginBottom:0, flex:1}} onClick={score.total>0?startQuiz:startFlashcards}>TRY AGAIN</button>
+            <button style={{...S.startBtn, marginBottom:0, flex:1}} onClick={lastMode==='write'?startWrite:lastMode==='quiz'?startQuiz:startFlashcards}>TRY AGAIN</button>
           </div>
         </div>
       </Frame>
@@ -538,6 +567,95 @@ function App() {
           </>}
           {quizSelected === null && <div style={S.kbHint}>1–4: select answer</div>}
           {quizSelected !== null && <div style={S.kbHint}>Enter: next card</div>}
+        </div>
+      </Frame>
+    );
+  }
+
+  if (mode === "write" && currentCard) {
+    const cardTint = GROUP_TINTS[currentCard.group] || "#f5f0e8";
+    const kanaPreview = writeInput && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput) : writeInput;
+    const submittedKana = writeInput.trim() && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput.trim()) : writeInput.trim();
+    return (
+      <Frame>
+        <div style={{padding:"12px 14px"}}>
+          <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
+            <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
+            <div style={S.progressBar}><div style={S.progressFill(progress)}/></div>
+            <span style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#4a4038", whiteSpace:"nowrap"}}>{score.correct}/{score.total}</span>
+          </div>
+          <div style={{border:"1px solid #1a1a18", marginBottom:"12px"}}>
+            <div style={{background:"#4a5a8a", color:"#f5f0e8", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"2px", padding:"5px 12px", display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+              <span>Write the Japanese</span>
+              <span style={{fontSize:"10px", color:"#b0b8d0", fontWeight:"400"}}>{currentCard.group}</span>
+            </div>
+            <div style={{background:cardTint, padding:"24px 20px", textAlign:"center"}}>
+              <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"clamp(20px,5vw,32px)", fontWeight:"700", color:"#1a1a18"}}>{currentCard.en}</div>
+            </div>
+          </div>
+
+          {!writeSubmitted && (
+            <div style={{marginBottom:"12px"}}>
+              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji — it converts live</div>
+              <div style={{display:"flex", gap:"8px"}}>
+                <input
+                  style={{flex:1, border:"2px solid #1a1a18", padding:"10px 14px", fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", outline:"none", background:"#fff", color:"#1a1a18", boxSizing:"border-box"}}
+                  value={writeInput}
+                  onChange={e => setWriteInput(e.target.value)}
+                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); submitWriteAnswer(); } }}
+                  placeholder="e.g. neko → ねこ"
+                  autoFocus
+                  autoComplete="off"
+                  spellCheck="false"
+                />
+                <button style={{background:"#1a1a18", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"8px 14px"}} onClick={submitWriteAnswer}>CHECK</button>
+              </div>
+              {kanaPreview && kanaPreview !== writeInput && (
+                <div style={{marginTop:"6px", fontFamily:"'Times New Roman',Times,serif", fontSize:"24px", color:"#1a1a18", padding:"8px 14px", background:"#ede8da", border:"1px solid #c8c0b4", letterSpacing:"2px"}}>
+                  {kanaPreview}
+                </div>
+              )}
+            </div>
+          )}
+
+          {writeSubmitted && (
+            <div style={{marginBottom:"12px", border:`2px solid ${writeCorrect?"#3d6b3d":"#7a3030"}`, background:writeCorrect?"#d8e8d0":"#e8d4d4", padding:"14px 16px"}}>
+              <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", letterSpacing:"1px", color:writeCorrect?"#2c5020":"#5c2020", marginBottom:"10px"}}>
+                {writeCorrect ? "○ Correct!" : "× Not quite"}
+              </div>
+              <div style={{display:"flex", alignItems:"center", gap:"10px"}}>
+                <div style={{flex:1}}>
+                  <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#6a6050", marginBottom:"3px"}}>Correct answer</div>
+                  <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"30px", fontWeight:"700", color:"#1a1a18"}}>{currentCard.jp}</div>
+                  {showRomaji && (() => { const r = toRomaji(currentCard.jp); return r && r !== currentCard.jp ? <div style={{fontSize:"11px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif"}}>{r}</div> : null; })()}
+                </div>
+                <SpeakBtn text={currentCard.jp}/>
+              </div>
+              {!writeCorrect && (
+                <div style={{marginTop:"10px", paddingTop:"10px", borderTop:"1px solid #c8a0a0"}}>
+                  <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#5c2020", marginBottom:"2px"}}>You wrote</div>
+                  <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"22px", color:"#7a3030", fontWeight:"700"}}>{submittedKana}</div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {writeSubmitted && (
+            <div style={{...S.sentenceBox, marginBottom:"12px"}}>
+              <div style={{display:"flex", alignItems:"flex-start", gap:"8px"}}>
+                <div style={{flex:1}}>
+                  <div style={{...S.tagLabel, marginBottom:"6px"}}>Example sentence</div>
+                  <div style={S.sentenceJp}>{currentCard.sentence}</div>
+                  {showRomaji && (() => { const r = toRomaji(currentCard.sentence); return r && r !== currentCard.sentence ? <div style={{fontSize:"11px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"4px"}}>{r}</div> : null; })()}
+                  <div style={S.sentenceEn}>{currentCard.sentenceEn}</div>
+                </div>
+                <SpeakBtn text={currentCard.sentence} style={{marginTop:"2px"}} />
+              </div>
+            </div>
+          )}
+
+          {writeSubmitted && <button style={S.startBtn} onClick={nextCard}>NEXT →</button>}
+          <div style={S.kbHint}>{writeSubmitted ? "Enter: next card" : "Enter: check answer"}</div>
         </div>
       </Frame>
     );
