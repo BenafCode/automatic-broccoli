@@ -46,6 +46,6 @@ function SpeakBtn({ text, style }) {
       style={{ background: '#fff', border: '1px solid #000', borderRadius: '0', color: '#000', fontSize: '14px', fontFamily: 'Helvetica,Arial,sans-serif', fontWeight: '700', padding: '8px 12px', cursor: 'pointer', lineHeight: 1, flexShrink: 0, minWidth: '44px', minHeight: '44px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', ...style }}
       onClick={e => { e.stopPropagation(); speak(text); }}
       title="Pronounce"
-    >🔊</button>
+    >♪</button>
   );
 }

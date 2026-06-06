@@ -282,8 +282,8 @@ function App() {
           <div style={{background:"#8b1a1a", color:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"12px 14px"}}>
             {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#d4b0b0", marginBottom:"6px"}}>{masteredCount} words mastered</div>}
             <div style={{display:"flex", gap:"8px"}}>
-              <button style={{flex:1, background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
-              <button style={{flex:1, background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startQuiz}>▶ QUIZ MODE</button>
+              <button style={{flex:1, background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startFlashcards}>→ FLASH CARDS</button>
+              <button style={{flex:1, background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startQuiz}>→ QUIZ MODE</button>
             </div>
           </div>
           <div style={{display:"flex", flexWrap:"wrap", gap:"4px", padding:"8px", borderBottom:"1px solid #1a1a18", background:"#ede8da", borderTop:"1px solid #1a1a18"}}>
@@ -303,8 +303,8 @@ function App() {
               <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", textTransform:"uppercase", marginBottom:"6px", letterSpacing:"1px"}}>Study</div>
               <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", lineHeight:"1.4", marginBottom:"8px", color:"#e0d0d0"}}>Select a topic, choose your mode, and build your Japanese vocabulary.</div>
               {masteredCount>0&&<div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#d4b0b0"}}>{masteredCount} words mastered</div>}
-              <button style={{display:"block", width:"100%", marginTop:"8px", background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startFlashcards}>▶ FLASH CARDS</button>
-              <button style={{display:"block", width:"100%", marginTop:"5px", background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startQuiz}>▶ QUIZ MODE</button>
+              <button style={{display:"block", width:"100%", marginTop:"8px", background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startFlashcards}>→ FLASH CARDS</button>
+              <button style={{display:"block", width:"100%", marginTop:"5px", background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startQuiz}>→ QUIZ MODE</button>
             </div>
             {[["Direction",[["JP → EN","jp2en",()=>setDirection("jp2en")],["EN → JP","en2jp",()=>setDirection("en2jp")]]],["Options",[["ローマ字 "+(showRomaji?"ON":"OFF"),showRomaji?"on":"",()=>setShowRomaji(r=>!r)]]],["Browse",[["Word List","",openList],["Grammar Guide","",()=>setMode("grammar")]]]].map(([sLabel,items])=>(
               <div key={sLabel}>
