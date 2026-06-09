@@ -59,7 +59,7 @@ const vocab = [
   { jp: "ドア", en: "Door", group: "Things & Places", sentence: "ドアをしめてください。", sentenceEn: "Please close the door." },
   { jp: "まど", en: "Window", group: "Things & Places", sentence: "まどをあけてもいいですか？", sentenceEn: "May I open the window?" },
   { jp: "たな", en: "Shelf", group: "Things & Places", sentence: "ほんはたなにあります。", sentenceEn: "The books are on the shelf." },
-  { jp: "本だな", en: "Bookshelf", group: "Things & Places", sentence: "本だなにたくさんほんがあります。", sentenceEn: "There are many books on the bookshelf." },
+  { jp: "ほんだな", en: "Bookshelf", group: "Things & Places", sentence: "本だなにたくさんほんがあります。", sentenceEn: "There are many books on the bookshelf." },
   { jp: "れいぞうこ", en: "Refrigerator", group: "Things & Places", sentence: "れいぞうこにみずがあります。", sentenceEn: "There is water in the refrigerator." },
   { jp: "ねこ", en: "Cat", group: "Things & Places", sentence: "あのしろいねこはかわいいです。", sentenceEn: "That white cat is cute." },
   { jp: "えき", en: "Station", group: "Things & Places", sentence: "えきはどこですか？", sentenceEn: "Where is the station?" },
