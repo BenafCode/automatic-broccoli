@@ -66,7 +66,7 @@ function App() {
   function submitWriteAnswer() {
     const raw = writeInputRef.current ? writeInputRef.current.value : writeInput;
     if (writeSubmitted || !raw.trim()) return;
-    const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(wanakana.toKana(s)) : s;
+    const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(s) : s;
     const final = norm(raw.trim());
     const correct = final === norm(currentCard.jp);
     setWriteInput(raw);
@@ -112,14 +112,8 @@ function App() {
 
   useEffect(() => {
     if (mode === 'write' && !writeSubmitted) {
-      const el = writeInputRef.current;
-      if (!el) return;
-      if (typeof wanakana !== 'undefined') wanakana.bind(el, { IMEMode: true });
-      const t = setTimeout(() => el.focus(), 50);
-      return () => {
-        clearTimeout(t);
-        if (typeof wanakana !== 'undefined') try { wanakana.unbind(el); } catch(e) {}
-      };
+      const t = setTimeout(() => writeInputRef.current?.focus(), 50);
+      return () => clearTimeout(t);
     }
   }, [mode, writeSubmitted]);
 
@@ -612,7 +606,7 @@ function App() {
 
           {!writeSubmitted && (
             <div style={{marginBottom:"12px"}}>
-              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type kana or rōmaji — converts automatically</div>
+              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in hiragana or katakana</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
                   ref={writeInputRef}
@@ -623,7 +617,7 @@ function App() {
                   onCompositionEnd={e => { setWriteInput(e.currentTarget.value); }}
                   onChange={e => { setWriteInput(e.target.value); }}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
-                  placeholder="ねこ, ネコ, neko…"
+                  placeholder="ねこ or ネコ…"
                   lang="ja"
                   autoFocus
                   autoComplete="off"
