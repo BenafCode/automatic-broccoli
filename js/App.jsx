@@ -112,8 +112,14 @@ function App() {
 
   useEffect(() => {
     if (mode === 'write' && !writeSubmitted) {
-      const t = setTimeout(() => writeInputRef.current?.focus(), 50);
-      return () => clearTimeout(t);
+      const el = writeInputRef.current;
+      if (!el) return;
+      if (typeof wanakana !== 'undefined') wanakana.bind(el, { IMEMode: true });
+      const t = setTimeout(() => el.focus(), 50);
+      return () => {
+        clearTimeout(t);
+        if (typeof wanakana !== 'undefined') try { wanakana.unbind(el); } catch(e) {}
+      };
     }
   }, [mode, writeSubmitted]);
 
@@ -585,8 +591,7 @@ function App() {
 
   if (mode === "write" && currentCard) {
     const cardTint = GROUP_TINTS[currentCard.group] || "#f5f0e8";
-    const kanaPreview = writeInput && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput) : writeInput;
-    const submittedKana = writeInput.trim() && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput.trim()) : writeInput.trim();
+    const submittedKana = writeInput.trim();
     return (
       <Frame>
         <div style={{padding:"12px 14px"}}>
@@ -607,7 +612,7 @@ function App() {
 
           {!writeSubmitted && (
             <div style={{marginBottom:"12px"}}>
-              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji or tap kana directly</div>
+              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type kana or rōmaji — converts automatically</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
                   ref={writeInputRef}
@@ -618,7 +623,7 @@ function App() {
                   onCompositionEnd={e => { setWriteInput(e.currentTarget.value); }}
                   onChange={e => { setWriteInput(e.target.value); }}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
-                  placeholder="neko, ねこ, ネコ…"
+                  placeholder="ねこ, ネコ, neko…"
                   lang="ja"
                   autoFocus
                   autoComplete="off"
@@ -628,11 +633,6 @@ function App() {
                 />
                 <button style={{background:"#1a1a18", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"8px 14px"}} onClick={submitWriteAnswer}>CHECK</button>
               </div>
-              {kanaPreview && kanaPreview !== writeInput && (
-                <div style={{marginTop:"6px", fontFamily:"'Times New Roman',Times,serif", fontSize:"24px", color:"#1a1a18", padding:"8px 14px", background:"#ede8da", border:"1px solid #c8c0b4", letterSpacing:"2px"}}>
-                  {kanaPreview}
-                </div>
-              )}
             </div>
           )}
 
