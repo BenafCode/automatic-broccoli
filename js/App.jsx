@@ -610,7 +610,7 @@ function App() {
 
           {!writeSubmitted && (
             <div style={{marginBottom:"12px"}}>
-              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji or tap kana directly</div>
+              <div style={{...S.tagLabel, marginBottom:"6px"}}>Tap the keyboard or type above</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
                   ref={writeInputRef}
@@ -621,7 +621,7 @@ function App() {
                   onCompositionEnd={e => { setWriteInput(e.currentTarget.value); }}
                   onChange={e => { setWriteInput(e.target.value); }}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
-                  placeholder="neko, ねこ, ネコ…"
+                  placeholder="ねこ, ネコ…"
                   lang="ja"
                   autoFocus
                   autoComplete="off"
@@ -636,6 +636,13 @@ function App() {
                   {kanaPreview}
                 </div>
               )}
+              <KanaKeyboard
+                value={writeInput}
+                onChange={newVal => {
+                  if (writeInputRef.current) writeInputRef.current.value = newVal;
+                  setWriteInput(newVal);
+                }}
+              />
             </div>
           )}
 
