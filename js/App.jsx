@@ -604,7 +604,7 @@ function App() {
               <div style={{display:"flex", gap:"8px"}}>
                 <input
                   ref={writeInputRef}
-                  style={{flex:1, border:"2px solid #1a1a18", padding:"10px 14px", fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", outline:"none", background:"#fff", color:"#1a1a18", boxSizing:"border-box"}}
+                  style={{flex:1, border:"2px solid #1a1a18", padding:"10px 14px", fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", outline:"none", background:"#fff", color:"#1a1a18", WebkitTextFillColor:"#1a1a18", opacity:1, boxSizing:"border-box"}}
                   onCompositionEnd={e => { setWriteInput(e.currentTarget.value); }}
                   onChange={e => { if (!e.nativeEvent.isComposing) setWriteInput(e.target.value); }}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
