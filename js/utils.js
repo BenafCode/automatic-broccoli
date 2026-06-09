@@ -54,6 +54,17 @@ function speak(text) {
   window.speechSynthesis.speak(u);
 }
 
+function AntonymHint({ jp }) {
+  const opp = ANTONYMS[jp];
+  if (!opp) return null;
+  const oppWord = vocab.find(v => v.jp === opp);
+  return (
+    <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#a09888", fontStyle:"italic", marginTop:"6px"}}>
+      ↔ {opp}{oppWord ? ` · ${oppWord.en}` : ""}
+    </div>
+  );
+}
+
 function SpeakBtn({ text, style }) {
   return (
     <button

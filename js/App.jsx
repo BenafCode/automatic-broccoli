@@ -483,6 +483,7 @@ function App() {
                   <div style={S.tagLabel}>{backIsJp?"Japanese":"English"}</div>
                   <div style={backIsJp?S.jpText:S.enText}>{back}</div>
                   {backIsJp && <Romaji text={back} />}
+                  <AntonymHint jp={currentCard.jp} />
                   <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"11px", color:"#6a6050", marginTop:"8px", textTransform:"uppercase", letterSpacing:"1px"}}>{currentCard.group}</div>
                 </div>
               </div>
@@ -563,6 +564,7 @@ function App() {
             );
           })}
           {quizSelected !== null && <>
+            <AntonymHint jp={currentCard.jp} />
             <div style={S.sentenceBox}>
               <div style={{display:"flex", alignItems:"flex-start", gap:"8px"}}>
                 <div style={{flex:1}}>
@@ -646,6 +648,7 @@ function App() {
                   <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#6a6050", marginBottom:"3px"}}>Correct answer</div>
                   <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"30px", fontWeight:"700", color:"#1a1a18"}}>{currentCard.jp}</div>
                   {showRomaji && (() => { const r = toRomaji(currentCard.jp); return r && r !== currentCard.jp ? <div style={{fontSize:"11px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif"}}>{r}</div> : null; })()}
+                  <AntonymHint jp={currentCard.jp} />
                 </div>
                 <SpeakBtn text={currentCard.jp}/>
               </div>
