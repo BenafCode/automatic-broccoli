@@ -21,6 +21,20 @@ function shuffle(arr) {
   return a;
 }
 
+function toKana(text) {
+  try {
+    if (typeof wanakana !== 'undefined') return wanakana.toKana(text);
+    return text;
+  } catch(e) { return text; }
+}
+
+function toHiragana(text) {
+  try {
+    if (typeof wanakana !== 'undefined') return wanakana.toHiragana(text);
+    return text;
+  } catch(e) { return text; }
+}
+
 function toRomaji(text) {
   try {
     if (typeof wanakana !== 'undefined') return wanakana.toRomaji(text);

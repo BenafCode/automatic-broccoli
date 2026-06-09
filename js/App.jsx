@@ -66,7 +66,7 @@ function App() {
   function submitWriteAnswer() {
     const raw = writeInputRef.current ? writeInputRef.current.value : writeInput;
     if (writeSubmitted || !raw.trim()) return;
-    const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(wanakana.toKana(s)) : s;
+    const norm = s => toHiragana(toKana(s));
     const final = norm(raw.trim());
     const correct = final === norm(currentCard.jp);
     setWriteInput(raw);
@@ -585,8 +585,8 @@ function App() {
 
   if (mode === "write" && currentCard) {
     const cardTint = GROUP_TINTS[currentCard.group] || "#f5f0e8";
-    const kanaPreview = writeInput && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput) : writeInput;
-    const submittedKana = writeInput.trim() && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput.trim()) : writeInput.trim();
+    const kanaPreview = toKana(writeInput);
+    const submittedKana = toKana(writeInput.trim());
     return (
       <Frame>
         <div style={{padding:"12px 14px"}}>
