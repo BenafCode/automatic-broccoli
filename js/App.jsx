@@ -423,6 +423,7 @@ function App() {
                         <div style={S.listItemJp}>{v.jp}</div>
                         {showRomaji && (() => { const r = toRomaji(v.jp); return r && r !== v.jp ? <div style={{fontSize:"10px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif",marginBottom:"1px"}}>{r}</div> : null; })()}
                         <div style={S.listItemEn}>{v.en}</div>
+                        <AntonymHint jp={v.jp} />
                       </div>
                       <div style={{display:"flex", alignItems:"center", gap:"8px", flexShrink:0, marginLeft:"12px"}}>
                         <SpeakBtn text={v.jp} />
