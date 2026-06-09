@@ -1,0 +1,390 @@
+#separator:tab
+#html:false
+#tags column:5
+#columns:japonais	romaji	francais	anglais	tags
+そふぃー・まるそー	Sophie Marusô	Sophie Marceau		japonais
+パリ	pari	Paris		japonais
+ロンドン	rondon	Londres		japonais
+ローマ	rôma	Rome		japonais
+シャンゼリゼ	shanzerize	Les Champs-Élysées		japonais
+ベルリン	berurin	Berlin		japonais
+あさくさ	asakusa	Asakusa (quartier de Tokyo)		japonais
+しんじゅく	shinjuku	Shinjuku (quartier de Tokyo)		japonais
+きょうと	kyôto	Kyoto		japonais
+ぎんざ	ginza	Ginza (quartier de Tokyo)		japonais
+おすし	osushi	sushi	Sushi	japonais::Food_et_Drink
+おみせ	omise	restaurant/magasin	Shop / Restaurant	japonais::Things_et_Places
+いたまえ	itamae	cuisinier (de cuisine traditionnelle)	Sushi chef / Traditional cook	japonais::Occupations
+えび	ebi	crevette	Shrimp / Prawn	japonais::Seafood
+すしや	sushiya	restaurant de sushi	Sushi restaurant	japonais::Things_et_Places
+ひらめ	hirame	turbot (poisson)	Flounder / Flatfish	japonais::Seafood
+みじかい	mijikai	court	Short	japonais::Adjectives
+テニス	tenisu	tennis	Tennis	japonais::Hobbies
+スキー	sukî	ski	Skiing / Skis	japonais::Hobbies
+ゴルフ	gorufu	golf	Golf	japonais::Hobbies
+ぞう	zô	éléphant	Elephant	japonais::Things_et_Places
+きりん	kirin	girafe	Giraffe	japonais::Things_et_Places
+たかい	takai	cher	Expensive / High / Tall	japonais::Adjectives
+やすい	yasui	bon marché	Cheap / Inexpensive	japonais::Adjectives
+むずかしい	muzukashii	difficile	Difficult	japonais::Adjectives
+やさしい	yasashii	facile/gentil	Easy / Kind	japonais::Adjectives
+おおきい	ôkii	grand	Big / Large	japonais::Adjectives
+ちいさい	chiisai	petit	Small / Little	japonais::Adjectives
+ながい	nagai	long	Long	japonais::Adjectives
+ひくい	hikui	bas	Low / Short (stature)	japonais::Adjectives
+ひろい	hiroi	large/spacieux	Spacious / Wide	japonais::Adjectives
+せまい	semai	étroit	Narrow / Cramped	japonais::Adjectives
+あつい	atsui	chaud	Hot (touch / weather)	japonais::Adjectives
+さむい	samui	froid (météo)	Cold (weather)	japonais::Adjectives
+あたらしい	atarashii	neuf/nouveau	New	japonais::Adjectives
+ふるい	furui	vieux/ancien	Old (not for people)	japonais::Adjectives
+しろい	shiroi	blanc	White	japonais::Colors
+くろい	kuroi	noir	Black	japonais::Colors
+あかい	akai	rouge	Red	japonais::Colors
+あおい	aoi	bleu	Blue / Green (classic)	japonais::Colors
+きいろい	kiiroi	jaune	Yellow	japonais::Colors
+ふとい	futoi	gros/épais	Thick / Fat	japonais::Adjectives
+ほそい	hosoi	fin/mince	Thin / Slender	japonais::Adjectives
+うすい	usui	fin/mince (épaisseur)	Thin (in thickness) / Light	japonais::Adjectives
+おもい	omoi	lourd	Heavy	japonais::Adjectives
+かるい	karui	léger	Light (in weight)	japonais::Adjectives
+くらい	kurai	sombre	Dark	japonais::Adjectives
+あかるい	akarui	lumineux/clair	Bright / Light	japonais::Adjectives
+わるい	warui	mauvais	Bad	japonais::Adjectives
+よい/いい	yoi/ii	bien/bon	Good	japonais::Adjectives
+かなしい	kanashii	triste	Sad	japonais::Adjectives
+うれしい	ureshii	joyeux/heureux	Happy / Glad	japonais::Adjectives
+おいしい	oishii	délicieux	Delicious / Tasty	japonais::Adjectives
+うつくしい	utsukushii	magnifique	Beautiful	japonais::Adjectives
+おもしろい	omoshiroi	intéressant/amusant	Interesting / Funny	japonais::Adjectives
+ネックレス	nekkuresu	un collier	Necklace	japonais::Clothes
+イアリング	iaringu	des boucles d'oreille	Earrings	japonais::Clothes
+てぶくろ	tebukuro	des gants	Gloves / Mittens	japonais::Clothes
+セーター	sêtâ	un pull/chandail	Sweater	japonais::Clothes
+ハンドバッグ	handobaggu	un sac à main	Handbag	japonais::Clothes
+スカート	sukâto	une jupe	Skirt	japonais::Clothes
+くつした	kutsushita	des chaussettes	Socks	japonais::Clothes
+ぼうし	bôshi	un chapeau	Hat / Cap	japonais::Clothes
+めがね	megane	des lunettes (de vue)	Glasses	japonais::Clothes
+うわぎ	uwagi	une veste/un pardessus	Jacket / Outer garment	japonais::Clothes
+ワイシャツ	waishatsu	une chemise blanche	Dress shirt / Collared shirt	japonais::Clothes
+ポケット	poketto	une poche	Pocket	japonais::Clothes
+ボタン	botan	un bouton	Button	japonais::Clothes
+ベルト	beruto	une ceinture	Belt	japonais::Clothes
+ズボン	zubon	un pantalon	Trousers / Pants	japonais::Clothes
+くつ	kutsu	des chaussures	Shoes	japonais::Clothes
+ティーシャツ	tîshatsu	un t-shirt	T-shirt	japonais::Clothes
+スーツ	sûtsu	un costume	Suit	japonais::Clothes
+コート	kôto	un manteau	Coat / Overcoat	japonais::Clothes
+きもの	kimono	un kimono	Kimono	japonais::Clothes
+おび	obi	un obi (ceinture de kimono)	Obi (kimono sash)	japonais::Clothes
+げた	geta	des geta (sandales traditionnelles en bois)	Geta (wooden clogs)	japonais::Clothes
+ぞうり	zôri	des zori (sandales traditionnelles formelles)	Zori (formal sandals)	japonais::Clothes
+ダイヤ（モンド）	daiyamondo	un diamant		japonais
+からだ	karada	le corps	Body	japonais::Body
+あたま	atama	la tête	Head	japonais::Body
+かみ	kami	les cheveux	Hair / Paper	japonais::Body
+め	me	les yeux	Eye	japonais::Body
+まゆ（げ）	mayu(ge)	les sourcils	Eyebrow	japonais::Body
+はな	hana	le nez	Nose / Flower	japonais::Body
+みみ	mimi	les oreilles	Ear	japonais::Body
+くち	kuchi	la bouche	Mouth	japonais::Body
+は	ha	les dents	Tooth / Teeth	japonais::Body
+くび	kubi	le cou	Neck	japonais::Body
+かた	kata	les épaules	Shoulder	japonais::Body
+むね	mune	la poitrine	Chest / Breast	japonais::Body
+うで	ude	le bras	Arm	japonais::Body
+ひじ	hiji	les coudes	Elbow	japonais::Body
+て	te	les mains	Hand	japonais::Body
+ゆび	yubi	les doigts	Finger / Toe	japonais::Body
+おなか	onaka	le ventre	Stomach / Belly	japonais::Body
+こし	koshi	les hanches/la taille	Waist / Hips / Lower back	japonais::Body
+あし	ashi	les jambes/le pied	Leg / Foot	japonais::Body
+もも	momo	les cuisses	Peach / Thigh	japonais::Fruit_et_Veg
+ひざ	hiza	les genoux	Knee	japonais::Body
+あしくび	ashikubi	la cheville	Ankle	japonais::Body
+ひげ	hige	la barbe	Beard / Mustache	japonais::Body
+すき	suki	aimer		japonais
+きらい	kirai	détester		japonais
+にぎやか	nigiyaka	animé		japonais
+しずか	shizuka	calme		japonais
+じょうず	jôzu	doué/habile		japonais
+へた	heta	maladroit/mauvais		japonais
+きれい	kirei	beau/propre		japonais
+べんり	benri	pratique		japonais
+ハンサム	hansamu	beau (homme)	Handsome	japonais::Na-Adjectives
+しんせつ	shinsetsu	gentil		japonais
+げんき	genki	en forme		japonais
+ナタリー	natarî	Nathalie		japonais
+あきこ	akiko	Akiko		japonais
+わたし	watashi	je/moi	I / Me	japonais::Basics
+おさけ	osake	saké (alcool en général)	Alcohol / Sake	japonais::Food_et_Drink
+けん	ken	Ken		japonais
+しげる	shigeru	Shigeru		japonais
+やまだ	yamada	Yamada		japonais
+ジャン・レノ	jan reno	Jean Réno		japonais
+がくせい	gakusei	étudiant	Student	japonais::Occupations
+せんせい	sensei	professeur	Teacher / Master	japonais::Occupations
+かいしゃ	kaisha	entreprise	Company / Firm	japonais::Things_et_Places
+かいしゃいん	kaishain	employé	Company employee	japonais::Occupations
+コンピューター	konpyûtâ	ordinateur	Computer	japonais::Things_et_Places
+だいとうりょう	daitôryô	président	President	japonais::Occupations
+ビール	bîru	bière	Beer	japonais::Food_et_Drink
+ワイン	wain	vin	Wine	japonais::Food_et_Drink
+コーヒー	kôhî	café	Coffee	japonais::Food_et_Drink
+おちゃ	ocha	thé	Tea (green tea)	japonais::Food_et_Drink
+たばこ	tabako	tabac/cigarette	Cigarette / Tobacco	japonais::Things_et_Places
+バナナ	banana	banane	Banana	japonais::Fruit_et_Veg
+ウイスキー	uisukî	whisky	Whisky	japonais::Food_et_Drink
+トマト	tomato	tomate	Tomato	japonais::Food_et_Drink
+ジュース	jûsu	jus	Juice	japonais::Food_et_Drink
+あなた	anata	tu/toi/vous	You	japonais::Basics
+にほん	nihon	le Japon	Japan	japonais::Countries
+にほんじん	nihonjin	Japonais/Japonaise	Japanese person	japonais::Countries
+にほんご	nihongo	le japonais (langue)	Japanese language	japonais::Countries
+フランス	furansu	la France	France	japonais::Countries
+フランスじん	furansujin	Français/Française	French person	japonais::Countries
+フランスご	furansugo	le français (langue)	French language	japonais::Countries
+ドイツ	doitsu	Allemand/Allemande	Germany	japonais::Countries
+ドイツじん	doitsujin	l'allemand	German person	japonais::Countries
+ドイツご	doitsugo	l'allemand (langue)	German language	japonais::Countries
+イタリア	itaria	l'Italie	Italy	japonais::Countries
+イタリアじん	itariajin	Italien/Italienne	Italian person	japonais::Countries
+イタリアご	itariago	l'italien (langue)	Italian language	japonais::Countries
+イギリス	igirisu	l'Angleterre	United Kingdom	japonais::Countries
+イギリスじん	igirisujin	Anglais/Anglaise	British person	japonais::Countries
+えいご	eigo	l'anglais (langue)	English language	japonais::Countries
+アメリカ	amerika	les États-Unis	United States	japonais::Countries
+アメリカじん	amerikajin	Américain/Américaine	American person	japonais::Countries
+ちゅうごく	chûgoku	la Chine	China	japonais::Countries
+ちゅうごくじん	chûgokujin	Chinois/Chinoise	Chinese person	japonais::Countries
+ちゅうごくご	chûgokugo	le chinois (langue)	Chinese language	japonais::Countries
+だいどころ	daidokoro	cuisine	Kitchen	japonais::Things_et_Places
+まど	mado	fenêtre	Window	japonais::Things_et_Places
+あさごはん	asagohan	le petit-déjeuner	Breakfast	japonais::Food_et_Drink
+ひるごはん	hirugohan	le déjeuner	Lunch	japonais::Food_et_Drink
+ばんごはん	bangohan	le dîner	Dinner	japonais::Food_et_Drink
+たまご	tamago	un œuf	Egg	japonais::Food_et_Drink
+れいぞうこ	reizôko	un réfrigérateur	Refrigerator	japonais::Things_et_Places
+しお	shio	le sel	Salt	japonais::Food_et_Drink
+こしょう	koshô	le poivre	Pepper (seasoning)	japonais::Food_et_Drink
+たな	tana	une étagère	Shelf	japonais::Things_et_Places
+なか	naka	dans/dedans/à l'intérieur	Inside / In	japonais::Directions
+うえ	ue	sur/dessus	Above / Up / On	japonais::Directions
+した	shita	sous/dessous	Below / Down / Under	japonais::Directions
+よこ	yoko	à côté	Next to / Beside	japonais::Directions
+まえ	mae	devant	In front / Before	japonais::Directions
+うしろ	ushiro	derrière	Behind / Back	japonais::Directions
+ほんだな	hondana	une étagère à livre		japonais
+ねこ	neko	un chat	Cat	japonais::Things_et_Places
+じてんしゃ	jitensha	un vélo	Bicycle	japonais::Things_et_Places
+くるま	kuruma	une voiture	Car	japonais::Things_et_Places
+へや	heya	une chambre	Room	japonais::Things_et_Places
+ドア	doa	une porte	Door	japonais::Things_et_Places
+テーブル	têburu	une table	Table	japonais::Things_et_Places
+ライター	raitâ	un briquet	Lighter	japonais::Things_et_Places
+コップ	koppu	une tasse	Cup / Glass	japonais::Things_et_Places
+ベッド	beddo	un lit	Bed	japonais::Things_et_Places
+ボール	bôru	un ballon	Ball	japonais::Things_et_Places
+かびん	kabin	un vase	Vase	japonais::Things_et_Places
+でんわ	denwa	un téléphone	Telephone / Phone	japonais::Things_et_Places
+つくえ	tsukue	une table/un bureau	Desk	japonais::Things_et_Places
+いす	isu	une chaise	Chair	japonais::Things_et_Places
+えき	eki	une gare/une station	Station	japonais::Things_et_Places
+こうえん	kôen	un parc	Park	japonais::Things_et_Places
+タクシー・バスのりば	takushî basu noriba	une station de taxi/de bus		japonais
+ゆうびんきょく	yûbinkyoku	la poste	Post office	japonais::Things_et_Places
+びょういん	byôin	l'hôpital	Hospital	japonais::Things_et_Places
+がっこう	gakkô	l'école	School	japonais::Things_et_Places
+ちゅうしゃじょう	chûshajô	un parking	Parking lot	japonais::Things_et_Places
+かわ	kawa	une rivière/un fleuve	River	japonais::Things_et_Places
+はし	hashi	des baguettes (de table)	Chopsticks	japonais::Things_et_Places
+ホテル	hoteru	un hôtel	Hotel	japonais::Things_et_Places
+レストラン	resutoran	un restaurant	Restaurant	japonais::Things_et_Places
+えいがかん	eigakan	un cinéma	Movie theater	japonais::Things_et_Places
+スーパー	sûpâ	un supermarché	Supermarket	japonais::Things_et_Places
+はなや	hanaya	un fleuriste	Florist / Flower shop	japonais::Things_et_Places
+ぎんこう	ginkô	une banque	Bank	japonais::Things_et_Places
+ほんや	honya	une librairie	Bookstore	japonais::Things_et_Places
+さかなや	sakanaya	une poissonnerie	Fish market / Fishmonger	japonais::Things_et_Places
+やおや	yaoya	un maraîcher	Greengrocer / Vegetable shop	japonais::Things_et_Places
+にくや	nikuya	une boucherie	Butcher / Meat shop	japonais::Things_et_Places
+うち	uchi	chez moi/à l'intérieur	House / Home	japonais::Things_et_Places
+きっさてん	kissaten	un café (endroit)	Café / Coffee shop	japonais::Things_et_Places
+しぶや	shibuya	Shibuya		japonais
+こんど	kondo	la prochaine fois	Next time / Soon	japonais::Time
+かいもの	kaimono	les courses	Shopping	japonais::Things_et_Places
+りんご	ringo	une pomme	Apple	japonais::Fruit_et_Veg
+あさ	asa	le matin	Morning	japonais::Time
+ひる	hiru	le midi	Afternoon / Daytime	japonais::Time
+ごぜん	gozen	le matin (avant midi)	AM / Morning	japonais::Time
+ごご	gogo	l'après-midi	PM / Afternoon	japonais::Time
+ゆうがた	yûgata	la fin d'après-midi/le soir	Evening / Dusk	japonais::Time
+よる	yoru	le soir/la nuit	Night / Evening	japonais::Time
+きのう	kinô	hier	Yesterday	japonais::Time
+きょう	kyô	aujourd'hui	Today	japonais::Time
+あした	ashita	demain	Tomorrow	japonais::Time
+げつようび	getsuyôbi	lundi	Monday	japonais::Time
+かようび	kayôbi	mardi	Tuesday	japonais::Time
+すいようび	suiyôbi	mercredi	Wednesday	japonais::Time
+もくようび	mokuyôbi	jeudi	Thursday	japonais::Time
+きんようび	kinyôbi	vendredi	Friday	japonais::Time
+どようび	doyôbi	samedi	Saturday	japonais::Time
+にちようび	nichiyôbi	dimanche	Sunday	japonais::Time
+きって	kitte	un timbre	Stamp (postage)	japonais::Things_et_Places
+ふうとう	fûtô	une enveloppe	Envelope	japonais::Things_et_Places
+のみもの	nomimono	une boisson	Drink / Beverage	japonais::Food_et_Drink
+さかな	sakana	un poisson	Fish	japonais::Food_et_Drink
+きっぷ	kippu	un ticket	Ticket	japonais::Things_et_Places
+プレゼント	purezento	un cadeau		japonais
+みず	mizu	eau	Water	japonais::Food_et_Drink
+たべもの	tabemono	nourriture	Food	japonais::Food_et_Drink
+にく	niku	la viande	Meat	japonais::Food_et_Drink
+やさい	yasai	les légumes	Vegetable	japonais::Food_et_Drink
+くだもの	kudamono	les fruits	Fruit	japonais::Food_et_Drink
+さしみ	sashimi	sashimi	Sashimi	japonais::Food_et_Drink
+てんぷら	tenpura	tempura	Tempura	japonais::Food_et_Drink
+パン	pan	le pain	Bread	japonais::Food_et_Drink
+チーズ	chîzu	le fromage	Cheese	japonais::Food_et_Drink
+チョコレート	chokorêto	le chocolat	Chocolate	japonais::Food_et_Drink
+エルジェ	eruje	Hergé		japonais
+ミシマ	mishima	Mishima		japonais
+おんがく	ongaku	musique	Music	japonais::Hobbies
+CD	shîdî	CD	CD / Album	japonais::Hobbies
+ジャズ	jazu	le jazz	Jazz	japonais::Hobbies
+クラシック	kurashikku	la musique classique	Classical music	japonais::Hobbies
+ロック	rokku	le rock	Rock music	japonais::Hobbies
+ほん	hon	un livre	Book	japonais::Things_et_Places
+まんが	manga	un manga	Manga / Comic	japonais::Things_et_Places
+ざっし	zasshi	un magazine	Magazine	japonais::Things_et_Places
+しんぶん	shinbun	un journal	Newspaper	japonais::Things_et_Places
+テレビ	terebi	une télévision	Television / TV	japonais::Things_et_Places
+ラジオ	rajio	la radio	Radio	japonais::Things_et_Places
+カメラ	kamera	un appareil photo	Camera	japonais::Things_et_Places
+ボールペン	bôrupen	un stylo bille	Ballpoint pen	japonais::Things_et_Places
+えんぴつ	enpitsu	un crayon à papier	Pencil	japonais::Things_et_Places
+はいざら	haizara	un cendrier		japonais
+とけい	tokei	une montre	Watch / Clock	japonais::Things_et_Places
+かさ	kasa	un parapluie	Umbrella	japonais::Things_et_Places
+いぬ	inu	un chien	Dog	japonais::Things_et_Places
+えいが	eiga	un film	Movie / Film	japonais::Things_et_Places
+くろさわ	kurosawa	Kurosawa		japonais
+かげむしゃ	kagemusha	Kagemusha		japonais
+デパート	depâto	les grands magasins	Department store	japonais::Things_et_Places
+バス	basu	un bus	Bus	japonais::Transport
+ひこうき	hikôki	un avion	Airplane	japonais::Transport
+タクシー	takushî	un taxi	Taxi	japonais::Transport
+あそこ	asoko	là-bas	Over there	japonais::Directions
+プログラム	puroguramu	un programme (d'événements/de films)		japonais
+ちかてつ	chikatetsu	le métro	Subway / Underground train	japonais::Transport
+でんしゃ	densha	le train	Train (electric)	japonais::Transport
+こんばん	konban	ce soir	Tonight	japonais::Time
+ふね	fune	un bateau	Ship / Boat	japonais::Transport
+しんかんせん	shinkansen	le shinkansen (train à grande vitesse)	Shinkansen / Bullet train	japonais::Transport
+ひがし	higashi	l'Est	East	japonais::Directions
+にし	nishi	l'Ouest	West	japonais::Directions
+きた	kita	le Nord	North	japonais::Directions
+みなみ	minami	le Sud	South	japonais::Directions
+さん	san	Monsieur/Madame (suffixe)		japonais
+はい			Yes	japonais::Basics
+いいえ			No	japonais::Basics
+おはようございます			Good morning (polite)	japonais::Basics
+こんにちは			Good afternoon / Hello	japonais::Basics
+こんばんは			Good evening	japonais::Basics
+さようなら			Goodbye	japonais::Basics
+ありがとう			Thank you	japonais::Basics
+はじめまして			Nice to meet you	japonais::Basics
+どうぞ			Please / Here you go	japonais::Basics
+おねがいします			Please (polite request)	japonais::Basics
+いらっしゃい			Welcome	japonais::Basics
+しつれいします			Excuse me / Goodbye (formal)	japonais::Basics
+いしゃ			Doctor	japonais::Occupations
+かんごし			Nurse	japonais::Occupations
+きょうし			Teacher / Instructor	japonais::Occupations
+エンジニア			Engineer	japonais::Occupations
+りょうりにん			Cook / Chef	japonais::Occupations
+コック			Cook / Chef	japonais::Occupations
+はいゆう			Actor / Actress	japonais::Occupations
+てんいん			Shop assistant / Clerk	japonais::Occupations
+ぎんこういん			Bank employee	japonais::Occupations
+パソコン			Personal computer / Laptop	japonais::Things_et_Places
+本だな			Bookshelf	japonais::Things_et_Places
+としょかん			Library	japonais::Things_et_Places
+みぎ			Right	japonais::Directions
+ひだり			Left	japonais::Directions
+いきます			To go	japonais::Verbs
+かえります			To return (home)	japonais::Verbs
+きます			To come	japonais::Verbs
+います			To exist / be (animate)	japonais::Verbs
+あります			To exist / be (inanimate)	japonais::Verbs
+します			To do	japonais::Verbs
+たべます			To eat	japonais::Verbs
+のみます			To drink	japonais::Verbs
+みます			To see / watch / look	japonais::Verbs
+ききます			To listen / hear / ask	japonais::Verbs
+よみます			To read	japonais::Verbs
+かきます			To write / draw	japonais::Verbs
+かいます			To buy	japonais::Verbs
+かぶります			To wear (on head)	japonais::Verbs
+はきます			To wear (on lower body / shoes)	japonais::Verbs
+けさ			This morning	japonais::Time
+しゅうまつ			Weekend	japonais::Time
+いただきます			Thanks for the meal (before eating)	japonais::Food_et_Drink
+ごちそうさまでした			Thanks for the meal (after eating)	japonais::Food_et_Drink
+ケーキ			Cake	japonais::Food_et_Drink
+つまらない			Boring / Tedious	japonais::Adjectives
+たのしい			Fun / Enjoyable	japonais::Adjectives
+いそがしい			Busy	japonais::Adjectives
+いたい			Painful / Hurt	japonais::Adjectives
+みどり			Green	japonais::Colors
+むらさき			Purple	japonais::Colors
+グレー			Grey	japonais::Colors
+ちゃいろ			Brown	japonais::Colors
+ピンク			Pink	japonais::Colors
+すき（な）			Likable / Favorite	japonais::Na-Adjectives
+きらい（な）			Disliked / Hated	japonais::Na-Adjectives
+じょうず（な）			Good at / Skillful	japonais::Na-Adjectives
+へた（な）			Poor at / Unskillful	japonais::Na-Adjectives
+にぎやか（な）			Lively / Bustling	japonais::Na-Adjectives
+しずか（な）			Quiet / Peaceful	japonais::Na-Adjectives
+きれい（な）			Beautiful / Clean	japonais::Na-Adjectives
+しんせつ（な）			Kind / Helpful	japonais::Na-Adjectives
+べんり（な）			Convenient / Useful	japonais::Na-Adjectives
+げんき（な）			Healthy / Energetic / Well	japonais::Na-Adjectives
+ひま			Free time / Leisure	japonais::Na-Adjectives
+ゆうめい			Famous	japonais::Na-Adjectives
+すてき			Lovely / Wonderful	japonais::Na-Adjectives
+おしゃれ			Stylish / Fashionable	japonais::Na-Adjectives
+いちご			Strawberry	japonais::Fruit_et_Veg
+すいか			Watermelon	japonais::Fruit_et_Veg
+ぶどう			Grape	japonais::Fruit_et_Veg
+みかん			Mandarin orange / Tangerine	japonais::Fruit_et_Veg
+さくらんぼ			Cherry	japonais::Fruit_et_Veg
+メロン			Melon	japonais::Fruit_et_Veg
+レモン			Lemon	japonais::Fruit_et_Veg
+きゅうり			Cucumber	japonais::Fruit_et_Veg
+なす			Eggplant / Aubergine	japonais::Fruit_et_Veg
+キャベツ			Cabbage	japonais::Fruit_et_Veg
+ねぎ			Green onion / Leek	japonais::Fruit_et_Veg
+はくさい			Napa cabbage / Chinese cabbage	japonais::Fruit_et_Veg
+ほうれんそう			Spinach	japonais::Fruit_et_Veg
+レタス			Lettuce	japonais::Fruit_et_Veg
+じゃがいも			Potato	japonais::Fruit_et_Veg
+たまねぎ			Onion	japonais::Fruit_et_Veg
+だいこん			Daikon radish	japonais::Fruit_et_Veg
+にんじん			Carrot	japonais::Fruit_et_Veg
+まぐろ			Tuna	japonais::Seafood
+さけ			Salmon / Sake (liquor)	japonais::Seafood
+かに			Crab	japonais::Seafood
+いか			Squid	japonais::Seafood
+たこ			Octopus	japonais::Seafood
+いわし			Sardine	japonais::Seafood
+さば			Mackerel	japonais::Seafood
+たい			Sea bream / Red snapper	japonais::Seafood
+サイクリング			Cycling	japonais::Hobbies
+ハイキング			Hiking	japonais::Hobbies
+ダンス			Dancing / Dance	japonais::Hobbies
+サーフィン			Surfing	japonais::Hobbies
+じょうば			Horseback riding	japonais::Hobbies
+すいえい			Swimming	japonais::Hobbies
+りょこう			Travel / Trip	japonais::Hobbies

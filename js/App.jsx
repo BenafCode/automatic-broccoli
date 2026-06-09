@@ -65,8 +65,9 @@ function App() {
 
   function submitWriteAnswer() {
     if (writeSubmitted || !writeInput.trim()) return;
-    const final = typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput.trim()) : writeInput.trim();
-    const correct = final === currentCard.jp;
+    const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(wanakana.toKana(s)) : s;
+    const final = norm(writeInput.trim());
+    const correct = final === norm(currentCard.jp);
     setWriteCorrect(correct);
     setWriteSubmitted(true);
     setScore(s => ({ correct: s.correct + (correct ? 1 : 0), total: s.total + 1 }));
@@ -596,16 +597,19 @@ function App() {
 
           {!writeSubmitted && (
             <div style={{marginBottom:"12px"}}>
-              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji — it converts live</div>
+              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji or tap kana directly</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
                   style={{flex:1, border:"2px solid #1a1a18", padding:"10px 14px", fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", outline:"none", background:"#fff", color:"#1a1a18", boxSizing:"border-box"}}
                   value={writeInput}
                   onChange={e => setWriteInput(e.target.value)}
-                  onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); submitWriteAnswer(); } }}
-                  placeholder="e.g. neko → ねこ"
+                  onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
+                  placeholder="neko, ねこ, ネコ…"
+                  lang="ja"
                   autoFocus
                   autoComplete="off"
+                  autoCorrect="off"
+                  autoCapitalize="off"
                   spellCheck="false"
                 />
                 <button style={{background:"#1a1a18", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"8px 14px"}} onClick={submitWriteAnswer}>CHECK</button>
