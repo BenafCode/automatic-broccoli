@@ -66,7 +66,7 @@ function App() {
   function submitWriteAnswer() {
     const raw = writeInputRef.current ? writeInputRef.current.value : writeInput;
     if (writeSubmitted || !raw.trim()) return;
-    const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(wanakana.toKana(s)) : s;
+    const norm = s => toHiragana(toKana(s));
     const final = norm(raw.trim());
     const correct = final === norm(currentCard.jp);
     setWriteInput(raw);
@@ -483,6 +483,7 @@ function App() {
                   <div style={S.tagLabel}>{backIsJp?"Japanese":"English"}</div>
                   <div style={backIsJp?S.jpText:S.enText}>{back}</div>
                   {backIsJp && <Romaji text={back} />}
+                  <AntonymHint jp={currentCard.jp} />
                   <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"11px", color:"#6a6050", marginTop:"8px", textTransform:"uppercase", letterSpacing:"1px"}}>{currentCard.group}</div>
                 </div>
               </div>
@@ -563,6 +564,7 @@ function App() {
             );
           })}
           {quizSelected !== null && <>
+            <AntonymHint jp={currentCard.jp} />
             <div style={S.sentenceBox}>
               <div style={{display:"flex", alignItems:"flex-start", gap:"8px"}}>
                 <div style={{flex:1}}>
@@ -585,8 +587,8 @@ function App() {
 
   if (mode === "write" && currentCard) {
     const cardTint = GROUP_TINTS[currentCard.group] || "#f5f0e8";
-    const kanaPreview = writeInput && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput) : writeInput;
-    const submittedKana = writeInput.trim() && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput.trim()) : writeInput.trim();
+    const kanaPreview = toKana(writeInput);
+    const submittedKana = toKana(writeInput.trim());
     return (
       <Frame>
         <div style={{padding:"12px 14px"}}>
@@ -646,6 +648,7 @@ function App() {
                   <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#6a6050", marginBottom:"3px"}}>Correct answer</div>
                   <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"30px", fontWeight:"700", color:"#1a1a18"}}>{currentCard.jp}</div>
                   {showRomaji && (() => { const r = toRomaji(currentCard.jp); return r && r !== currentCard.jp ? <div style={{fontSize:"11px",color:"#6a6050",fontStyle:"italic",fontFamily:"'Times New Roman',Times,serif"}}>{r}</div> : null; })()}
+                  <AntonymHint jp={currentCard.jp} />
                 </div>
                 <SpeakBtn text={currentCard.jp}/>
               </div>

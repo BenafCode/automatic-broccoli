@@ -21,6 +21,20 @@ function shuffle(arr) {
   return a;
 }
 
+function toKana(text) {
+  try {
+    if (typeof wanakana !== 'undefined') return wanakana.toKana(text);
+    return text;
+  } catch(e) { return text; }
+}
+
+function toHiragana(text) {
+  try {
+    if (typeof wanakana !== 'undefined') return wanakana.toHiragana(text);
+    return text;
+  } catch(e) { return text; }
+}
+
 function toRomaji(text) {
   try {
     if (typeof wanakana !== 'undefined') return wanakana.toRomaji(text);
@@ -38,6 +52,17 @@ function speak(text) {
   const jpVoice = voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang.startsWith('ja'));
   if (jpVoice) u.voice = jpVoice;
   window.speechSynthesis.speak(u);
+}
+
+function AntonymHint({ jp }) {
+  const opp = ANTONYMS[jp];
+  if (!opp) return null;
+  const oppWord = vocab.find(v => v.jp === opp);
+  return (
+    <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#a09888", fontStyle:"italic", marginTop:"6px"}}>
+      ↔ {opp}{oppWord ? ` · ${oppWord.en}` : ""}
+    </div>
+  );
 }
 
 function SpeakBtn({ text, style }) {
