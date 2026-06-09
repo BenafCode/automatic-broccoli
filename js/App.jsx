@@ -32,6 +32,7 @@ function App() {
   const [writeSubmitted, setWriteSubmitted] = useState(false);
   const [writeCorrect, setWriteCorrect] = useState(false);
   const [lastMode, setLastMode] = useState("flashcard");
+  const writeComposing = useRef(false);
 
   useEffect(() => { try { localStorage.setItem('vocabStudy_group', group); } catch(e) {} }, [group]);
   useEffect(() => { try { localStorage.setItem('vocabStudy_direction', direction); } catch(e) {} }, [direction]);
@@ -602,7 +603,9 @@ function App() {
                 <input
                   style={{flex:1, border:"2px solid #1a1a18", padding:"10px 14px", fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", outline:"none", background:"#fff", color:"#1a1a18", boxSizing:"border-box"}}
                   value={writeInput}
-                  onChange={e => setWriteInput(e.target.value)}
+                  onCompositionStart={() => { writeComposing.current = true; }}
+                  onCompositionEnd={e => { writeComposing.current = false; setWriteInput(e.currentTarget.value); }}
+                  onChange={e => { if (!writeComposing.current) setWriteInput(e.target.value); }}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
                   placeholder="neko, ねこ, ネコ…"
                   lang="ja"

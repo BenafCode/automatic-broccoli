@@ -1,4 +1,4 @@
-const { useState, useEffect, useCallback } = React;
+const { useState, useEffect, useCallback, useRef } = React;
 
 function useWindowWidth() {
   const [width, setWidth] = useState(window.innerWidth);
