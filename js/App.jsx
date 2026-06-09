@@ -103,6 +103,7 @@ function App() {
   }
 
   function nextCard() {
+    if (writeInputRef.current) writeInputRef.current.value = "";
     setFlipped(false); setShowSentence(false); setQuizSelected(null);
     setWriteInput(""); setWriteSubmitted(false); setWriteCorrect(false);
     if (index + 1 >= deck.length) setMode("done");
@@ -602,7 +603,6 @@ function App() {
               <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji or tap kana directly</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
-                  key={index}
                   ref={writeInputRef}
                   style={{flex:1, border:"2px solid #1a1a18", padding:"10px 14px", fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", outline:"none", background:"#fff", color:"#1a1a18", boxSizing:"border-box"}}
                   onCompositionEnd={e => { setWriteInput(e.currentTarget.value); }}
