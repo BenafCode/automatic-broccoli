@@ -66,7 +66,7 @@ function App() {
   function submitWriteAnswer() {
     const raw = writeInputRef.current ? writeInputRef.current.value : writeInput;
     if (writeSubmitted || !raw.trim()) return;
-    const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(s) : s;
+    const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(wanakana.toKana(s)) : s;
     const final = norm(raw.trim());
     const correct = final === norm(currentCard.jp);
     setWriteInput(raw);
@@ -585,7 +585,8 @@ function App() {
 
   if (mode === "write" && currentCard) {
     const cardTint = GROUP_TINTS[currentCard.group] || "#f5f0e8";
-    const submittedKana = writeInput.trim();
+    const kanaPreview = writeInput && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput) : writeInput;
+    const submittedKana = writeInput.trim() && typeof wanakana !== 'undefined' ? wanakana.toKana(writeInput.trim()) : writeInput.trim();
     return (
       <Frame>
         <div style={{padding:"12px 14px"}}>
@@ -606,7 +607,7 @@ function App() {
 
           {!writeSubmitted && (
             <div style={{marginBottom:"12px"}}>
-              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in hiragana or katakana</div>
+              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji or tap kana directly</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
                   ref={writeInputRef}
@@ -617,7 +618,7 @@ function App() {
                   onCompositionEnd={e => { setWriteInput(e.currentTarget.value); }}
                   onChange={e => { setWriteInput(e.target.value); }}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
-                  placeholder="ねこ or ネコ…"
+                  placeholder="neko, ねこ, ネコ…"
                   lang="ja"
                   autoFocus
                   autoComplete="off"
@@ -627,6 +628,11 @@ function App() {
                 />
                 <button style={{background:"#1a1a18", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"8px 14px"}} onClick={submitWriteAnswer}>CHECK</button>
               </div>
+              {kanaPreview && kanaPreview !== writeInput && (
+                <div style={{marginTop:"6px", fontFamily:"'Times New Roman',Times,serif", fontSize:"24px", color:"#1a1a18", padding:"8px 14px", background:"#ede8da", border:"1px solid #c8c0b4", letterSpacing:"2px"}}>
+                  {kanaPreview}
+                </div>
+              )}
             </div>
           )}
 
