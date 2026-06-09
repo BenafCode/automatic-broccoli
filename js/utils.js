@@ -101,28 +101,32 @@ function KanaKeyboard({ value, onChange }) {
   const K = { border:'1px solid #c8c0b4', background:'#fff', fontFamily:"'Times New Roman',Times,serif", fontSize:'17px', color:'#1a1a18', cursor:'pointer', padding:'5px 0', minHeight:'36px', lineHeight:1 };
   const C = { ...K, background:'#ede8da', fontFamily:'Helvetica,Arial,sans-serif', fontSize:'12px', fontWeight:'700' };
 
+  const tap = fn => e => { e.preventDefault(); fn(); };
+
   return (
-    <div style={{marginTop:'8px', border:'1px solid #c8c0b4', background:'#f5f0e8', padding:'6px', userSelect:'none'}}>
+    <div style={{marginTop:'8px', border:'1px solid #c8c0b4', background:'#f5f0e8', padding:'6px'}}>
       <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'5px'}}>
         <span style={{fontFamily:'Helvetica,Arial,sans-serif', fontWeight:'700', fontSize:'10px', textTransform:'uppercase', letterSpacing:'1px', color:'#6a6050'}}>
           {isKatakana ? 'カタカナ' : 'ひらがな'}
         </span>
-        <button style={{...C, padding:'3px 10px', border:'1px solid #1a1a18', fontSize:'13px', fontFamily:"'Times New Roman',Times,serif"}}
-          onClick={() => setIsKatakana(k => !k)}>
+        <button type="button" style={{...C, padding:'3px 10px', border:'1px solid #1a1a18', fontSize:'13px', fontFamily:"'Times New Roman',Times,serif"}}
+          onPointerDown={tap(() => setIsKatakana(k => !k))}>
           {isKatakana ? 'ひ' : 'カ'}
         </button>
       </div>
       {rows.map((row, ri) => (
         <div key={ri} style={{display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:'2px', marginBottom:'2px'}}>
-          {row.map(ch => <button key={ch} style={K} onClick={() => insert(ch)}>{ch}</button>)}
+          {row.map(ch => (
+            <button type="button" key={ch} style={K} onPointerDown={tap(() => insert(ch))}>{ch}</button>
+          ))}
         </div>
       ))}
       <div style={{display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:'2px', marginTop:'4px'}}>
-        <button style={C} onClick={voiced}>゛</button>
-        <button style={C} onClick={semiVoiced}>゜</button>
-        <button style={C} onClick={() => insert('ー')}>ー</button>
-        <button style={C} onClick={bksp}>⌫</button>
-        <button style={{...C, background:'#e8d4d4', color:'#7a2020'}} onClick={() => onChange('')}>✕</button>
+        <button type="button" style={C} onPointerDown={tap(voiced)}>゛</button>
+        <button type="button" style={C} onPointerDown={tap(semiVoiced)}>゜</button>
+        <button type="button" style={C} onPointerDown={tap(() => insert('ー'))}>ー</button>
+        <button type="button" style={C} onPointerDown={tap(bksp)}>⌫</button>
+        <button type="button" style={{...C, background:'#e8d4d4', color:'#7a2020'}} onPointerDown={tap(() => onChange(''))}>✕</button>
       </div>
     </div>
   );
