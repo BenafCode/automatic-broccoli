@@ -32,6 +32,7 @@ function App() {
   const [writeSubmitted, setWriteSubmitted] = useState(false);
   const [writeCorrect, setWriteCorrect] = useState(false);
   const [lastMode, setLastMode] = useState("flashcard");
+  const writeInputRef = useRef(null);
   useEffect(() => { try { localStorage.setItem('vocabStudy_group', group); } catch(e) {} }, [group]);
   useEffect(() => { try { localStorage.setItem('vocabStudy_direction', direction); } catch(e) {} }, [direction]);
   useEffect(() => { try { localStorage.setItem('vocabStudy_romaji', showRomaji); } catch(e) {} }, [showRomaji]);
@@ -63,10 +64,12 @@ function App() {
   function openList() { setListSearch(""); setExpandedWord(null); setMode("list"); }
 
   function submitWriteAnswer() {
-    if (writeSubmitted || !writeInput.trim()) return;
+    const raw = writeInputRef.current ? writeInputRef.current.value : writeInput;
+    if (writeSubmitted || !raw.trim()) return;
     const norm = s => typeof wanakana !== 'undefined' ? wanakana.toHiragana(wanakana.toKana(s)) : s;
-    const final = norm(writeInput.trim());
+    const final = norm(raw.trim());
     const correct = final === norm(currentCard.jp);
+    setWriteInput(raw);
     setWriteCorrect(correct);
     setWriteSubmitted(true);
     setScore(s => ({ correct: s.correct + (correct ? 1 : 0), total: s.total + 1 }));
@@ -599,8 +602,9 @@ function App() {
               <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji or tap kana directly</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
+                  key={index}
+                  ref={writeInputRef}
                   style={{flex:1, border:"2px solid #1a1a18", padding:"10px 14px", fontFamily:"'Times New Roman',Times,serif", fontSize:"20px", outline:"none", background:"#fff", color:"#1a1a18", boxSizing:"border-box"}}
-                  value={writeInput}
                   onCompositionEnd={e => { setWriteInput(e.currentTarget.value); }}
                   onChange={e => { if (!e.nativeEvent.isComposing) setWriteInput(e.target.value); }}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); submitWriteAnswer(); } }}
