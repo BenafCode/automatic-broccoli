@@ -42,6 +42,23 @@ function toRomaji(text) {
   } catch(e) { return ''; }
 }
 
+// Acceptable written forms for an answer. Handles:
+//  - slash alternatives:          "よい / いい"  -> ["よい", "いい"]
+//  - na-adjective parentheticals: "すき（な）"   -> ["すき（な）", "すき", "すきな"]
+function answerForms(jp) {
+  const forms = new Set();
+  jp.split('/').forEach(part => {
+    const trimmed = part.trim();
+    if (!trimmed) return;
+    forms.add(trimmed);
+    const base = trimmed.replace(/[（(][^）)]*[）)]/g, '').trim();
+    forms.add(base);
+    const m = trimmed.match(/[（(]([^）)]*)[）)]/);
+    if (m) forms.add(base + m[1]);
+  });
+  return [...forms];
+}
+
 function speak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
