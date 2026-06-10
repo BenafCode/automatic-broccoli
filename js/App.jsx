@@ -618,7 +618,7 @@ function App() {
 
           {!writeSubmitted && (
             <div style={{marginBottom:"12px"}}>
-              <div style={{...S.tagLabel, marginBottom:"6px"}}>Tap the keyboard or type above</div>
+              <div style={{...S.tagLabel, marginBottom:"6px"}}>Type in rōmaji or kana</div>
               <div style={{display:"flex", gap:"8px"}}>
                 <input
                   ref={writeInputRef}
@@ -644,13 +644,6 @@ function App() {
                   {kanaPreview}
                 </div>
               )}
-              <KanaKeyboard
-                value={writeInput}
-                onChange={newVal => {
-                  if (writeInputRef.current) writeInputRef.current.value = newVal;
-                  setWriteInput(newVal);
-                }}
-              />
             </div>
           )}
 
