@@ -1,3 +1,35 @@
+function Frame({ isMobile, wordCount, onHome, onCards, onList, onGrammar, children }) {
+  return (
+    <div style={{background: isMobile ? "#f5f0e8" : "#b8b0a4", minHeight:"100vh", padding: isMobile ? "0" : "8px 0", boxSizing:"border-box"}}>
+      <div style={{border: isMobile ? "none" : "8px solid #1a1a18", maxWidth:"760px", margin:"0 auto", background:"#fff", fontFamily:"'Times New Roman',Times,serif", color:"#1a1a18", boxSizing:"border-box"}}>
+        <div style={{background:"#1a1a18", color:"#f5f0e8", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 16px"}}>
+          <div>
+            <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"16px", textTransform:"uppercase", color:"#f5f0e8", letterSpacing:"1px"}}>日本語 · Vocabulary Study</div>
+            <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"11px", color:"#a09888", textTransform:"uppercase", letterSpacing:"2px"}}>Build Your Japanese.</div>
+          </div>
+          <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"1px"}}>
+            <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"900", fontSize:"20px", color:"#c8a84b", lineHeight:1}}>{wordCount}</span>
+            <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"9px", color:"#a09888", textTransform:"uppercase", letterSpacing:"2px"}}>words</span>
+          </div>
+        </div>
+        <div style={isMobile ? {paddingBottom:"80px"} : {}}>{children}</div>
+        <div style={{background:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"10px 16px", ...(isMobile ? {position:"fixed", bottom:0, left:0, right:0, zIndex:10} : {})}}>
+          <div style={{display:"flex", justifyContent:"space-around", borderBottom:"1px solid #c8c0b4", paddingBottom:"8px", marginBottom:"6px"}}>
+            {[["HOME",onHome],["CARDS",onCards],["LIST",onList],["文法",onGrammar]].map(([label,fn])=>(
+              <button key={label} onClick={fn} style={{background:"none", border:"none", cursor:"pointer", textAlign:"center", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", color:"#1e3050", padding:"4px 8px"}}>
+                {label}
+              </button>
+            ))}
+          </div>
+          <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", textAlign:"center", fontStyle:"italic"}}>
+            This site is best viewed with browser versions 3.0 and higher.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const isMobile = useWindowWidth() < 640;
   const [mode, setMode] = useState("menu");
@@ -197,35 +229,11 @@ function App() {
     "Hobbies":         "#d8e4de",
   };
 
-  const Frame = ({children}) => (
-    <div style={{background: isMobile ? "#f5f0e8" : "#b8b0a4", minHeight:"100vh", padding: isMobile ? "0" : "8px 0", boxSizing:"border-box"}}>
-      <div style={{border: isMobile ? "none" : "8px solid #1a1a18", maxWidth:"760px", margin:"0 auto", background:"#fff", fontFamily:"'Times New Roman',Times,serif", color:"#1a1a18", boxSizing:"border-box"}}>
-        <div style={{background:"#1a1a18", color:"#f5f0e8", display:"flex", justifyContent:"space-between", alignItems:"center", padding:"12px 16px"}}>
-          <div>
-            <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"16px", textTransform:"uppercase", color:"#f5f0e8", letterSpacing:"1px"}}>日本語 · Vocabulary Study</div>
-            <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"11px", color:"#a09888", textTransform:"uppercase", letterSpacing:"2px"}}>Build Your Japanese.</div>
-          </div>
-          <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap:"1px"}}>
-            <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"900", fontSize:"20px", color:"#c8a84b", lineHeight:1}}>{filteredVocab.length}</span>
-            <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontSize:"9px", color:"#a09888", textTransform:"uppercase", letterSpacing:"2px"}}>words</span>
-          </div>
-        </div>
-        <div style={isMobile ? {paddingBottom:"80px"} : {}}>{children}</div>
-        <div style={{background:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"10px 16px", ...(isMobile ? {position:"fixed", bottom:0, left:0, right:0, zIndex:10} : {})}}>
-          <div style={{display:"flex", justifyContent:"space-around", borderBottom:"1px solid #c8c0b4", paddingBottom:"8px", marginBottom:"6px"}}>
-            {[["HOME",()=>setMode("menu")],["CARDS",startFlashcards],["LIST",openList],["文法",()=>setMode("grammar")]].map(([label,fn])=>(
-              <button key={label} onClick={fn} style={{background:"none", border:"none", cursor:"pointer", textAlign:"center", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", color:"#1e3050", padding:"4px 8px"}}>
-                {label}
-              </button>
-            ))}
-          </div>
-          <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", textAlign:"center", fontStyle:"italic"}}>
-            This site is best viewed with browser versions 3.0 and higher.
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  // Frame is a module-level component (see below). Defining it inside App
+  // would give it a new identity every render, making React remount the
+  // whole subtree — which wipes the uncontrolled write-mode input on every
+  // keystroke.
+  const frameProps = { isMobile, wordCount: filteredVocab.length, onHome: () => setMode("menu"), onCards: startFlashcards, onList: openList, onGrammar: () => setMode("grammar") };
 
   const S = {
     backBtn: { background:"#f5f0e8", border:"1px solid #1a1a18", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"4px 12px" },
@@ -313,7 +321,7 @@ function App() {
   );
 
   if (mode === "menu") return (
-    <Frame>
+    <Frame {...frameProps}>
       {isMobile ? (
         <div>
           <div style={{background:"#8b1a1a", color:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"12px 14px"}}>
@@ -363,7 +371,7 @@ function App() {
   if (mode === "done") {
     const pct = score.total > 0 ? Math.round((score.correct/score.total)*100) : 0;
     return (
-      <Frame>
+      <Frame {...frameProps}>
         <div style={{padding:"16px"}}>
           <div style={{background:"#8b1a1a", color:"#f5f0e8", border:"1px solid #1a1a18", padding:"16px", marginBottom:"12px", textAlign:"center"}}>
             <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif", fontWeight:"900", fontSize:"48px", color:"#f5f0e8", lineHeight:"1.0"}}>{pct}%</div>
@@ -403,7 +411,7 @@ function App() {
     const grouped = {};
     listVocab.forEach(v => { if (!grouped[v.group]) grouped[v.group]=[]; grouped[v.group].push(v); });
     return (
-      <Frame>
+      <Frame {...frameProps}>
         <div style={{borderBottom:"1px solid #1a1a18", padding:"8px 14px", display:"flex", alignItems:"center", gap:"10px", background:"#ede8da", borderTop:"1px solid #1a1a18"}}>
           <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
           <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif", fontWeight:"900", fontSize:"18px", textTransform:"uppercase", color:"#1a1a18"}}>Vocabulary List</div>
@@ -460,7 +468,7 @@ function App() {
     const backIsJp = direction==="en2jp";
     const cardTint = GROUP_TINTS[currentCard.group]||"#f5f0e8";
     return (
-      <Frame>
+      <Frame {...frameProps}>
         <div style={{padding:"12px 14px"}}>
           <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
@@ -533,7 +541,7 @@ function App() {
     const optionsAreJp = direction==="en2jp";
     const cardTint = GROUP_TINTS[currentCard.group]||"#f5f0e8";
     return (
-      <Frame>
+      <Frame {...frameProps}>
         <div style={{padding:"12px 14px"}}>
           <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
@@ -591,7 +599,7 @@ function App() {
     const kanaPreview = toKana(writeInput);
     const submittedKana = toKana(writeInput.trim());
     return (
-      <Frame>
+      <Frame {...frameProps}>
         <div style={{padding:"12px 14px"}}>
           <div style={{display:"flex", alignItems:"center", gap:"10px", marginBottom:"12px"}}>
             <button style={S.backBtn} onClick={()=>setMode("menu")}>← MENU</button>
