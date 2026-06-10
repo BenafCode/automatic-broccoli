@@ -100,7 +100,7 @@ function App() {
     if (writeSubmitted || !raw.trim()) return;
     const norm = s => toHiragana(toKana(s));
     const final = norm(raw.trim());
-    const correct = final === norm(currentCard.jp);
+    const correct = answerForms(currentCard.jp).some(f => norm(f) === final);
     setWriteInput(raw);
     setWriteCorrect(correct);
     setWriteSubmitted(true);
