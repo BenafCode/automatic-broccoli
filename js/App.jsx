@@ -1,4 +1,4 @@
-function Frame({ isMobile, wordCount, onHome, onCards, onList, onGrammar, children }) {
+function Frame({ isMobile, wordCount, onHome, onCards, onList, onGrammar, onExam, children }) {
   return (
     <div style={{background: isMobile ? "#f5f0e8" : "#b8b0a4", minHeight:"100vh", padding: isMobile ? "0" : "8px 0", boxSizing:"border-box"}}>
       <div style={{border: isMobile ? "none" : "8px solid #1a1a18", maxWidth:"760px", margin:"0 auto", background:"#fff", fontFamily:"'Times New Roman',Times,serif", color:"#1a1a18", boxSizing:"border-box"}}>
@@ -15,7 +15,7 @@ function Frame({ isMobile, wordCount, onHome, onCards, onList, onGrammar, childr
         <div style={isMobile ? {paddingBottom:"80px"} : {}}>{children}</div>
         <div style={{background:"#f5f0e8", borderTop:"1px solid #1a1a18", padding:"10px 16px", ...(isMobile ? {position:"fixed", bottom:0, left:0, right:0, zIndex:10} : {})}}>
           <div style={{display:"flex", justifyContent:"space-around", borderBottom:"1px solid #c8c0b4", paddingBottom:"8px", marginBottom:"6px"}}>
-            {[["HOME",onHome],["CARDS",onCards],["LIST",onList],["文法",onGrammar]].map(([label,fn])=>(
+            {[["HOME",onHome],["CARDS",onCards],["LIST",onList],["文法",onGrammar],["試験",onExam]].map(([label,fn])=>(
               <button key={label} onClick={fn} style={{background:"none", border:"none", cursor:"pointer", textAlign:"center", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", color:"#1e3050", padding:"4px 8px"}}>
                 {label}
               </button>
@@ -233,7 +233,7 @@ function App() {
   // would give it a new identity every render, making React remount the
   // whole subtree — which wipes the uncontrolled write-mode input on every
   // keystroke.
-  const frameProps = { isMobile, wordCount: filteredVocab.length, onHome: () => setMode("menu"), onCards: startFlashcards, onList: openList, onGrammar: () => setMode("grammar") };
+  const frameProps = { isMobile, wordCount: filteredVocab.length, onHome: () => setMode("menu"), onCards: startFlashcards, onList: openList, onGrammar: () => setMode("grammar"), onExam: () => setMode("exam") };
 
   const S = {
     backBtn: { background:"#f5f0e8", border:"1px solid #1a1a18", color:"#1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", textTransform:"uppercase", cursor:"pointer", padding:"4px 12px" },
@@ -331,6 +331,7 @@ function App() {
               <button style={{flex:1, background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"12px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"48px"}} onClick={startQuiz}>→ QUIZ MODE</button>
             </div>
             <button style={{display:"block", width:"100%", marginTop:"6px", background:"#4a5a8a", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"10px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"44px"}} onClick={startWrite}>→ WRITE MODE</button>
+            <button style={{display:"block", width:"100%", marginTop:"6px", background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", padding:"10px 8px", textTransform:"uppercase", cursor:"pointer", minHeight:"44px"}} onClick={()=>setMode("exam")}>→ 試験 TEST N5 (FR)</button>
           </div>
           <div style={{display:"flex", flexWrap:"wrap", gap:"4px", padding:"8px", borderBottom:"1px solid #1a1a18", background:"#ede8da", borderTop:"1px solid #1a1a18"}}>
             {[["JP→EN","jp2en",()=>setDirection("jp2en")],["EN→JP","en2jp",()=>setDirection("en2jp")]].map(([label,val,fn])=>(
@@ -350,6 +351,7 @@ function App() {
               <button style={{display:"block", width:"100%", marginTop:"8px", background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startFlashcards}>→ FLASH CARDS</button>
               <button style={{display:"block", width:"100%", marginTop:"5px", background:"#f5f0e8", color:"#1a1a18", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startQuiz}>→ QUIZ MODE</button>
               <button style={{display:"block", width:"100%", marginTop:"5px", background:"#4a5a8a", color:"#f5f0e8", border:"1px solid #1a1a18", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={startWrite}>→ WRITE MODE</button>
+              <button style={{display:"block", width:"100%", marginTop:"5px", background:"#1a1a18", color:"#f5f0e8", border:"1px solid #c8a84b", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"12px", padding:"6px", textTransform:"uppercase", cursor:"pointer"}} onClick={()=>setMode("exam")}>→ 試験 TEST N5 (FR)</button>
             </div>
             {[["Direction",[["JP → EN","jp2en",()=>setDirection("jp2en")],["EN → JP","en2jp",()=>setDirection("en2jp")]]],["Options",[["ローマ字 "+(showRomaji?"ON":"OFF"),showRomaji?"on":"",()=>setShowRomaji(r=>!r)]]],["Browse",[["Word List","",openList],["Grammar Guide","",()=>setMode("grammar")]]]].map(([sLabel,items])=>(
               <div key={sLabel}>
@@ -693,6 +695,10 @@ function App() {
 
   if (mode === "grammar") {
     return <GrammarView onBack={()=>setMode("menu")} onCards={startFlashcards} onList={openList} showRomaji={showRomaji}/>;
+  }
+
+  if (mode === "exam") {
+    return <ExamView onBack={()=>setMode("menu")} onCards={startFlashcards} onList={openList} onGrammar={()=>setMode("grammar")}/>;
   }
 
   return null;
