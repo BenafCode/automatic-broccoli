@@ -403,6 +403,18 @@ function jpToRomaji(s) {
   return (typeof wanakana !== "undefined") ? wanakana.toRomaji(s) : s;
 }
 
+// Construit un tableau de 4 options de QCM en plaçant la bonne réponse à
+// l'index voulu et les distracteurs dans l'ordre fourni.
+function buildMcqOptions(correct, distractors, correctIndex) {
+  const options = [];
+  let d = 0;
+  for (let pos = 0; pos < 4; pos++) {
+    if (pos === correctIndex) options.push(correct);
+    else options.push(distractors[d++]);
+  }
+  return options;
+}
+
 // ---- Verbes en -masu : conjugaison (négatif / passé / négatif-passé) -------
 const VERB_FR = {
   "いきます": "aller",
@@ -470,6 +482,7 @@ function genAdjectiveQuestions() {
       prompt: `Donnez la forme négative de « ${jpToRomaji(v.jp)} » (${ADJ_FR[v.jp]}).`,
       accepted: [[stemR + "kunai", stemR + "ku nai", stemR + "kunai desu", stemR + "ku arimasen"]],
       explanation: `Adjectif en -i : ${jpToRomaji(v.jp)} → ${stemR}kunai.`,
+      hint: "Adjectif en -i : retirez le い final, puis ajoutez くない (+ desu).",
     });
   });
   vocab.filter(v => v.group === "Na-Adjectives" && v.jp !== "げんき（な）").forEach(v => {
@@ -480,6 +493,65 @@ function genAdjectiveQuestions() {
       prompt: `Donnez la forme négative de « ${stemR} » (${NA_ADJ_FR[v.jp]}).`,
       accepted: [[stemR + " ja arimasen", stemR + " dewa arimasen", stemR + " ja nai desu", stemR + " janai desu"]],
       explanation: `Na-adjectif : se nie comme un nom → ${stemR} ja arimasen.`,
+      hint: "Malgré sa terminaison, c'est un na-adjectif : il se nie comme un nom (X ja arimasen / dewa arimasen).",
+    });
+  });
+  return out;
+}
+
+// ---- Pièges classiques : forme négative des adjectifs (QCM) -----------------
+// Pour chaque adjectif, les distracteurs reproduisent les erreurs les plus
+// fréquentes des apprenants francophones.
+const ADJ_TRAP_I = [
+  { jp: "たかい", fr: "cher / haut" },
+  { jp: "あつい", fr: "chaud" },
+  { jp: "おいしい", fr: "délicieux" },
+  { jp: "むずかしい", fr: "difficile" },
+  { jp: "さむい", fr: "froid" },
+  { jp: "ちいさい", fr: "petit" },
+  { jp: "あたらしい", fr: "nouveau" },
+  { jp: "いそがしい", fr: "occupé" },
+];
+const ADJ_TRAP_NA = [
+  { jp: "きれい（な）", fr: "beau / propre" },
+  { jp: "げんき（な）", fr: "en forme" },
+  { jp: "しずか（な）", fr: "calme" },
+  { jp: "べんり（な）", fr: "pratique" },
+  { jp: "しんせつ（な）", fr: "gentil" },
+  { jp: "ゆうめい（な）", fr: "célèbre" },
+];
+function genAdjectiveTrapQuestions() {
+  const out = [];
+  ADJ_TRAP_I.forEach((v, i) => {
+    const full = jpToRomaji(v.jp);
+    const stemR = full.slice(0, -1); // on retire le -i final
+    const correct = `${stemR}kunai desu`;
+    const trapFull = `${full}kunai desu`;       // garde le -i avant -kunai
+    const trapNoun = `${full} ja arimasen`;     // traite l'adj. comme un nom
+    const trapYoi = "yokunai desu";             // surgénéralise l'irrégularité de いい
+    const correctIndex = i % 4;
+    out.push({
+      sectionId: "adjectives", difficulty: "N2", type: "mcq",
+      prompt: `Quelle est la forme négative correcte de « ${full} » (${v.fr}) ?`,
+      options: buildMcqOptions(correct, [trapFull, trapNoun, trapYoi], correctIndex),
+      correctIndex,
+      explanation: `${full} → ${correct}. Pièges : « ${trapFull} » garde le -i avant -kunai (faux), « ${trapNoun} » traite l'adjectif comme un nom (faux pour un adjectif en -i), et « ${trapYoi} » applique l'irrégularité de いい (yoi/yokunai) à un autre adjectif.`,
+    });
+  });
+  ADJ_TRAP_NA.forEach((v, i) => {
+    const stem = v.jp.replace(/（な）$/, "");
+    const stemR = jpToRomaji(stem);
+    const correct = `${stemR} ja arimasen`;
+    const trapIAdj = `${stemR}kunai desu`;   // applique la règle des adj. en -i
+    const trapWa = `${stemR} wa arimasen`;   // mauvaise particule
+    const trapImasen = `${stemR} ja imasen`; // mauvais verbe (imasen au lieu de arimasen)
+    const correctIndex = i % 4;
+    out.push({
+      sectionId: "adjectives", difficulty: "N2", type: "mcq",
+      prompt: `Quelle est la forme négative correcte de « ${stemR} » (${v.fr}) ?`,
+      options: buildMcqOptions(correct, [trapIAdj, trapWa, trapImasen], correctIndex),
+      correctIndex,
+      explanation: `${stemR} est un na-adjectif : il se nie comme un nom → ${correct}. Piège : « ${trapIAdj} » applique la règle des adjectifs en -i (faux, même si ${stemR} se termine par い) ; « ${trapWa} » et « ${trapImasen} » utilisent la mauvaise particule ou le mauvais verbe.`,
     });
   });
   return out;
@@ -673,14 +745,207 @@ function genKatakanaQuestions() {
   return out;
 }
 
+// ---- Katakana : paires confondues (longueur, dakuten, petits kana) ----------
+const KATAKANA_CONFUSABLE_DATA = [
+  { prompt: "« ビル » (biru, sans allongement) signifie :", correct: "immeuble / bâtiment",
+    distractors: ["bière (= ビール, biiru)", "lit", "porte"],
+    explanation: "ビル (biru, court) = immeuble. ビール (biiru, avec ー) = bière. Le petit allongement ー change complètement le sens !" },
+  { prompt: "« ビール » (biiru, avec allongement ー) signifie :", correct: "bière",
+    distractors: ["immeuble (= ビル, biru)", "vin", "lit"],
+    explanation: "ビール (biiru) = bière, à ne pas confondre avec ビル (biru) = immeuble : l'allongement ー est essentiel." },
+  { prompt: "Quelle est l'orthographe correcte de « jūsu » (jus) en katakana ?", correct: "ジュース",
+    distractors: ["ジュウス", "シュース", "ジューズ"],
+    explanation: "ジュース = ジュ + ー (allongement) + ス. Pièges : ジュウス (ウ au lieu de ー), シュース (シ au lieu de ジ — ゛ manquant), ジューズ (ズ au lieu de ス — ゛ ajouté à tort)." },
+  { prompt: "Quelle est l'orthographe correcte de « konpyūtā » (ordinateur) en katakana ?", correct: "コンピューター",
+    distractors: ["コンピュウター", "コソピューター", "コンピューダー"],
+    explanation: "コンピューター. Pièges : コンピュウター (ウ au lieu de ー), コソピューター (ソ et ン souvent confondus — regardez le sens du petit trait), コンピューダー (タ→ダ, ゛ ajouté à tort)." },
+  { prompt: "Quelle est la différence entre « キャ » et « キヤ » ?",
+    correct: "キャ (ャ petit) = « kya » en une syllabe ; キヤ (ヤ normal) = « kiya » en deux syllabes",
+    distractors: ["ce sont deux écritures de la même syllabe « kya »", "キャ se lit « kiya » et キヤ se lit « kya »", "il n'y a aucune différence de prononciation"],
+    explanation: "La taille du petit kana ャ/ュ/ョ change la prononciation : en petit, il fusionne avec la consonne précédente (キャ = kya, une syllabe) ; en taille normale, c'est une syllabe séparée (キヤ = ki-ya, deux syllabes)." },
+];
+function genKatakanaConfusableQuestions() {
+  return KATAKANA_CONFUSABLE_DATA.map((d, i) => {
+    const correctIndex = (i + 2) % 4;
+    return {
+      sectionId: "katakana", difficulty: "N2", type: "mcq",
+      prompt: d.prompt,
+      options: buildMcqOptions(d.correct, d.distractors, correctIndex),
+      correctIndex,
+      explanation: d.explanation,
+    };
+  });
+}
+
+// ---- Confusables lexicaux : sens proches, formes proches ---------------------
+const LEXICAL_TRAP_DATA = [
+  { sectionId: "adjectives", prompt: "Que signifie « kirei » (きれい) ?", correct: "beau / propre",
+    distractors: ["détesté (= きらい, kirai)", "calme", "pratique"],
+    explanation: "きれい (kirei) = beau / propre. Piège : きらい (kirai) ressemble beaucoup mais signifie « détesté » — sens quasi opposé !" },
+  { sectionId: "adjectives", prompt: "Que signifie « kirai » (きらい) ?", correct: "détesté",
+    distractors: ["beau / propre (= きれい, kirei)", "doué", "gentil"],
+    explanation: "きらい (kirai) = détesté. Piège : きれい (kirei) ressemble beaucoup mais signifie « beau / propre » — ne les confondez pas !" },
+  { sectionId: "adjectives", prompt: "« takai » (たかい) peut signifier :", correct: "cher OU haut, selon le contexte",
+    distractors: ["uniquement « cher »", "uniquement « haut »", "rapide"],
+    explanation: "たかい a deux sens distincts : « cher » (pour un prix) et « haut » (pour une taille / altitude) — le contexte détermine lequel." },
+  { sectionId: "adjectives", prompt: "« yasashii » (やさしい) peut signifier :", correct: "facile OU gentil, selon le contexte",
+    distractors: ["uniquement « facile »", "uniquement « gentil »", "difficile"],
+    explanation: "やさしい a deux sens : « facile » (pour une tâche) et « gentil » (pour une personne) — le contexte permet de choisir." },
+  { sectionId: "adjectives", prompt: "Quelle est la différence entre « suki » et « jouzu » ?",
+    correct: "suki = aimer ; jouzu = être doué (compétence)",
+    distractors: ["suki = être doué ; jouzu = aimer", "ce sont des synonymes", "suki est un verbe, jouzu un nom"],
+    explanation: "On peut aimer une activité (suki) sans y être doué (jouzu), et inversement : ce sont deux na-adjectifs indépendants, tous deux construits avec が." },
+  { sectionId: "adjectives", prompt: "Quel est le contraire de « takai » (haut, pour la TAILLE / l'altitude) ?",
+    correct: "hikui (bas)",
+    distractors: ["yasui (bon marché)", "chiisai (petit)", "mijikai (court)"],
+    explanation: "Pour la hauteur, le contraire de takai (haut) est hikui (bas). Attention : ce n'est pas yasui, qui s'applique au prix." },
+  { sectionId: "adjectives", prompt: "Quel est le contraire de « takai » (cher, pour le PRIX) ?",
+    correct: "yasui (bon marché)",
+    distractors: ["hikui (bas)", "ookii (grand)", "mottainai (gâché)"],
+    explanation: "Pour le prix, le contraire de takai (cher) est yasui (bon marché). hikui s'utilise pour la hauteur, pas pour le prix." },
+  { sectionId: "adjectives", prompt: "Quelle est la différence entre « mijikai » et « chiisai » ?",
+    correct: "mijikai = court (longueur / durée) ; chiisai = petit (taille générale)",
+    distractors: ["ce sont des synonymes parfaits", "mijikai = petit ; chiisai = court", "mijikai s'applique aux personnes uniquement"],
+    explanation: "mijikai décrit une longueur ou une durée courte (cheveux courts, trajet court) ; chiisai décrit la taille générale d'un objet (petit sac, petite voiture)." },
+  { sectionId: "self", prompt: "« hashi » (はし) peut signifier :", correct: "des baguettes OU un pont, selon le contexte",
+    distractors: ["uniquement des baguettes", "uniquement un pont", "des chaussures"],
+    explanation: "はし est un homophone : 箸 (baguettes) et 橋 (pont) se prononcent pareil — seul le contexte (et l'accent tonique à l'oral) permet de les distinguer." },
+  { sectionId: "self", prompt: "« kami » (かみ) peut signifier :", correct: "des cheveux OU du papier (voire un dieu), selon le contexte",
+    distractors: ["uniquement des cheveux", "uniquement du papier", "uniquement un dieu"],
+    explanation: "かみ regroupe plusieurs homophones : 髪 (cheveux), 紙 (papier), 神 (dieu) — seul le kanji ou le contexte écrit permet de les distinguer." },
+];
+function genLexicalTrapQuestions() {
+  return LEXICAL_TRAP_DATA.map((d, i) => {
+    const correctIndex = i % 4;
+    return {
+      sectionId: d.sectionId, difficulty: "N2", type: "mcq",
+      prompt: d.prompt,
+      options: buildMcqOptions(d.correct, d.distractors, correctIndex),
+      correctIndex,
+      explanation: d.explanation,
+    };
+  });
+}
+
+// ---- Particules : minimal-pairs et pièges classiques -------------------------
+const PARTICLE_TRAP_QUESTIONS = [
+  { sectionId: "particles", difficulty: "N2", type: "fill_blank",
+    prompt: "Complétez : « Toshokan ___ hon ga arimasu. » (Il y a des livres à la bibliothèque)",
+    accepted: [["ni"]],
+    traps: [{ test: (n, t) => t === "de", message: "で / に — で marque le lieu d'une ACTION (lire, manger…). Pour dire qu'une chose EXISTE quelque part (arimasu / imasu), on utilise に." }],
+    explanation: "に + arimasu / imasu = lieu d'existence. で est réservé au lieu d'une action.",
+    hint: "Le verbe est arimasu (existence) : quelle particule de lieu va avec « il y a » ?" },
+  { sectionId: "particles", difficulty: "N2", type: "fill_blank",
+    prompt: "Complétez : « Toshokan ___ hon o yomimasu. » (Je lis des livres à la bibliothèque)",
+    accepted: [["de"]],
+    traps: [{ test: (n, t) => t === "ni", message: "に / で — に marque le lieu où une chose EXISTE (arimasu / imasu). Pour le lieu d'une ACTION (yomimasu = lire), on utilise で." }],
+    explanation: "で + verbe d'action = lieu où se déroule l'action. Comparez avec « toshokan ni hon ga arimasu » (に = existence).",
+    hint: "Le verbe est yomimasu (action) : quelle particule de lieu va avec une action ?" },
+  { sectionId: "particles", difficulty: "N2", type: "fill_blank",
+    prompt: "Complétez : « Zou ___ hana ga nagai desu. » (L'éléphant a une longue trompe — littéralement : pour ce qui est de l'éléphant, la trompe est longue)",
+    accepted: [["wa"]],
+    traps: [{ test: (n, t) => t === "ga", message: "は / が — dans la structure « A wa B ga [adjectif] », le THÈME général (zou) prend は, et la caractéristique précise (hana) prend が. Mettre が aux deux retire le thème de la phrase." }],
+    explanation: "Structure classique A wa B ga [adjectif] : zou wa hana ga nagai desu = « l'éléphant, c'est le nez qui est long ».",
+    hint: "Le sujet général de la phrase (« l'éléphant ») prend は ; la partie dont on parle précisément (« la trompe ») prend が." },
+  { sectionId: "particles", difficulty: "N2", type: "fill_blank",
+    prompt: "Complétez : « Watashi wa sushi ___ suki desu. » (J'aime les sushis)",
+    accepted: [["ga"]],
+    traps: [{ test: (n, t) => t === "o", message: "を / が — すき (aimer) est un na-adjectif, pas un verbe transitif. L'objet aimé se marque avec が, jamais avec を." }],
+    explanation: "suki desu est un adjectif (« être agréable / apprécié »), pas un verbe d'action : on dit toujours « X ga suki desu », jamais « X o suki desu ».",
+    hint: "« suki » se comporte comme un adjectif, pas comme un verbe : quelle particule accompagne un adjectif de préférence ?" },
+  { sectionId: "particles", difficulty: "N2", type: "fill_blank",
+    prompt: "Complétez : « Watashi wa nihongo ___ jouzu desu. » (Je suis doué en japonais)",
+    accepted: [["ga"]],
+    traps: [{ test: (n, t) => t === "o", message: "を / が — じょうず (doué) est un na-adjectif, pas un verbe. Le domaine de compétence se marque avec が, jamais avec を." }],
+    explanation: "Même piège que suki : jouzu desu est un adjectif → nihongo ga jouzu desu (jamais « o jouzu »).",
+    hint: "Comme « suki », « jouzu » est un adjectif : quelle particule l'accompagne ?" },
+  { sectionId: "particles", difficulty: "N2", type: "fill_blank",
+    prompt: "Complétez : « Eki ___ arukimasu. » (Je marche jusqu'à la gare)",
+    accepted: [["made"]],
+    traps: [{ test: (n, t) => t === "ni" || t === "e" || t === "he", message: "まで / に — に et へ marquent la destination avec aller / venir / rentrer (ikimasu, kimasu, kaerimasu). Pour exprimer une LIMITE, un point « jusqu'à », on utilise まで." }],
+    explanation: "まで = jusqu'à (limite d'un trajet) : eki made arukimasu = « je marche jusqu'à la gare ».",
+    hint: "On insiste sur le point d'arrivée comme une LIMITE (« jusqu'à ») plutôt que comme une simple destination." },
+  { sectionId: "particles", difficulty: "N2", type: "fill_blank",
+    prompt: "Complétez : « Gakkou ___ jitensha de ikimasu. » (Je vais à l'école à vélo)",
+    accepted: [["ni", "e", "he"]],
+    traps: [{ test: (n, t) => t === "made", message: "まで / に — まで indique une limite (« jusqu'à »), mais avec ikimasu (aller), la destination se marque par に ou へ." }],
+    explanation: "に / へ + ikimasu / kimasu / kaerimasu = destination d'un déplacement : gakkou ni / e ikimasu.",
+    hint: "Le verbe est ikimasu (aller) : quelle particule marque la destination avec ce verbe ?" },
+];
+
+// ---- « Trouvez l'erreur » : repérer et corriger un piège classique -----------
+const FIND_ERROR_QUESTIONS = [
+  { sectionId: "adjectives", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Kono kaban wa takai ja arimasen.",
+    accepted: [["kono kaban wa takakunai desu", "kono kaban wa takaku arimasen"]],
+    errorTrap: "« takai ja arimasen » traite l'adjectif en -i たかい comme un na-adjectif. Un adjectif en -i se nie en -kunai (desu), jamais avec ja arimasen.",
+    hint: "たかい est un adjectif en -I : retirez le い final, que met-on à la place ?",
+    explanation: "takai (adjectif en -i) → takakunai desu. ja arimasen ne s'utilise qu'après un nom ou un na-adjectif." },
+  { sectionId: "adjectives", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Kono heya wa kirei kunai desu.",
+    accepted: [["kono heya wa kirei ja arimasen", "kono heya wa kirei dewa arimasen", "kono heya wa kirei ja nai desu", "kono heya wa kirei janai desu"]],
+    errorTrap: "きれい est un na-adjectif malgré sa terminaison en い : on ne peut pas lui appliquer -kunai. Il se nie comme un nom, avec ja arimasen.",
+    hint: "きれい se termine par い mais c'est un NA-adjectif : comment se nient les noms et na-adjectifs ?",
+    explanation: "kirei (na-adjectif) → kirei ja arimasen / dewa arimasen. -kunai est réservé aux adjectifs en -i comme takai, ookii…" },
+  { sectionId: "particles", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Toshokan ni hon o yomimasu.",
+    accepted: [["toshokan de hon o yomimasu"]],
+    errorTrap: "に marque le lieu d'EXISTENCE (avec arimasu / imasu), pas le lieu d'une ACTION. Pour lire (action), il faut で.",
+    hint: "yomimasu est un verbe d'action : quelle particule de lieu accompagne une action ?",
+    explanation: "で + verbe d'action = lieu où se déroule l'action : toshokan de hon o yomimasu." },
+  { sectionId: "particles", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Watashi wa nihongo o suki desu.",
+    accepted: [["watashi wa nihongo ga suki desu"]],
+    errorTrap: "すき (aimer) est un na-adjectif, pas un verbe transitif : l'objet aimé se marque toujours par が, jamais par を.",
+    hint: "« suki » se comporte comme un adjectif : quelle particule accompagne un adjectif de préférence ?",
+    explanation: "X ga suki desu — jamais « X o suki desu »." },
+  { sectionId: "verbs", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Kinou eiga o mimasu.",
+    accepted: [["kinou eiga o mimashita"]],
+    errorTrap: "« kinou » (hier) impose un verbe au PASSÉ. mimasu est au présent / futur : il faut mimashita.",
+    hint: "« kinou » signifie « hier » : à quel temps doit être le verbe ?",
+    explanation: "kinou (hier) → verbe au passé : mimasu → mimashita." },
+  { sectionId: "demonstratives", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Kore hon wa watashi no desu.",
+    accepted: [["kono hon wa watashi no desu"]],
+    errorTrap: "« kore » est un PRONOM (employé seul, sans nom après). Devant un nom (hon), il faut « kono ».",
+    hint: "Y a-t-il un nom juste après « kore / kono » ? Quelle forme s'utilise devant un nom ?",
+    explanation: "kore = pronom seul (« ceci »). kono + nom = « ce / cette … »." },
+  { sectionId: "existence", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Kyoushitsu ni gakusei ga arimasu.",
+    accepted: [["kyoushitsu ni gakusei ga imasu"]],
+    errorTrap: "arimasu s'utilise pour les objets inanimés. gakusei (étudiant) est un être animé : il faut imasu.",
+    hint: "Un étudiant est-il animé ou inanimé ? Quel verbe d'existence correspond ?",
+    explanation: "Êtres animés (personnes, animaux) → imasu. Objets / plantes inanimés → arimasu." },
+  { sectionId: "self", difficulty: "N3", type: "find_error",
+    prompt: "Cette phrase contient une erreur classique. Corrigez-la (réécrivez la phrase entière, en rōmaji).",
+    sentence: "Watashi wa Furansu ni kimashita.",
+    accepted: [["watashi wa furansu kara kimashita", "furansu kara kimashita"]],
+    errorTrap: "に marque une destination (« venir À »), mais ici on veut exprimer l'ORIGINE (« venir DE »). Il faut から.",
+    hint: "On veut dire « venir DE » (origine), pas « venir À » (destination) : quelle particule exprime l'origine ?",
+    explanation: "~kara kimashita = « je viens de … » (origine). に / へ marquent une destination, pas une origine." },
+];
+
 EXAM_QUESTIONS.push(
   ...genVerbQuestions(),
   ...genAdjectiveQuestions(),
+  ...genAdjectiveTrapQuestions(),
   ...genAntonymMatchQuestions(),
   ...genColorQuestions(),
   ...genPlaceQuestions(),
   ...genSelfQuestions(),
   ...genKatakanaQuestions(),
+  ...genKatakanaConfusableQuestions(),
+  ...genLexicalTrapQuestions(),
+  ...PARTICLE_TRAP_QUESTIONS,
+  ...FIND_ERROR_QUESTIONS,
 );
 
 // ============================================================================
@@ -748,9 +1013,16 @@ function gradeExam(q, answer) {
   }
   if (allCorrect) return { correct: true, near: false };
 
-  // « Presque » : pour une traduction, s'il ne manque/diffère qu'un seul mot.
+  // Piège « phrase recopiée » : pour find_error, si l'utilisateur n'a rien
+  // changé à la phrase fautive, on signale directement l'erreur à corriger.
+  if (q.type === "find_error" && q.sentence && examTight(arr[0] || "") === examTight(q.sentence)) {
+    return { correct: false, near: false, trapMessage: q.errorTrap };
+  }
+
+  // « Presque » : pour une traduction (ou la correction d'une erreur), s'il
+  // ne manque/diffère qu'un seul mot.
   let near = false;
-  if (q.type === "translate" && blanks === 1 && (arr[0] || "").trim()) {
+  if ((q.type === "translate" || q.type === "find_error") && blanks === 1 && (arr[0] || "").trim()) {
     const best = (q.accepted[0] || []).map(examNormalize)
       .sort((a, b) => b.split(" ").length - a.split(" ").length)[0] || "";
     const want = best.split(" ").filter(Boolean);
@@ -758,7 +1030,21 @@ function gradeExam(q, answer) {
     const missing = want.filter(w => !got.includes(w));
     near = want.length >= 2 && missing.length === 1;
   }
-  return { correct: false, near };
+
+  // Pièges spécifiques (particules, etc.) : message ciblé sur l'erreur précise.
+  return { correct: false, near, trapMessage: detectTrap(q, arr) };
+}
+
+// Détecte si la réponse correspond à un piège connu (q.traps), pour donner
+// une explication ciblée sur l'erreur précise commise par l'apprenant.
+function detectTrap(q, arr) {
+  if (!q.traps) return undefined;
+  const norm = examNormalize(arr[0] || "");
+  const tight = examTight(arr[0] || "");
+  for (const trap of q.traps) {
+    if (trap.test(norm, tight)) return trap.message;
+  }
+  return undefined;
 }
 
 // Nombre de questions piochées par mode (le pool étant plus grand que ces
