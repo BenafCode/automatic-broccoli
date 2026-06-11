@@ -395,6 +395,295 @@ const EXAM_QUESTIONS = [
 ];
 
 // ============================================================================
+//  Génération de questions supplémentaires à partir de data/vocab.js
+//  (plus de variété : un pool plus large = un test différent à chaque essai)
+// ============================================================================
+
+function jpToRomaji(s) {
+  return (typeof wanakana !== "undefined") ? wanakana.toRomaji(s) : s;
+}
+
+// ---- Verbes en -masu : conjugaison (négatif / passé / négatif-passé) -------
+const VERB_FR = {
+  "いきます": "aller",
+  "かえります": "rentrer (à la maison)",
+  "きます": "venir",
+  "います": "être / se trouver (animé)",
+  "あります": "y avoir / se trouver (inanimé)",
+  "します": "faire",
+  "たべます": "manger",
+  "のみます": "boire",
+  "みます": "regarder / voir",
+  "ききます": "écouter / entendre / demander",
+  "よみます": "lire",
+  "かきます": "écrire / dessiner",
+  "かいます": "acheter",
+  "かぶります": "porter (sur la tête)",
+  "はきます": "porter (bas du corps / chaussures)",
+};
+const VERB_FORMS = [
+  { name: "négative (présent)", suffix: "ません" },
+  { name: "passée", suffix: "ました" },
+  { name: "négative passée", suffix: "ませんでした" },
+];
+function genVerbQuestions() {
+  return vocab.filter(v => v.group === "Verbs").map((v, i) => {
+    const stem = v.jp.slice(0, -2);
+    const form = VERB_FORMS[i % VERB_FORMS.length];
+    const base = jpToRomaji(v.jp);
+    const accepted = jpToRomaji(stem + form.suffix);
+    return {
+      sectionId: "verbs", difficulty: "N2", type: "conjugate",
+      prompt: `Mettez « ${base} » (${VERB_FR[v.jp] || v.en}) à la forme ${form.name}.`,
+      accepted: [[accepted]],
+      explanation: `${base} → ${accepted} (forme ${form.name}).`,
+    };
+  });
+}
+
+// ---- Adjectifs i / na : forme négative --------------------------------------
+const ADJ_FR = {
+  "おおきい": "grand", "ちいさい": "petit", "ながい": "long", "みじかい": "court",
+  "たかい": "cher / haut", "やすい": "bon marché", "ひくい": "bas",
+  "あたらしい": "nouveau", "ふるい": "vieux (objet)", "ひろい": "spacieux", "せまい": "étroit",
+  "むずかしい": "difficile", "やさしい": "facile / gentil", "あつい": "chaud", "さむい": "froid",
+  "おいしい": "délicieux", "おもしろい": "intéressant / drôle", "つまらない": "ennuyeux",
+  "たのしい": "amusant", "いそがしい": "occupé", "かなしい": "triste", "うれしい": "content",
+  "いたい": "douloureux", "うつくしい": "beau", "わるい": "mauvais",
+  "ふとい": "épais / gros", "ほそい": "fin / mince", "うすい": "fin (épaisseur)",
+  "おもい": "lourd", "かるい": "léger (poids)", "くらい": "sombre", "あかるい": "lumineux",
+};
+const NA_ADJ_FR = {
+  "すき（な）": "aimé / favori", "きらい（な）": "détesté", "じょうず（な）": "doué",
+  "へた（な）": "maladroit", "にぎやか（な）": "animé", "しずか（な）": "calme",
+  "きれい（な）": "beau / propre", "しんせつ（な）": "gentil", "べんり（な）": "pratique",
+  "ひま": "disponible", "ゆうめい": "célèbre", "すてき": "charmant", "おしゃれ": "élégant",
+  "ハンサム": "beau (homme)",
+};
+function genAdjectiveQuestions() {
+  const out = [];
+  vocab.filter(v => v.group === "Adjectives" && v.jp !== "よい / いい").forEach(v => {
+    const stem = v.jp.slice(0, -1);
+    const stemR = jpToRomaji(stem);
+    out.push({
+      sectionId: "adjectives", difficulty: "N2", type: "conjugate",
+      prompt: `Donnez la forme négative de « ${jpToRomaji(v.jp)} » (${ADJ_FR[v.jp]}).`,
+      accepted: [[stemR + "kunai", stemR + "ku nai", stemR + "kunai desu", stemR + "ku arimasen"]],
+      explanation: `Adjectif en -i : ${jpToRomaji(v.jp)} → ${stemR}kunai.`,
+    });
+  });
+  vocab.filter(v => v.group === "Na-Adjectives" && v.jp !== "げんき（な）").forEach(v => {
+    const stem = v.jp.replace(/（な）$/, "");
+    const stemR = jpToRomaji(stem);
+    out.push({
+      sectionId: "adjectives", difficulty: "N2", type: "conjugate",
+      prompt: `Donnez la forme négative de « ${stemR} » (${NA_ADJ_FR[v.jp]}).`,
+      accepted: [[stemR + " ja arimasen", stemR + " dewa arimasen", stemR + " ja nai desu", stemR + " janai desu"]],
+      explanation: `Na-adjectif : se nie comme un nom → ${stemR} ja arimasen.`,
+    });
+  });
+  return out;
+}
+
+// ---- Antonymes : appariement -------------------------------------------------
+function genAntonymMatchQuestions() {
+  const FR = Object.assign({}, ADJ_FR, NA_ADJ_FR);
+  const seen = new Set();
+  const pairs = [];
+  Object.keys(ANTONYMS).forEach(k => {
+    const v = ANTONYMS[k];
+    if (k.indexOf("/") !== -1 || v.indexOf("/") !== -1) return; // exclut よい / いい
+    const key = [k, v].sort().join("|");
+    if (seen.has(key)) return;
+    seen.add(key);
+    const kR = jpToRomaji(k.replace(/（な）$/, ""));
+    const vR = jpToRomaji(v.replace(/（な）$/, ""));
+    pairs.push({ l: `${FR[k]} (${kR})`, r: vR });
+  });
+  const out = [];
+  for (let i = 0; i < pairs.length; i += 4) {
+    out.push({
+      sectionId: "adjectives", difficulty: "N1", type: "match",
+      prompt: "Reliez chaque adjectif à son contraire (rōmaji).",
+      pairs: pairs.slice(i, i + 4),
+      explanation: "Les antonymes sont des paires à connaître par cœur pour le N5.",
+    });
+  }
+  return out;
+}
+
+// ---- Couleurs : noms (+ no) et adjectifs en -i -------------------------------
+const COLOR_NOUN_FR = { "みどり": "vert", "むらさき": "violet", "グレー": "gris", "ちゃいろ": "marron", "ピンク": "rose" };
+const COLOR_NOUN_ITEMS = [
+  { jp: "かばん", fr: "sac" },
+  { jp: "はな", fr: "fleur" },
+  { jp: "くるま", fr: "voiture" },
+  { jp: "かみ", fr: "cheveux" },
+  { jp: "ふく", fr: "vêtement" },
+];
+const COLOR_I_ADJ_FR = { "しろい": "blanc", "くろい": "noir", "あかい": "rouge", "あおい": "bleu", "きいろい": "jaune" };
+function genColorQuestions() {
+  const out = [];
+  const nouns = vocab.filter(v => v.group === "Colors" && !/い$/.test(v.jp));
+  nouns.forEach((v, i) => {
+    const item = COLOR_NOUN_ITEMS[(i + 1) % COLOR_NOUN_ITEMS.length];
+    out.push({
+      sectionId: "colors", difficulty: "N2", type: "fill_blank",
+      prompt: `Complétez : « ${jpToRomaji(v.jp)} ___ ${jpToRomaji(item.jp)} » (un ${item.fr} ${COLOR_NOUN_FR[v.jp]})`,
+      accepted: [["no"]],
+      explanation: `Un nom de couleur se relie au nom avec の : ${jpToRomaji(v.jp)} no ${jpToRomaji(item.jp)}.`,
+    });
+  });
+  const adjs = vocab.filter(v => v.group === "Colors" && /い$/.test(v.jp) && v.jp !== "あかい");
+  const adjList = adjs.map(v => v.jp);
+  adjs.forEach((v, i) => {
+    const distractors = adjList.filter(j => j !== v.jp);
+    const correctIndex = i % 4;
+    const options = [];
+    let d = 0;
+    for (let pos = 0; pos < 4; pos++) {
+      if (pos === correctIndex) options.push(COLOR_I_ADJ_FR[v.jp]);
+      else { options.push(COLOR_I_ADJ_FR[distractors[d % distractors.length]]); d++; }
+    }
+    out.push({
+      sectionId: "colors", difficulty: "N1", type: "mcq",
+      prompt: `Que signifie « ${jpToRomaji(v.jp)} » ?`,
+      options, correctIndex,
+      explanation: `${jpToRomaji(v.jp)} = ${COLOR_I_ADJ_FR[v.jp]}.`,
+    });
+  });
+  return out;
+}
+
+// ---- Lieux classiques ---------------------------------------------------------
+const PLACE_FR = {
+  "こうえん": "le parc", "びょういん": "l'hôpital", "がっこう": "l'école",
+  "ぎんこう": "la banque", "ほんや": "la librairie",
+  "はなや": "le fleuriste", "さかなや": "la poissonnerie", "やおや": "le marchand de légumes",
+  "にくや": "la boucherie", "スーパー": "le supermarché", "レストラン": "le restaurant",
+  "ホテル": "l'hôtel", "きっさてん": "le café / salon de thé", "デパート": "le grand magasin",
+  "えいがかん": "le cinéma", "ゆうびんきょく": "le bureau de poste", "ちゅうしゃじょう": "le parking",
+  "すしや": "le restaurant de sushis",
+};
+function genPlaceQuestions() {
+  const words = Object.keys(PLACE_FR);
+  return words.map((jp, i) => {
+    const distractors = words.filter(w => w !== jp);
+    const correctIndex = i % 4;
+    const options = [];
+    let d = i;
+    for (let pos = 0; pos < 4; pos++) {
+      if (pos === correctIndex) options.push(PLACE_FR[jp]);
+      else { d = (d + 1) % distractors.length; options.push(PLACE_FR[distractors[d]]); }
+    }
+    return {
+      sectionId: "places", difficulty: "N1", type: "mcq",
+      prompt: `Que signifie « ${jpToRomaji(jp)} » ?`,
+      options, correctIndex,
+      explanation: `${jpToRomaji(jp)} = ${PLACE_FR[jp]}.`,
+    };
+  });
+}
+
+// ---- Parler de soi : métiers et nationalités -----------------------------------
+const OCCUPATION_FR = {
+  "いしゃ": "médecin", "かんごし": "infirmier / infirmière", "せんせい": "professeur",
+  "きょうし": "enseignant", "がくせい": "étudiant(e)", "エンジニア": "ingénieur",
+  "りょうりにん": "cuisinier", "コック": "cuistot", "はいゆう": "acteur / actrice",
+  "だいとうりょう": "président", "てんいん": "vendeur / employé de magasin",
+  "ぎんこういん": "employé de banque", "かいしゃいん": "employé d'entreprise", "いたまえ": "chef sushi",
+};
+const NATIONALITY_FR = {
+  "にほんじん": "japonais(e)", "アメリカじん": "américain(e)", "イギリスじん": "britannique",
+  "ドイツじん": "allemand(e)", "フランスじん": "français(e)", "イタリアじん": "italien(ne)",
+  "ちゅうごくじん": "chinois(e)",
+};
+function genSelfQuestions() {
+  const out = [];
+  const jobs = Object.keys(OCCUPATION_FR);
+  jobs.forEach((jp, i) => {
+    const distractors = jobs.filter(j => j !== jp);
+    const correctIndex = i % 4;
+    const options = [];
+    let d = i;
+    for (let pos = 0; pos < 4; pos++) {
+      if (pos === correctIndex) options.push(OCCUPATION_FR[jp]);
+      else { d = (d + 1) % distractors.length; options.push(OCCUPATION_FR[distractors[d]]); }
+    }
+    out.push({
+      sectionId: "self", difficulty: "N1", type: "mcq",
+      prompt: `Que signifie « ${jpToRomaji(jp)} » ?`,
+      options, correctIndex,
+      explanation: `${jpToRomaji(jp)} = ${OCCUPATION_FR[jp]}.`,
+    });
+  });
+  Object.keys(NATIONALITY_FR).forEach(jp => {
+    const r = jpToRomaji(jp);
+    out.push({
+      sectionId: "self", difficulty: "N2", type: "translate",
+      prompt: `Traduisez : « Je suis ${NATIONALITY_FR[jp]}. »`,
+      accepted: [[`${r} desu`, `watashi wa ${r} desu`]],
+      explanation: `Watashi wa ${r} desu — le sujet « watashi wa » est souvent omis à l'oral.`,
+    });
+  });
+  return out;
+}
+
+// ---- Katakana : sens et écriture ------------------------------------------------
+const KATAKANA_MCQ_FR = {
+  "パソコン": "ordinateur portable", "コンピューター": "ordinateur", "テーブル": "table",
+  "ベッド": "lit", "ドア": "porte", "カメラ": "appareil photo", "ボールペン": "stylo à bille",
+  "コップ": "verre / tasse", "タクシー": "taxi", "バス": "bus", "コーヒー": "café",
+  "ジュース": "jus", "ワイン": "vin", "ウイスキー": "whisky", "パン": "pain", "チーズ": "fromage",
+  "チョコレート": "chocolat", "ケーキ": "gâteau", "トマト": "tomate", "バナナ": "banane",
+  "メロン": "melon", "レモン": "citron", "キャベツ": "chou", "レタス": "laitue",
+  "スーツ": "costume", "セーター": "pull", "コート": "manteau", "ズボン": "pantalon",
+  "ネックレス": "collier", "テニス": "tennis", "ゴルフ": "golf", "ジャズ": "jazz",
+  "ティーシャツ": "T-shirt",
+};
+const KATAKANA_WRITE = ["タクシー", "ジュース", "レモン", "セーター", "ティーシャツ", "チョコレート"];
+function genKatakanaQuestions() {
+  const out = [];
+  const words = Object.keys(KATAKANA_MCQ_FR);
+  words.forEach((jp, i) => {
+    const distractors = words.filter(w => w !== jp);
+    const correctIndex = i % 4;
+    const options = [];
+    let d = i;
+    for (let pos = 0; pos < 4; pos++) {
+      if (pos === correctIndex) options.push(KATAKANA_MCQ_FR[jp]);
+      else { d = (d + 1) % distractors.length; options.push(KATAKANA_MCQ_FR[distractors[d]]); }
+    }
+    out.push({
+      sectionId: "katakana", difficulty: "N1", type: "mcq",
+      prompt: `Que signifie « ${jpToRomaji(jp)} » ?`,
+      options, correctIndex,
+      explanation: `${jpToRomaji(jp)} = ${KATAKANA_MCQ_FR[jp]}.`,
+    });
+  });
+  KATAKANA_WRITE.forEach(jp => {
+    const r = jpToRomaji(jp);
+    out.push({
+      sectionId: "katakana", difficulty: "N3", type: "katakana",
+      prompt: `Écrivez en katakana : « ${r} » (${KATAKANA_MCQ_FR[jp] || ""}).`,
+      accepted: [[r, jp]], kana: jp,
+      explanation: `${jp} = ${r}.`,
+    });
+  });
+  return out;
+}
+
+EXAM_QUESTIONS.push(
+  ...genVerbQuestions(),
+  ...genAdjectiveQuestions(),
+  ...genAntonymMatchQuestions(),
+  ...genColorQuestions(),
+  ...genPlaceQuestions(),
+  ...genSelfQuestions(),
+  ...genKatakanaQuestions(),
+);
+
+// ============================================================================
 //  Moteur de correction tolérant
 // ============================================================================
 
@@ -472,6 +761,10 @@ function gradeExam(q, answer) {
   return { correct: false, near };
 }
 
+// Nombre de questions piochées par mode (le pool étant plus grand que ces
+// limites, chaque tentative tire un sous-ensemble différent).
+const EXAM_DECK_CAPS = { complete: 40, section: 15, level: 30, weak: 24 };
+
 // Construit un jeu de questions selon le mode choisi.
 function buildExamDeck(mode, value) {
   let pool;
@@ -479,5 +772,7 @@ function buildExamDeck(mode, value) {
   else if (mode === "level") pool = EXAM_QUESTIONS.filter(q => q.difficulty === value);
   else if (mode === "weak") pool = EXAM_QUESTIONS.filter(q => EXAM_WEAK_SECTIONS.includes(q.sectionId));
   else pool = EXAM_QUESTIONS.slice(); // complete
-  return shuffle(pool);
+  const shuffled = shuffle(pool);
+  const cap = EXAM_DECK_CAPS[mode];
+  return cap ? shuffled.slice(0, cap) : shuffled;
 }
