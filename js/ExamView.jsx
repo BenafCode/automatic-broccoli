@@ -6,11 +6,13 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
   const [screen, setScreen] = useState("home");      // home | quiz | results
   const [deck, setDeck] = useState([]);
   const [index, setIndex] = useState(0);
-  const [results, setResults] = useState([]);         // [{ q, correct }]
+  const [results, setResults] = useState([]);         // [{ q, correct, points }]
   const [submitted, setSubmitted] = useState(false);
   const [lastResult, setLastResult] = useState({ correct: false, near: false });
   const [mcqSelected, setMcqSelected] = useState(null);
   const [matchSel, setMatchSel] = useState({});
+  const [hintUsed, setHintUsed] = useState(false);
+  const [hintShown, setHintShown] = useState(false);
   const inputRefs = useRef({});
 
   const q = deck[index];
@@ -26,6 +28,7 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
   function resetQuestionState() {
     setSubmitted(false); setLastResult({ correct: false, near: false });
     setMcqSelected(null); setMatchSel({}); inputRefs.current = {};
+    setHintUsed(false); setHintShown(false);
   }
 
   function collectAnswer() {
@@ -44,7 +47,8 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
     const res = gradeExam(q, answer);
     setLastResult(res);
     setSubmitted(true);
-    setResults(r => [...r, { q, correct: res.correct }]);
+    const points = res.correct ? (hintUsed ? 0.5 : 1) : 0;
+    setResults(r => [...r, { q, correct: res.correct, points }]);
   }
 
   function chooseMcq(i) {
@@ -53,7 +57,8 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
     const res = gradeExam(q, i);
     setLastResult(res);
     setSubmitted(true);
-    setResults(r => [...r, { q, correct: res.correct }]);
+    const points = res.correct ? (hintUsed ? 0.5 : 1) : 0;
+    setResults(r => [...r, { q, correct: res.correct, points }]);
   }
 
   function next() {
@@ -88,7 +93,16 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
     progressBar: { height:"4px", background:"#ddd6cc", border:"1px solid #1a1a18", overflow:"hidden", flex:1 },
     kbHint: { fontFamily:"'Times New Roman',Times,serif", fontSize:"11px", color:"#888078", fontStyle:"italic", textAlign:"center", marginTop:"10px" },
     select: { border:"2px solid #1a1a18", padding:"8px 10px", fontFamily:"'Times New Roman',Times,serif", fontSize:"16px", background:"#fff", color:"#1a1a18", boxSizing:"border-box", minWidth:"140px" },
+    sentenceBox: { border:"2px solid #1a1a18", background:"#ede8da", padding:"12px 14px", margin:"0 16px 12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"17px", fontStyle:"italic", color:"#1a1a18" },
+    hintBtn: { background:"none", border:"1px solid #8b6a14", color:"#8b6a14", fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"11px", textTransform:"uppercase", letterSpacing:"1px", cursor:"pointer", padding:"6px 12px", marginBottom:"10px" },
+    hintBox: { background:"#fdf6e3", border:"1px dashed #8b6a14", padding:"8px 12px", marginBottom:"10px", fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", fontStyle:"italic", color:"#5c4a14" },
+    trapBox: { background:"#f7e6c8", border:"2px solid #b8860b", padding:"10px 12px", marginTop:"12px", fontFamily:"'Times New Roman',Times,serif", fontSize:"13px", lineHeight:1.5, color:"#1a1a18" },
   };
+
+  // Formatage des scores : entiers affichés sans décimale, demi-points avec « .5 ».
+  function fmtNum(n) {
+    return Number.isInteger(n) ? String(n) : n.toFixed(1);
+  }
 
   // Réponse canonique affichée dans le feedback.
   function correctAnswerText(q) {
@@ -189,33 +203,33 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
   // ===== ÉCRAN RÉSULTATS =====================================================
   if (screen === "results") {
     const total = results.length;
-    const correct = results.filter(r => r.correct).length;
-    const pct = total ? Math.round((correct / total) * 100) : 0;
+    const points = results.reduce((sum, r) => sum + (r.points || 0), 0);
+    const pct = total ? Math.round((points / total) * 100) : 0;
     const passed = pct >= PASS;
     const missed = results.filter(r => !r.correct);
     // Agrégat par section.
     const bySection = {};
     results.forEach(r => {
       const id = r.q.sectionId;
-      if (!bySection[id]) bySection[id] = { correct: 0, total: 0 };
-      bySection[id].total++; if (r.correct) bySection[id].correct++;
+      if (!bySection[id]) bySection[id] = { points: 0, total: 0 };
+      bySection[id].total++; bySection[id].points += (r.points || 0);
     });
     return (
       <Shell>
         <div style={{background: passed ? "#2c4f2c" : "#8b1a1a", color:"#f5f0e8", padding:"16px", textAlign:"center", borderBottom:"1px solid #1a1a18"}}>
           <div style={{fontFamily:"'Arial Black',Helvetica,sans-serif", fontWeight:"900", fontSize:"48px", lineHeight:1}}>{pct}%</div>
-          <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", textTransform:"uppercase", letterSpacing:"1px", marginTop:"6px"}}>{correct} / {total} correct · seuil {PASS}%</div>
+          <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", textTransform:"uppercase", letterSpacing:"1px", marginTop:"6px"}}>{fmtNum(points)} / {total} points · seuil {PASS}%</div>
           <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"14px", marginTop:"4px", color: passed ? "#cfe0cf" : "#e0c0c0"}}>{passed ? "合格 — Réussi !" : "Continuez à réviser — presque !"}</div>
         </div>
 
         <div style={E.sectionHeader}>Score par section</div>
         <div style={{borderBottom:"1px solid #c8c0b4"}}>
           {Object.entries(bySection).map(([id, s]) => {
-            const sp = Math.round((s.correct / s.total) * 100);
+            const sp = Math.round((s.points / s.total) * 100);
             return (
               <div key={id} style={{display:"flex", justifyContent:"space-between", alignItems:"center", padding:"7px 16px", borderBottom:"1px solid #ece6da", fontFamily:"'Times New Roman',Times,serif", fontSize:"13px"}}>
                 <span>{EXAM_SECTION_TITLE[id] || id}</span>
-                <span style={{flexShrink:0, marginLeft:"10px", fontWeight:"700", color: sp >= PASS ? "#2c5020" : "#7a3030"}}>{s.correct}/{s.total}</span>
+                <span style={{flexShrink:0, marginLeft:"10px", fontWeight:"700", color: sp >= PASS ? "#2c5020" : "#7a3030"}}>{fmtNum(s.points)}/{s.total}</span>
               </div>
             );
           })}
@@ -247,7 +261,7 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
   // ===== ÉCRAN QUESTION ======================================================
   if (!q) return <Shell><div style={{padding:"20px"}}>—</div></Shell>;
   const answered = results.length;
-  const score = results.filter(r => r.correct).length;
+  const score = results.reduce((sum, r) => sum + (r.points || 0), 0);
   const progress = (index / deck.length) * 100;
 
   function renderInputs() {
@@ -315,13 +329,21 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
       <div style={{display:"flex", alignItems:"center", gap:"10px", padding:"10px 16px", borderBottom:"1px solid #c8c0b4"}}>
         <span style={E.badge(q.difficulty)}>{q.difficulty}</span>
         <div style={E.progressBar}><div style={{height:"100%", width:`${progress}%`, background:"#1a1a18"}}/></div>
-        <span style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#4a4038", whiteSpace:"nowrap"}}>{score}/{answered}</span>
+        <span style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"12px", color:"#4a4038", whiteSpace:"nowrap"}}>{fmtNum(score)}/{answered}</span>
       </div>
       <div style={{...E.sectionHeader, borderTop:"none"}}>{EXAM_SECTION_TITLE[q.sectionId]}</div>
 
       <div style={E.prompt}>{q.prompt}</div>
 
+      {q.type === "find_error" && <div style={E.sentenceBox}>« {q.sentence} »</div>}
+
       <div style={{padding:"0 16px 12px"}}>
+        {!submitted && q.hint && (
+          hintShown
+            ? <div style={E.hintBox}><strong>Indice</strong> ({"-0.5 pt si correct"}) — {q.hint}</div>
+            : <button style={E.hintBtn} onClick={() => { setHintShown(true); setHintUsed(true); }}>Afficher un indice (−0.5 pt)</button>
+        )}
+
         {renderInputs()}
 
         {needsCheckBtn && !submitted && (
@@ -334,7 +356,7 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
           <div style={{marginTop:"14px"}}>
             <div style={{border:`2px solid ${lastResult.correct ? "#3d6b3d" : "#7a3030"}`, background: lastResult.correct ? "#d8e8d0" : "#e8d4d4", padding:"12px 14px"}}>
               <div style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"13px", textTransform:"uppercase", letterSpacing:"1px", color: lastResult.correct ? "#2c5020" : "#5c2020"}}>
-                {lastResult.correct ? "✓ Correct !" : lastResult.near ? "✗ Presque — il manque un mot" : "✗ Faux"}
+                {lastResult.correct ? (hintUsed ? "✓ Correct (avec indice — 0.5 pt)" : "✓ Correct !") : lastResult.near ? "✗ Presque — il manque un mot" : "✗ Faux"}
               </div>
               {!lastResult.correct && (
                 <div style={{marginTop:"8px"}}>
@@ -347,6 +369,12 @@ function ExamView({ onBack, onCards, onList, onGrammar }) {
                 <div style={{fontFamily:"'Times New Roman',Times,serif", fontSize:"26px", color:"#1a1a18", marginTop:"6px", letterSpacing:"2px"}}>{q.kana}</div>
               )}
             </div>
+            {!lastResult.correct && lastResult.trapMessage && (
+              <div style={E.trapBox}>
+                <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"10px", textTransform:"uppercase", letterSpacing:"1px", color:"#8b6a14", marginRight:"6px"}}>⚠ Piège</span>
+                {lastResult.trapMessage}
+              </div>
+            )}
             <div style={E.explain}>
               <span style={{fontFamily:"Helvetica,Arial,sans-serif", fontWeight:"700", fontSize:"10px", textTransform:"uppercase", letterSpacing:"1px", color:"#8b6a14", marginRight:"6px"}}>Règle</span>
               {q.explanation}
